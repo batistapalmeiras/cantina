@@ -1,3 +1,4 @@
+// Components
 import { Dish } from '../../../types';
 
 export function newId(): string {

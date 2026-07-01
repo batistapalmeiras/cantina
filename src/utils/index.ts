@@ -1,1 +1,1 @@
-export { formatCurrency, parseCurrency, maskCurrencyInput, maskPhone, parsePhone } from './mask';
+export { formatCurrency, maskCurrencyInput, maskPhone, parseCurrency, parsePhone } from './mask';

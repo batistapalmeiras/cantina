@@ -1,24 +1,28 @@
+// React
 import { useState } from 'react';
+// Libs
 import { Check, Undo2 } from 'lucide-react';
-import { useKitchen } from './hooks/useKitchen';
-import { groupTicketsByDish } from './domain';
-import { KitchenTab } from './types';
-import { Typography } from '../../components/Typography';
-import { PageHeader } from '../../components/PageHeader';
+// Components
 import { IconButton } from '../../components/IconButton';
-import { TabBar, Tab, TabBadge } from '../../components/Tabs';
+import { PageHeader } from '../../components/PageHeader';
+import { Tab, TabBadge,TabBar } from '../../components/Tabs';
+import { Typography } from '../../components/Typography';
+// Local
+import { groupTicketsByDish } from './domain';
+import { useKitchen } from './hooks/useKitchen';
 import {
-  Grid,
   Card,
   CardTop,
   CustomerName,
-  ItemList,
-  ItemRow,
-  ItemQty,
-  ItemAddons,
   Empty,
   EmptyHint,
+  Grid,
+  ItemAddons,
+  ItemList,
+  ItemQty,
+  ItemRow,
 } from './styles';
+import { KitchenTab } from './types';
 
 export function KitchenPage() {
   const { session, pending, delivered, toggleDelivered } = useKitchen();

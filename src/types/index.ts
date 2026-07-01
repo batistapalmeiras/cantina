@@ -1,3 +1,3 @@
 export * from './enums';
-export * from './interfaces';
 export * from './Inputs';
+export * from './interfaces';

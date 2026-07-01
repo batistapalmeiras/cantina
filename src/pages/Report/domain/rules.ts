@@ -1,5 +1,7 @@
-import { Session, OrderStatus } from '../../../types';
-import { ReportStats, DishMapEntry } from './types';
+// Components
+import { OrderStatus,Session } from '../../../types';
+// Local
+import { DishMapEntry,ReportStats } from './types';
 
 export function computeStats(session: Session): { stats: ReportStats; dishMap: DishMapEntry[] } {
   const sales = session.orders.filter((o) => o.status === OrderStatus.Sale);

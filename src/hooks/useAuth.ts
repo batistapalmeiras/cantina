@@ -1,7 +1,9 @@
-import { useContext, useState, useCallback, useEffect } from 'react';
-import { User } from '../types';
-import { supabase } from '../lib/supabase';
+// React
+import { useCallback, useContext, useEffect,useState } from 'react';
+// Components
 import { AuthContext, AuthContextValue } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
+import { User } from '../types';
 
 export async function fetchProfile(userId: string): Promise<User | null> {
   const { data } = await supabase

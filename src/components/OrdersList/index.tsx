@@ -1,9 +1,12 @@
+// React
 import { useState } from 'react';
+// Libs
 import styled from 'styled-components';
+// Components
 import { Order, OrderStatus, PaymentMethod } from '../../types';
+import { BottomSheet } from '../BottomSheet';
 import { Pagination } from '../Pagination';
 import { Typography } from '../Typography';
-import { BottomSheet } from '../BottomSheet';
 
 export const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
   [OrderStatus.Sale]: 'Confirmado',
@@ -14,8 +17,6 @@ export const PAYMENT_METHOD_LABEL: Record<PaymentMethod, string> = {
   [PaymentMethod.Pix]: 'Pix',
   [PaymentMethod.Cash]: 'Dinheiro',
 };
-
-/* ── Table ───────────────────────────────────────────────── */
 
 const TableWrap = styled.div`
   overflow-x: auto;
@@ -69,8 +70,6 @@ export const StatusBadge = styled.span<{ $status: OrderStatus }>`
   color: ${({ $status }) => $status === OrderStatus.Sale ? '#1a7a4a' : '#b45309'};
   border: 1px solid ${({ $status }) => $status === OrderStatus.Sale ? '#b6e8cf' : '#fde68a'};
 `;
-
-/* ── Cards (mobile) ──────────────────────────────────────── */
 
 const CardList = styled.div`
   display: none;
@@ -154,10 +153,6 @@ const Empty = styled.div`
   padding: ${({ theme }) => theme.spacing.xxl} ${({ theme }) => theme.spacing.base};
   text-align: center;
 `;
-
-/* ══════════════════════════════════════════════════════════
-   Props
-══════════════════════════════════════════════════════════ */
 
 interface Props {
   orders: Order[];

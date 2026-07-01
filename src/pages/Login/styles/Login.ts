@@ -1,4 +1,6 @@
+// Libs
 import styled from 'styled-components';
+// Components
 import { fadeUp } from '../../../styles/animations';
 
 export const Page = styled.div`

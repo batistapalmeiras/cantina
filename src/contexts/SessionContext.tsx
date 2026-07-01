@@ -1,6 +1,8 @@
+// React
 import { createContext, ReactNode } from 'react';
-import { Session, Order, Dish } from '../types';
+// Components
 import { useSession } from '../hooks/useSession';
+import { Dish,Order, Session } from '../types';
 
 export interface SessionContextValue {
   session: Session | null;

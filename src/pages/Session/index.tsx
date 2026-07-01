@@ -1,11 +1,14 @@
+// React
 import { Navigate } from 'react-router-dom';
-import { useSessionForm } from './hooks/useSessionForm';
-import { SessionMode } from './types';
-import { AppRoute } from '../../routes/paths';
-import { SessionFormFields } from '../../components/SessionForm';
+// Components
 import { Button } from '../../components/Button';
 import { PageHeader } from '../../components/PageHeader';
+import { SessionFormFields } from '../../components/SessionForm';
+import { AppRoute } from '../../routes/paths';
+// Local
+import { useSessionForm } from './hooks/useSessionForm';
 import { ActionsRow } from './styles';
+import { SessionMode } from './types';
 
 interface Props {
   mode: SessionMode;

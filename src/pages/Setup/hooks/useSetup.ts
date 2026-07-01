@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+// React
+import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Components
+import { fetchSessionsPage,useSessionCtx } from '../../../hooks/useSession';
 import { AppRoute } from '../../../routes/paths';
-import { useSessionCtx, fetchSessionsPage } from '../../../hooks/useSession';
 import { SessionSummary } from '../types';
 
 const PAGE_SIZE = 5;

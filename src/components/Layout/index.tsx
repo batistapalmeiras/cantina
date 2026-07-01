@@ -1,18 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+// React
+import React, { useEffect,useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { UserCircle, ChevronDown, LogOut, User, Settings, ShoppingBag, ClipboardList, ChefHat } from 'lucide-react';
-import { fadeUp, fadeDown } from '../../styles/animations';
+// Libs
+import { ChefHat,ChevronDown, ClipboardList, LogOut, Settings, ShoppingBag, User, UserCircle } from 'lucide-react';
 import styled from 'styled-components';
+// Components
 import icon from '../../assets/icon.png';
 import { useAuthCtx } from '../../hooks/useAuth';
 import { useSessionCtx } from '../../hooks/useSession';
 import { AppRoute } from '../../routes/paths';
+import { fadeDown,fadeUp } from '../../styles/animations';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
-
-/* ── Header ────────────────────────────────────────────── */
 
 const Header = styled.header`
   position: sticky;
@@ -65,8 +66,6 @@ const BrandName = styled.span`
   }
 `;
 
-/* ── Desktop nav ───────────────────────────────────────── */
-
 const Nav = styled.nav`
   display: flex;
   align-items: center;
@@ -107,9 +106,6 @@ const NavLink = styled(Link)<{ $active: boolean }>`
     color: ${({ theme }) => theme.colors.ink};
   }
 `;
-
-/* ── User dropdown ─────────────────────────────────────── */
-
 
 const UserArea = styled.div`
   position: relative;
@@ -191,9 +187,6 @@ const DropdownDivider = styled.div`
   background: ${({ theme }) => theme.colors.hairlineSoft};
 `;
 
-
-/* ── Mobile bottom tab bar ─────────────────────────────── */
-
 const BottomBar = styled.nav`
   display: none;
 
@@ -240,8 +233,6 @@ const BottomTabLabel = styled.span<{ $active: boolean }>`
   letter-spacing: 0.2px;
 `;
 
-/* ── Main ──────────────────────────────────────────────── */
-
 const Main = styled.main`
   min-height: calc(100vh - 64px);
   background: ${({ theme }) => theme.colors.canvas};
@@ -261,10 +252,6 @@ const MainInner = styled.div`
     padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.base};
   }
 `;
-
-/* ══════════════════════════════════════════════════════════
-   Component
-══════════════════════════════════════════════════════════ */
 
 export function Layout({ children }: LayoutProps) {
   const { user, logout } = useAuthCtx();
@@ -309,7 +296,6 @@ export function Layout({ children }: LayoutProps) {
             <BrandName>Cantina Batista Palmeiras</BrandName>
           </Brand>
 
-          {/* Desktop nav */}
           <Nav>
             {showSetup && (
               <NavLink to={AppRoute.Setup} $active={isActive(AppRoute.Setup)}>
@@ -365,7 +351,6 @@ export function Layout({ children }: LayoutProps) {
         <MainInner>{children}</MainInner>
       </Main>
 
-      {/* Mobile bottom tab bar — só aparece se a rota atual é uma das abas */}
       {(isActive(AppRoute.Setup) || isActive(AppRoute.Cashier) || isActive(AppRoute.Orders) || isActive(AppRoute.Kitchen)) && (
         <BottomBar>
           {showSetup && (

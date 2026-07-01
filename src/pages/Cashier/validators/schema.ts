@@ -1,4 +1,6 @@
+// Libs
 import { z } from 'zod';
+// Components
 import { PaymentMethod } from '../../../types';
 
 export const cashierSchema = z.object({

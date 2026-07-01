@@ -1,7 +1,16 @@
-import styled from 'styled-components';
+// Components
 import { ModalTitle } from '../../../components/Modal';
-import { HistoryOrder } from '../hooks/useClientHistory';
 import { OrderStatus, PaymentMethod } from '../../../types';
+import { HistoryOrder } from '../domain';
+import {
+  HistoryEmpty,
+  HistoryItem,
+  HistoryItemHeader,
+  HistoryItemMeta,
+  HistoryItemSession,
+  HistoryList,
+  StatusBadge,
+} from '../styles';
 
 const PAYMENT_LABEL: Record<PaymentMethod, string> = {
   [PaymentMethod.Pix]: 'Pix',
@@ -13,68 +22,6 @@ const STATUS_LABEL: Record<OrderStatus, string> = {
   [OrderStatus.Reservation]: 'Pendente',
 };
 
-const List = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.md};
-  max-height: 60vh;
-  overflow-y: auto;
-  margin-top: ${({ theme }) => theme.spacing.md};
-  padding-right: 4px;
-`;
-
-const Item = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.sm};
-  padding: ${({ theme }) => theme.spacing.md};
-`;
-
-const ItemHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: ${({ theme }) => theme.spacing.sm};
-  margin-bottom: 4px;
-`;
-
-const ItemSession = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.caption.fontSize};
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
-const ItemMeta = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  margin-top: 2px;
-`;
-
-const StatusBadge = styled.span<{ $status: OrderStatus }>`
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-radius: ${({ theme }) => theme.rounded.full};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.badge.fontSize};
-  font-weight: 600;
-
-  ${({ $status }) =>
-    $status === OrderStatus.Sale
-      ? `background: #f0faf5; color: #1a7a4a; border: 1px solid #b6e8cf;`
-      : `background: #fffbeb; color: #b45309; border: 1px solid #fde68a;`}
-`;
-
-const Empty = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing.xl} 0;
-`;
-
 interface Props {
   history: HistoryOrder[];
   loading: boolean;
@@ -85,28 +32,28 @@ export function HistoryModal({ history, loading }: Props) {
     <div>
       <ModalTitle>Histórico de pedidos</ModalTitle>
       {loading ? (
-        <Empty>Carregando...</Empty>
+        <HistoryEmpty>Carregando...</HistoryEmpty>
       ) : history.length === 0 ? (
-        <Empty>Nenhum pedido em domingos anteriores.</Empty>
+        <HistoryEmpty>Nenhum pedido em domingos anteriores.</HistoryEmpty>
       ) : (
-        <List>
+        <HistoryList>
           {history.map((o) => (
-            <Item key={o.id}>
-              <ItemHeader>
+            <HistoryItem key={o.id}>
+              <HistoryItemHeader>
                 <div>
-                  <ItemSession>
+                  <HistoryItemSession>
                     {o.sessionMinistry} · {new Date(o.sessionDate).toLocaleDateString('pt-BR')}
-                  </ItemSession>
-                  <ItemMeta>
+                  </HistoryItemSession>
+                  <HistoryItemMeta>
                     {o.dishes.filter((d, i, arr) => arr.indexOf(d) === i).join(', ')}
                     {' · '}R$ {o.total.toFixed(2)} · {PAYMENT_LABEL[o.paymentMethod]}
-                  </ItemMeta>
+                  </HistoryItemMeta>
                 </div>
                 <StatusBadge $status={o.status}>{STATUS_LABEL[o.status]}</StatusBadge>
-              </ItemHeader>
-            </Item>
+              </HistoryItemHeader>
+            </HistoryItem>
           ))}
-        </List>
+        </HistoryList>
       )}
     </div>
   );

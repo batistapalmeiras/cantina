@@ -1,6 +1,9 @@
+// React
 import React from 'react';
 import { createPortal } from 'react-dom';
+// Libs
 import styled from 'styled-components';
+// Components
 import { fadeIn, slideUp } from '../../styles/animations';
 
 const Overlay = styled.div`

@@ -1,107 +1,141 @@
-# Convenções do projeto
+# Project conventions
 
-## Estrutura de uma page
+## Page structure
 
-Cada page complexa (com lógica de negócio própria) segue esta estrutura:
+Each complex page (with its own business logic) follows this structure:
 
 ```
 pages/<Page>/
   domain/
-    rules.ts          # funções puras de negócio (sem React, sem Supabase)
-    types/             # tipos derivados de regras de negócio (ver "Padrão de pasta types/")
+    rules.ts           # pure business functions (no React, no Supabase)
+    types/             # types derived from business rules (see "types/ folder pattern")
       interfaces.ts
       index.ts
-    index.ts            # barrel: export * from './rules'; export * from './types';
+    index.ts           # barrel: export * from './rules'; export * from './types';
+  validators/
+    schema.ts          # Zod schemas + inferred types (z.infer)
+    index.ts           # barrel: export * from './schema';
   hooks/
-    use<Page>.ts       # orquestra dados (contexts/Supabase) + chama domain/rules
-  styles/
-    <Page>.ts            # styled-components da page
-    index.ts              # barrel: export * from './<Page>';
-  types/
-    enums.ts             # tipos de estado de UI (ver "Padrão de pasta types/")
+    use<Page>.ts       # orchestrates data (contexts/Supabase) + calls domain/rules
     index.ts
-  components/            # subcomponentes específicos da page, se houver
-  index.tsx               # só composição/JSX — sem lógica de negócio, sem styled-components
+  styles/
+    <Page>.ts          # styled-components for the page
+    index.ts           # barrel: export * from './<Page>';
+  types/
+    enums.ts           # UI-only state types (see "types/ folder pattern")
+    index.ts
+  components/          # page-specific subcomponents, if any
+    index.ts
+  index.tsx            # composition/JSX only — no business logic, no styled-components
 ```
 
-### Toda pasta tem seu `index.ts` como porta de entrada
+Only create folders that have content — if the page has no pure business rules, skip `domain/`. If there's no form, skip `validators/`.
 
-`domain/`, `types/`, `styles/`, `components/` — todas são importadas de fora **pelo caminho da pasta**, nunca pelo arquivo interno:
+### Every folder has its own `index.ts` as the entry point
+
+`domain/`, `validators/`, `types/`, `styles/`, `hooks/`, `components/` — always imported by **folder path**, never by the internal file:
 
 ```ts
-// ✅ certo
+// ✅ correct
 import { groupTicketsByDish } from './domain';
+import { cashierSchema } from './validators';
 
-// ❌ errado — vaza detalhe de implementação interna da pasta
+// ❌ wrong — leaks internal implementation detail
 import { groupTicketsByDish } from './domain/rules';
+import { cashierSchema } from './validators/schema';
 ```
 
-Isso vale mesmo quando a pasta hoje só tem um arquivo (`rules.ts`, `enums.ts`, `<Page>.ts` etc.) — o `index.ts` existe desde o início para não exigir refatorar todos os imports quando a pasta crescer.
+This applies even when the folder currently has only one file (`rules.ts`, `schema.ts`, `enums.ts`, `<Page>.ts`, etc.) — the `index.ts` exists from the start so you never need to refactor imports as the folder grows.
 
-Se `styles/<Page>.ts` ficar grande demais, divida por responsabilidade (ex: `Card.ts`, `Tabs.ts`) e mantenha `index.ts` reexportando todos — a mesma lógica de `types/`.
+If `styles/<Page>.ts` gets too large, split it by responsibility (e.g. `Card.ts`, `Tabs.ts`) and keep `index.ts` re-exporting everything — same logic as `types/`.
 
-### Padrão de pasta `types/`
+### `validators/`: what goes in
 
-Toda pasta `types/` do projeto (seja a raiz de uma page, seja `domain/types/`, seja `src/types/`) segue a mesma divisão por responsabilidade — **nunca um arquivo único misturando tudo**:
+- Zod schemas that define the shape and validation of forms.
+- Types inferred from those schemas (`z.infer<typeof schema>`).
+- Nothing else — no business functions, no UI constants.
+
+```ts
+// validators/schema.ts
+export const cashierSchema = z.object({ ... });
+export type CashierFormValues = z.infer<typeof cashierSchema>;
+```
+
+### `domain/` vs `validators/` vs `types/`: which one to use?
+
+**Test for `domain/`**: *"Would this function/type still make sense if this feature became an API or script, with no UI at all?"*
+
+- **Yes** → `domain/` (it's a business concept)
+- **No, but it's form validation** → `validators/`
+- **No, it exists only because of the UI** → `types/` at the page root
+
+| Example | Where | Why |
+|---|---|---|
+| `groupTicketsByDish(order)` | `domain/rules.ts` | Pure business rule. Would make sense in a report or API with no UI. |
+| `GroupedItem` (grouping format) | `domain/types/interfaces.ts` | Return type of a business rule. |
+| `cashierSchema` / `CashierFormValues` | `validators/schema.ts` | Form validation — exists because of the `<form>`, not the business. |
+| `KitchenTab` (`Pending` \| `Delivered`) | `types/enums.ts` | Local navigation state, exists only because of the screen tabs. |
+
+Practical rule: **start in `types/`**. Promote to `domain/types/` when a non-React layer (hook, rule, test) also needs it. Use `validators/` when it comes from a Zod schema.
+
+### `types/` folder pattern
+
+Every `types/` folder in the project (whether at the page root, `domain/types/`, or `src/types/`) follows the same split by responsibility — **never a single file mixing everything**:
 
 ```
 types/
-  enums.ts        # só enums
-  interfaces.ts     # só interfaces
-  types.ts          # só type aliases (union types, utility types, etc.)
-  index.ts           # barrel: export * from './enums'; export * from './interfaces'; export * from './types';
+  enums.ts       # enums only
+  interfaces.ts  # interfaces only
+  types.ts       # type aliases only (union types, utility types, etc.)
+  index.ts       # barrel
 ```
 
-Crie **apenas os arquivos que tiverem conteúdo** — se a page só tem um enum, existe só `enums.ts` + `index.ts`. Não criar `interfaces.ts`/`types.ts` vazios "por precaução".
+Create **only the files that have content**. Do not create empty files "just in case".
 
-Sempre importe pelo caminho da pasta (`from './types'`), nunca do arquivo específico (`from './types/enums'`) fora da própria pasta — o `index.ts` é o único ponto de entrada público.
+Always import by folder path (`from './types'`), never from the specific file (`from './types/enums'`) outside the folder itself.
 
-### `domain/` vs `types/`: qual usar?
+### `domain/rules.ts`: what goes in
 
-**Teste**: *"Esse tipo/função ainda faria sentido se essa funcionalidade virasse uma API ou script, sem nenhuma tela?"*
+- Pure functions: receive data, return data. No `useState`, no `supabase`, no JSX.
+- Testable in isolation without mocking React/Supabase.
+- Examples: grouping/sorting/filtering data, calculating totals, validating business rules.
 
-- **Sim** → `domain/` (é um conceito do negócio)
-- **Não** → `types/` na raiz da page (só existe por causa da UI)
+### `hooks/use<Page>.ts`: what goes in
 
-| Exemplo | Onde | Por quê |
-|---|---|---|
-| `groupTicketsByDish(order)` | `domain/rules.ts` | Regra de negócio: como agrupar itens de um pedido. Faria sentido num relatório, numa API, em testes — sem tela nenhuma. |
-| `GroupedItem` (formato do agrupamento) | `domain/types/interfaces.ts` | É o tipo de retorno de uma regra de negócio. |
-| `KitchenTab` (`Pending` \| `Delivered`) | `types/enums.ts` | Só existe porque a tela tem abas. É estado de navegação local, não um conceito do domínio "pedido". |
+- Data access (via contexts like `useSessionCtx`, or direct Supabase calls).
+- Orchestration: fetches raw data → calls `domain/rules` → returns it ready for the UI.
+- Does not duplicate business logic that already exists in `domain/`.
 
-Regra prática: **comece em `types/`**. Só promova para `domain/types/` quando uma camada sem React (um hook, uma rule, um teste) também precisar do tipo.
+### `index.tsx`: what goes in
 
-### `domain/rules.ts`: o que entra
+- JSX and component composition only.
+- No `styled.div` declarations (those go in `styles/`).
+- No business rule declarations (those go in `domain/`).
+- No Zod schema declarations (those go in `validators/`).
+- No loose domain enums/interfaces (those go in `domain/types/` or `types/`).
 
-- Funções puras: recebem dados, retornam dados. Sem `useState`, sem `supabase`, sem JSX.
-- Testáveis isoladamente sem mock de React/Supabase.
-- Exemplos: agrupar/ordenar/filtrar dados, calcular totais, validar regras de negócio.
+## Global utilities (`src/utils/`)
 
-### `hooks/use<Page>.ts`: o que entra
+Pure functions reused by more than one page live in `src/utils/`. Do not duplicate them in each page's `domain/rules.ts`.
 
-- Acesso a dados (via contexts como `useSessionCtx`, ou chamadas diretas ao Supabase).
-- Orquestra: busca dado bruto → chama `domain/rules` → retorna pronto para a UI.
-- Não duplica lógica de negócio que já existe em `domain/`.
+Existing examples: `maskPhone`, `maskCurrencyInput`, `formatCurrency`.
 
-### `index.tsx`: o que entra
+## Domain shared across pages
 
-- Só JSX e composição de componentes.
-- Não declara `styled.div` (vai em `styles/`).
-- Não declara regra de negócio (vai em `domain/`).
-- Não declara enum/interface de domínio solto (vai em `domain/types/` ou `types/`).
+When a concept is used by more than one page (e.g. `Order`, `Dish`, `Session`), it does **not** go into any single page's `domain/`. It stays in `src/types/` (shared) until there is a real need for a formal shared domain layer — do not create this structure preemptively.
 
-## Domínio compartilhado entre páginas
+## Product domains (future)
 
-Quando um conceito é usado por mais de uma page (ex: `Order`, `Dish`, `Session` — usados em Kitchen, Cashier, Report, Pedidos), ele **não** entra no `domain/` de uma page específica. Continua em `src/types/` (compartilhado) até que exista necessidade real de uma camada de domínio compartilhada formal — não criar isso preventivamente.
+The project may grow to cover products beyond the cafeteria (e.g. course bookings, book sales). When that happens, do **not** create a global `domain/` that mixes concepts from different products. Each product should have its own grouping (e.g. `domains/courses/`, `domains/bookstore/`), avoiding collisions where "Order" means different things in different contexts. Do not create these folders ahead of time — only when the domain actually exists.
 
-## Domínios de produto (futuro)
+## Global components (`src/components/`)
 
-O projeto pode crescer para outros produtos além da cantina (ex: reserva de cursos, venda de livros). Quando isso acontecer, **não** criar `domain/` global misturando conceitos de produtos diferentes. Cada produto deve ter seu próprio agrupamento (ex: `domains/cursos/`, `domains/livraria/`), evitando colisão de conceitos como "Pedido" significando coisas diferentes em cada contexto. Não criar essas pastas antecipadamente — só quando o domínio existir de fato.
+A component moves out of a page and into `src/components/` only when it is **reused by more than one page** (e.g. `Button`, `IconButton`, `Tabs`, `Toast`, `BottomSheet`). Components used in a single page stay in `pages/<Page>/components/`.
 
-## Componentes globais (`src/components/`)
-
-Um componente só sai de dentro de uma page e vai para `src/components/` quando é **reutilizado por mais de uma page** (ex: `Button`, `IconButton`, `Tabs`, `Toast`, `BottomSheet`). Componentes usados em uma única page ficam em `pages/<Page>/components/`.
-
-## Páginas já estruturadas neste padrão
+## Pages already structured in this pattern
 
 - `pages/Kitchen/`
+- `pages/Login/`
+- `pages/Reservation/`
+- `pages/ReservationSuccess/`
+- `pages/Cashier/`

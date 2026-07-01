@@ -1,19 +1,22 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+// React
+import { BrowserRouter, Navigate,Route, Routes } from 'react-router-dom';
+// Components
+import { Layout } from '../components/Layout';
 import { AuthProvider } from '../contexts/AuthContext';
 import { SessionProvider } from '../contexts/SessionContext';
-import { ProtectedRoute } from './ProtectedRoute';
-import { Layout } from '../components/Layout';
-import { AppRoute } from './paths';
-import { LoginPage } from '../pages/Login';
 import { CashierPage } from '../pages/Cashier';
-import { SetupPage } from '../pages/Setup';
-import { SessionPage } from '../pages/Session';
-import { ReportPage } from '../pages/Report';
-import { OrdersPage } from '../pages/Orders';
 import { KitchenPage } from '../pages/Kitchen';
+import { LoginPage } from '../pages/Login';
+import { OrdersPage } from '../pages/Orders';
 import { ProfilePage } from '../pages/Profile';
+import { ReportPage } from '../pages/Report';
 import { ReservationPage } from '../pages/Reservation';
-import { ReservationSuccessPage } from '../pages/Reservation/ReservationSuccess';
+import { ReservationSuccessPage } from '../pages/ReservationSuccess';
+import { SessionPage } from '../pages/Session';
+import { SetupPage } from '../pages/Setup';
+// Local
+import { AppRoute } from './paths';
+import { ProtectedRoute } from './ProtectedRoute';
 
 export function AppRouter() {
   return (
@@ -21,12 +24,10 @@ export function AppRouter() {
       <AuthProvider>
         <SessionProvider>
           <Routes>
-            {/* Rotas públicas */}
             <Route path={AppRoute.Login} element={<LoginPage />} />
             <Route path={AppRoute.Reservation} element={<ReservationPage />} />
             <Route path={AppRoute.ReservationSuccess} element={<ReservationSuccessPage />} />
 
-            {/* Rotas protegidas com Layout */}
             <Route
               path="/*"
               element={

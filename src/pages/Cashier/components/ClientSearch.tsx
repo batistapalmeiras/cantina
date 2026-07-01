@@ -1,8 +1,13 @@
-import { useRef, useEffect } from 'react';
-import styled from 'styled-components';
+// React
+import { useEffect,useRef } from 'react';
+// Libs
 import { Search, X } from 'lucide-react';
-import { useClientSearch, SelectedClient } from '../hooks/useClientSearch';
+import styled from 'styled-components';
+// Components
 import { Button } from '../../../components/Button';
+import { maskPhone } from '../../../utils';
+import { SelectedClient } from '../domain';
+import { useClientSearch } from '../hooks/useClientSearch';
 
 interface Props {
   onSelect: (client: SelectedClient) => void;
@@ -44,7 +49,6 @@ const Input = styled.input`
 
   &::placeholder { color: ${({ theme }) => theme.colors.muted}; }
 `;
-
 
 const ClearBtn = styled.button`
   display: flex;
@@ -110,16 +114,6 @@ const DropdownMsg = styled.div`
   color: ${({ theme }) => theme.colors.muted};
 `;
 
-const StatusRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  margin-top: ${({ theme }) => theme.spacing.xs};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-`;
-
-
 const RegisterBox = styled.div`
   margin-top: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => theme.spacing.md};
@@ -179,14 +173,6 @@ const ConflictText = styled.p`
   strong { font-weight: 600; }
 `;
 
-function formatPhone(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 11);
-  if (digits.length <= 2) return digits;
-  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-  if (digits.length <= 11) return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
-  return value;
-}
-
 export function ClientSearch({ onSelect, onClear }: Props) {
   const phoneRef = useRef<HTMLInputElement>(null);
   const { query, phone, state, search, selectClient, checkPhone, clear } =
@@ -220,7 +206,6 @@ export function ClientSearch({ onSelect, onClear }: Props) {
         )}
       </InputRow>
 
-      {/* Dropdown de resultados */}
       {state.type === 'results' && (
         <Dropdown>
           {state.items.map((client) => (
@@ -238,20 +223,18 @@ export function ClientSearch({ onSelect, onClear }: Props) {
         </Dropdown>
       )}
 
-      {/* Nenhum resultado → cadastro imediato */}
       {state.type === 'registering' && (
         <RegisterBox>
           <RegisterLabel>Cliente não encontrado — informe o telefone para cadastrar</RegisterLabel>
           <PhoneInput
             ref={phoneRef}
             value={phone}
-            onChange={(e) => checkPhone(formatPhone(e.target.value))}
+            onChange={(e) => checkPhone(maskPhone(e.target.value))}
             placeholder="(00) 00000-0000"
           />
         </RegisterBox>
       )}
 
-      {/* Conflito de telefone */}
       {state.type === 'phone_conflict' && (
         <RegisterBox>
           <RegisterLabel>Cliente não encontrado — informe o telefone para cadastrar</RegisterLabel>
@@ -271,7 +254,6 @@ export function ClientSearch({ onSelect, onClear }: Props) {
           </ConflictBox>
         </RegisterBox>
       )}
-
     </Wrap>
   );
 }

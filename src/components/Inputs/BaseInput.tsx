@@ -1,5 +1,8 @@
+// React
+import { Control, Controller, ControllerRenderProps,FieldPath, FieldValues } from 'react-hook-form';
+// Libs
 import styled from 'styled-components';
-import { Controller, Control, FieldPath, FieldValues, ControllerRenderProps } from 'react-hook-form';
+// Components
 import { IBaseInputProps } from '../../types/Inputs';
 
 const Wrapper = styled.div`

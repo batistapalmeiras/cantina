@@ -1,4 +1,6 @@
+// Components
 import { Order, OrderStatus } from '../../../types';
+// Local
 import { GroupedItem } from './types';
 
 export function selectKitchenOrders(orders: Order[]): Order[] {

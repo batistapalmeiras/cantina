@@ -1,6 +1,8 @@
+// Libs
 import styled from 'styled-components';
-import { ModalTitle, ModalActions } from '../../../components/Modal';
+// Components
 import { Button } from '../../../components/Button';
+import { ModalActions,ModalTitle } from '../../../components/Modal';
 import { Typography } from '../../../components/Typography';
 
 interface Props {

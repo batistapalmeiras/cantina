@@ -1,297 +1,53 @@
-import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+// React
 import { zodResolver } from '@hookform/resolvers/zod';
-import styled, { keyframes } from 'styled-components';
+import { useState } from 'react';
+import { Controller,useForm } from 'react-hook-form';
+// Libs
 import { Pencil } from 'lucide-react';
-import { useReservation } from './hooks/useReservation';
-import { useClientHistory } from './hooks/useClientHistory';
-import { reservationSchema, ReservationFormValues } from './validators/schema';
-import { useClient } from '../../hooks/useClient';
-import { useModal } from '../../hooks/useModal';
-import { PaymentMethod } from '../../types';
-import { Typography } from '../../components/Typography';
+// Components
+import icon from '../../assets/icon.png';
 import { Button } from '../../components/Button';
 import { InfoBox } from '../../components/InfoBox';
 import { DishSelector } from '../../components/Inputs';
-import { EditProfileModal } from './components/EditProfileModal';
+import { PaymentToggle } from '../../components/PaymentToggle';
+import { Typography } from '../../components/Typography';
+import { useClient } from '../../hooks/useClient';
+import { useModal } from '../../hooks/useModal';
+import { PaymentMethod } from '../../types';
+import { maskPhone } from '../../utils';
+// Local
 import { CancelConfirmDialog } from './components/CancelConfirmDialog';
+import { EditProfileModal } from './components/EditProfileModal';
 import { HistoryModal } from './components/HistoryModal';
-import icon from '../../assets/icon.png';
-
-/* ── Phone mask ─────────────────────────────────────────── */
-
-const formatPhone = (val: string) => {
-  const d = val.replace(/\D/g, '').slice(0, 11);
-  if (d.length === 0) return '';
-  if (d.length <= 2) return `(${d}`;
-  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
-  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
-};
-
-/* ── Skeleton ───────────────────────────────────────────── */
-
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
-`;
-
-const Skeleton = styled.div<{ $h?: string; $w?: string }>`
-  height: ${({ $h }) => $h ?? '16px'};
-  width: ${({ $w }) => $w ?? '100%'};
-  border-radius: 6px;
-  background: ${({ theme }) => theme.colors.surfaceStrong};
-  animation: ${pulse} 1.4s ease-in-out infinite;
-`;
-
-/* ── Layout ──────────────────────────────────────────────── */
-
-const Page = styled.div`
-  min-height: 100vh;
-  background: ${({ theme }) => theme.colors.canvas};
-`;
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.base};
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.md};
-`;
-
-/* ── Header ─────────────────────────────────────────────── */
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${({ theme }) => theme.spacing.base} 0;
-`;
-
-const BrandRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-`;
-
-const BrandLogo = styled.img`
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-`;
-
-const BrandName = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.titleMd.fontSize};
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
-const BrandSub = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  margin-top: 1px;
-`;
-
-const EditBtn = styled.button`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.full};
-  background: none;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.muted};
-  cursor: pointer;
-  transition: box-shadow 0.15s, color 0.15s;
-  &:hover { box-shadow: ${({ theme }) => theme.shadows.md}; color: ${({ theme }) => theme.colors.ink}; }
-`;
-
-/* ── Cards ──────────────────────────────────────────────── */
-
-const Card = styled.div`
-  background: ${({ theme }) => theme.colors.canvas};
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.md};
-  padding: ${({ theme }) => theme.spacing.base};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
-`;
-
-const CardLabel = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.caption.fontSize};
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.muted};
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const SessionName = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.titleMd.fontSize};
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
-const SessionDate = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  margin-top: 2px;
-`;
-
-/* ── Input ──────────────────────────────────────────────── */
-
-const FieldStack = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.md};
-`;
-
-const FieldWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-const Label = styled.label`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.caption.fontSize};
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
-const Input = styled.input<{ $error?: boolean }>`
-  height: 48px;
-  width: 100%;
-  padding: 0 ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme, $error }) => ($error ? theme.colors.primaryErrorText : theme.colors.hairline)};
-  border-radius: ${({ theme }) => theme.rounded.sm};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.bodyMd.fontSize};
-  color: ${({ theme }) => theme.colors.ink};
-  background: ${({ theme }) => theme.colors.canvas};
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.ink};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.hairlineSoft};
-  }
-  &::placeholder { color: ${({ theme }) => theme.colors.mutedSoft}; }
-`;
-
-const ErrorMsg = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-  color: ${({ theme }) => theme.colors.primaryErrorText};
-`;
-
-/* ── Payment toggle ─────────────────────────────────────── */
-
-const PaymentToggle = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.sm};
-  overflow: hidden;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const PaymentBtn = styled.button<{ $selected: boolean }>`
-  height: 44px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.buttonSm.fontSize};
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  background: ${({ theme, $selected }) => ($selected ? theme.colors.ink : theme.colors.canvas)};
-  color: ${({ theme, $selected }) => ($selected ? theme.colors.onDark : theme.colors.muted)};
-  & + & { border-left: 1px solid ${({ theme }) => theme.colors.hairline}; }
-  &:hover { background: ${({ theme, $selected }) => ($selected ? theme.colors.ink : theme.colors.surfaceSoft)}; }
-`;
-
-const TotalLine = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.sm} 0;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  border-top: 1px solid ${({ theme }) => theme.colors.hairlineSoft};
-`;
-
-const TotalLabel = styled.span`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.titleMd.fontSize};
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
-const TotalValue = styled.span`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.displaySm.fontSize};
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
-const CancelLink = styled.button`
-  display: block;
-  width: 100%;
-  margin-top: ${({ theme }) => theme.spacing.sm};
-  padding: ${({ theme }) => theme.spacing.sm};
-  background: none;
-  border: none;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
-  color: ${({ theme }) => theme.colors.primaryErrorText};
-  cursor: pointer;
-  text-align: center;
-  &:hover { text-decoration: underline; }
-`;
-
-const HistoryBtn = styled.button`
-  display: block;
-  width: 100%;
-  padding: ${({ theme }) => theme.spacing.sm};
-  background: none;
-  border: none;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  cursor: pointer;
-  text-align: center;
-  &:hover { color: ${({ theme }) => theme.colors.ink}; text-decoration: underline; }
-`;
-
-/* ── Empty page ─────────────────────────────────────────── */
-
-const Empty = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  text-align: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  padding: ${({ theme }) => theme.spacing.base};
-`;
-
-/* ══════════════════════════════════════════════════════════
-   Component
-══════════════════════════════════════════════════════════ */
-
-const PAYMENT_LABEL: Record<PaymentMethod, string> = {
-  [PaymentMethod.Pix]: 'Pix',
-  [PaymentMethod.Cash]: 'Dinheiro',
-};
+import { useClientHistory } from './hooks/useClientHistory';
+import { useReservation } from './hooks/useReservation';
+import {
+  BrandLogo,
+  BrandName,
+  BrandRow,
+  BrandSub,
+  CancelLink,
+  Card,
+  CardLabel,
+  Container,
+  EditBtn,
+  Empty,
+  ErrorMsg,
+  FieldStack,
+  FieldWrap,
+  Header,
+  HistoryBtn,
+  Input,
+  Label,
+  Page,
+  SessionDate,
+  SessionName,
+  Skeleton,
+  TotalLabel,
+  TotalLine,
+  TotalValue,
+} from './styles';
+import { ReservationFormValues,reservationSchema } from './validators';
 
 export function ReservationPage() {
   const { client, loginClient, updateClient, loading: clientLoading } = useClient();
@@ -356,20 +112,12 @@ export function ReservationPage() {
 
   const paymentSection = (
     <Card>
-      <CardLabel>Pagamento</CardLabel>
-      <PaymentToggle>
-        <PaymentBtn $selected={paymentMethod === PaymentMethod.Pix} onClick={() => setPaymentMethod(PaymentMethod.Pix)}>
-          Pix
-        </PaymentBtn>
-        <PaymentBtn $selected={paymentMethod === PaymentMethod.Cash} onClick={() => setPaymentMethod(PaymentMethod.Cash)}>
-          Dinheiro
-        </PaymentBtn>
-      </PaymentToggle>
+      <PaymentToggle label="Forma de pagamento" value={paymentMethod} onChange={setPaymentMethod} />
       {paymentMethod === PaymentMethod.Pix && (
-        <InfoBox variant="warning">Apresente o comprovante Pix no caixa após o culto.</InfoBox>
+        <InfoBox variant="warning" style={{ marginTop: 12 }}>Apresente o comprovante Pix no caixa após o culto.</InfoBox>
       )}
       {paymentMethod === PaymentMethod.Cash && (
-        <InfoBox variant="warning">Acerte o pagamento em dinheiro no caixa após o culto.</InfoBox>
+        <InfoBox variant="warning" style={{ marginTop: 12 }}>Acerte o pagamento em dinheiro no caixa após o culto.</InfoBox>
       )}
       <TotalLine>
         <TotalLabel>Total</TotalLabel>
@@ -380,7 +128,6 @@ export function ReservationPage() {
 
   const openHistory = () => open(<HistoryModal history={history} loading={historyLoading} />);
 
-  /* ── Sessão fechada ── */
   if (!session || !session.isOpen) {
     return (
       <Page>
@@ -395,7 +142,6 @@ export function ReservationPage() {
     );
   }
 
-  /* ── Skeleton ── */
   if (clientLoading) {
     return (
       <Page>
@@ -419,7 +165,6 @@ export function ReservationPage() {
     );
   }
 
-  /* ── Login ── */
   if (!client) {
     const handleLogin = async () => {
       setLoggingIn(true);
@@ -459,7 +204,7 @@ export function ReservationPage() {
                       placeholder="(11) 99999-0000"
                       inputMode="numeric"
                       $error={!!errors.phone}
-                      onChange={(e) => field.onChange(formatPhone(e.target.value))}
+                      onChange={(e) => field.onChange(maskPhone(e.target.value))}
                     />
                   )}
                 />
@@ -482,7 +227,6 @@ export function ReservationPage() {
     );
   }
 
-  /* ── Editar reserva existente ── */
   if (clientOrder) {
     return (
       <Page>
@@ -529,7 +273,6 @@ export function ReservationPage() {
     );
   }
 
-  /* ── Nova reserva ── */
   return (
     <Page>
       <Container>

@@ -1,10 +1,14 @@
+// React
 import { InputHTMLAttributes, useState } from 'react';
 import { FieldPath, FieldValues } from 'react-hook-form';
-import { TextFieldProps, CurrencyFieldProps } from '../../types/Inputs';
-import { maskCurrencyInput, parseCurrency } from '../../utils';
-import { ControlledBase, BaseInput, InputField } from './BaseInput';
+// Libs
 import { Eye, EyeOff } from 'lucide-react';
 import styled from 'styled-components';
+// Components
+import { CurrencyFieldProps,TextFieldProps } from '../../types/Inputs';
+import { maskCurrencyInput, parseCurrency } from '../../utils';
+// Local
+import { BaseInput, ControlledBase, InputField } from './BaseInput';
 
 const InputWrapper = styled.div`
   position: relative;

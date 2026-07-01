@@ -1,7 +1,9 @@
-import styled from 'styled-components';
+// Libs
 import { AlertTriangle } from 'lucide-react';
-import { ModalTitle } from '../../../components/Modal';
+import styled from 'styled-components';
+// Components
 import { Button } from '../../../components/Button';
+import { ModalTitle } from '../../../components/Modal';
 
 interface Props {
   pendingCount: number;

@@ -1,8 +1,12 @@
+// React
 import React from 'react';
-import styled from 'styled-components';
 import { FieldPath, FieldValues } from 'react-hook-form';
+// Libs
+import styled from 'styled-components';
+// Components
 import { SelectProps } from '../../types/Inputs';
-import { ControlledBase, BaseInput } from './BaseInput';
+// Local
+import { BaseInput,ControlledBase } from './BaseInput';
 
 const SelectField = styled.select`
   height: 56px;

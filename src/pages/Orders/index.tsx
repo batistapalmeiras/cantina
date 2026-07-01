@@ -1,23 +1,26 @@
+// Libs
 import { Search } from 'lucide-react';
 import { Check, Pencil, X } from 'lucide-react';
-import { useOrders } from './hooks/useOrders';
-import { computeRemainingTickets } from './domain';
-import { useModal } from '../../hooks/useModal';
-import { Order, OrderStatus } from '../../types';
-import { Typography } from '../../components/Typography';
-import { PageHeader } from '../../components/PageHeader';
+// Components
 import { Button } from '../../components/Button';
 import { OrdersList } from '../../components/OrdersList';
+import { PageHeader } from '../../components/PageHeader';
+import { Typography } from '../../components/Typography';
+import { useModal } from '../../hooks/useModal';
+import { Order, OrderStatus } from '../../types';
 import { OrderEditForm } from '../Report/components/OrderEditForm';
+// Local
+import { computeRemainingTickets } from './domain';
+import { useOrders } from './hooks/useOrders';
 import {
-  StatsGrid,
-  StatCard,
-  StatLabel,
-  StatValue,
-  SearchWrap,
-  SearchInput,
   Empty,
   OrderActions,
+  SearchInput,
+  SearchWrap,
+  StatCard,
+  StatLabel,
+  StatsGrid,
+  StatValue,
 } from './styles';
 
 export function OrdersPage() {

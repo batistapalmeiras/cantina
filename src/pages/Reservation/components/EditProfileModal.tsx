@@ -1,50 +1,10 @@
+// React
 import { useState } from 'react';
-import styled from 'styled-components';
-import { ModalTitle, ModalActions } from '../../../components/Modal';
+// Components
 import { Button } from '../../../components/Button';
-
-const formatPhone = (val: string) => {
-  const d = val.replace(/\D/g, '').slice(0, 11);
-  if (d.length === 0) return '';
-  if (d.length <= 2) return `(${d}`;
-  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
-  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
-};
-
-const FieldWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const Label = styled.label`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.caption.fontSize};
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
-const Input = styled.input`
-  height: 48px;
-  padding: 0 ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.sm};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.bodyMd.fontSize};
-  color: ${({ theme }) => theme.colors.ink};
-  background: ${({ theme }) => theme.colors.canvas};
-  outline: none;
-  box-sizing: border-box;
-  width: 100%;
-  transition: border-color 0.15s, box-shadow 0.15s;
-
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.ink};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.hairlineSoft};
-  }
-`;
+import { ModalActions,ModalTitle } from '../../../components/Modal';
+import { maskPhone } from '../../../utils';
+import { EditFieldWrap, EditInput,Label } from '../styles';
 
 interface Props {
   name: string;
@@ -72,23 +32,23 @@ export function EditProfileModal({ name: initialName, phone: initialPhone, close
   return (
     <div>
       <ModalTitle>Editar dados</ModalTitle>
-      <FieldWrap>
+      <EditFieldWrap>
         <Label>Nome completo</Label>
-        <Input
+        <EditInput
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Seu nome"
         />
-      </FieldWrap>
-      <FieldWrap>
+      </EditFieldWrap>
+      <EditFieldWrap>
         <Label>Telefone (WhatsApp)</Label>
-        <Input
+        <EditInput
           value={phone}
-          onChange={(e) => setPhone(formatPhone(e.target.value))}
+          onChange={(e) => setPhone(maskPhone(e.target.value))}
           placeholder="(11) 99999-0000"
           inputMode="numeric"
         />
-      </FieldWrap>
+      </EditFieldWrap>
       <ModalActions>
         <Button variant="secondary" size="md" onClick={close}>Cancelar</Button>
         <Button
