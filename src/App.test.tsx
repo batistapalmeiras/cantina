@@ -1,5 +1,3 @@
-// React
-import React from 'react';
 // Libs
 import { render, screen } from '@testing-library/react';
 // Local

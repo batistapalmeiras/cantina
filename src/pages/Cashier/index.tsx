@@ -35,6 +35,7 @@ export function CashierPage() {
     tickets,
     total,
     onSale,
+    orderError,
     reservations,
     pendingCount,
     increment,
@@ -48,6 +49,7 @@ export function CashierPage() {
   const { show: showToast, toast } = useToast();
 
   useEffect(() => { if (onSale) showToast('✓ Venda registrada com sucesso'); }, [onSale]);
+  useEffect(() => { if (orderError) showToast(orderError); }, [orderError]);
 
   const { control, handleSubmit, reset, setValue } = useForm<CashierFormValues>({
     resolver: zodResolver(cashierSchema),

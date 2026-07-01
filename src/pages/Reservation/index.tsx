@@ -1,6 +1,6 @@
 // React
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import { Controller,useForm } from 'react-hook-form';
 // Libs
 import { Pencil } from 'lucide-react';
@@ -10,6 +10,7 @@ import { Button } from '../../components/Button';
 import { InfoBox } from '../../components/InfoBox';
 import { DishSelector } from '../../components/Inputs';
 import { PaymentToggle } from '../../components/PaymentToggle';
+import { useToast } from '../../components/Toast';
 import { Typography } from '../../components/Typography';
 import { useClient } from '../../hooks/useClient';
 import { useModal } from '../../hooks/useModal';
@@ -62,6 +63,7 @@ export function ReservationPage() {
     tickets,
     total,
     clientOrder,
+    orderError,
     increment,
     decrement,
     setAddonCount,
@@ -69,6 +71,10 @@ export function ReservationPage() {
     saveReservation,
     cancelReservation,
   } = useReservation(client?.phone);
+
+  const { show: showToast, toast } = useToast();
+
+  useEffect(() => { if (orderError) showToast(orderError); }, [orderError]);
 
   const { history, loading: historyLoading } = useClientHistory(client?.phone, session?.id);
 
@@ -309,6 +315,7 @@ export function ReservationPage() {
         <HistoryBtn onClick={openHistory}>Ver histórico de pedidos</HistoryBtn>
 
         {modal}
+        {toast}
       </Container>
     </Page>
   );
