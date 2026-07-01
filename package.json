@@ -47,13 +47,7 @@
           "argsIgnorePattern": "^_",
           "varsIgnorePattern": "^_"
         }
-<<<<<<< HEAD
-      ],
-      "simple-import-sort/imports": "warn",
-      "simple-import-sort/exports": "error"
-=======
       ]
->>>>>>> cf59cefac376d155b8745d529125553f5f4d2eda
     }
   },
   "browserslist": {
