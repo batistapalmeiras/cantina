@@ -1,8 +1,7 @@
 // Libs
 import styled, { css } from 'styled-components';
-
-type Variant = 'primary' | 'secondary' | 'danger';
-type Size = 'xs' | 'sm' | 'md' | 'lg';
+// Components
+import { Size, Variant } from '../types';
 
 export const iconBoxSize: Record<Size, number> = { xs: 14, sm: 16, md: 18, lg: 20 };
 

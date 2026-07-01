@@ -1,19 +1,6 @@
-// React
-import { ButtonHTMLAttributes, ReactNode } from 'react';
 // Local
 import { IconWrap, StyledButton } from './styles';
-
-type Variant = 'primary' | 'secondary' | 'danger';
-type Size = 'xs' | 'sm' | 'md' | 'lg';
-type IconPosition = 'left' | 'center' | 'right';
-
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  icon: ReactNode;
-  iconPosition?: IconPosition;
-  variant?: Variant;
-  size?: Size;
-  fullWidth?: boolean;
-}
+import { IconButtonProps } from './types';
 
 export function IconButton({
   icon,

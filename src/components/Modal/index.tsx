@@ -2,7 +2,6 @@
 import React from 'react';
 // Local
 import { Box, Overlay } from './styles';
-
 export { ModalActions, ModalTitle } from './styles';
 
 interface Props {

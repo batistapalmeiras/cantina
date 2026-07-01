@@ -1,8 +1,7 @@
 // Libs
 import styled, { css } from 'styled-components';
-
-type Variant = 'primary' | 'secondary' | 'danger';
-type Size = 'sm' | 'md' | 'lg';
+// Components
+import { Size, Variant } from '../types';
 
 export const sizeStyles = {
   sm: css`

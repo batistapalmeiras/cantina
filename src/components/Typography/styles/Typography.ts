@@ -1,10 +1,7 @@
 // Libs
 import styled, { css } from 'styled-components';
-
-type TypographyType =
-  | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-  | 'p' | 'span'
-  | 'label' | 'caption' | 'error' | 'micro';
+// Components
+import { TypographyType } from '../types';
 
 export const styleMap: Record<TypographyType, ReturnType<typeof css>> = {
   h1: css`font-size: ${({ theme }) => theme.typography.displayXl.fontSize}; font-weight: ${({ theme }) => theme.typography.displayXl.fontWeight}; line-height: ${({ theme }) => theme.typography.displayXl.lineHeight}; color: ${({ theme }) => theme.colors.ink};`,

@@ -1,17 +1,11 @@
 // React
-import { ReactNode } from 'react';
-import { Control, Controller, ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 // Local
 import { ErrorText, Label, Wrapper } from './styles';
+import { ControlledBaseProps, IBaseInputProps } from './types';
 
 export { InputField } from './styles';
-
-export interface IBaseInputProps {
-  label: string;
-  wrapperStyle?: React.CSSProperties;
-  error?: string;
-  children: ReactNode;
-}
+export type { IBaseInputProps } from './types';
 
 export function BaseInput({ label, wrapperStyle, error, children }: IBaseInputProps) {
   return (
@@ -21,14 +15,6 @@ export function BaseInput({ label, wrapperStyle, error, children }: IBaseInputPr
       {error && <ErrorText>{error}</ErrorText>}
     </Wrapper>
   );
-}
-
-interface ControlledBaseProps<T extends FieldValues, N extends FieldPath<T>> {
-  label: string;
-  control: Control<T>;
-  name: N;
-  wrapperStyle?: React.CSSProperties;
-  children: (field: ControllerRenderProps<T, N>, error?: string) => React.ReactNode;
 }
 
 export function ControlledBase<T extends FieldValues, N extends FieldPath<T>>({
