@@ -1,0 +1,178 @@
+export const theme = {
+  colors: {
+    primary: '#78b9a4',
+    primaryActive: '#5a9d88',
+    primaryDisabled: '#c2dbd4',
+    primaryErrorText: '#c13515',
+    primaryErrorTextHover: '#b32505',
+    luxe: '#2d6a58',
+    plus: '#4a9e82',
+    ink: '#222222',
+    body: '#3f3f3f',
+    muted: '#6a6a6a',
+    mutedSoft: '#929292',
+    hairline: '#dddddd',
+    hairlineSoft: '#ebebeb',
+    borderStrong: '#c1c1c1',
+    canvas: '#ffffff',
+    surfaceSoft: '#f7f7f7',
+    surfaceCard: '#ffffff',
+    surfaceStrong: '#f2f2f2',
+    onPrimary: '#ffffff',
+    onDark: '#ffffff',
+    legalLink: '#428bff',
+    starRating: '#222222',
+    scrim: '#000000',
+  },
+
+  typography: {
+    fontFamily:
+      "'Airbnb Cereal VF', Circular, -apple-system, system-ui, Roboto, 'Helvetica Neue', sans-serif",
+
+    displayXl: {
+      fontSize: '28px',
+      fontWeight: 700,
+      lineHeight: 1.43,
+      letterSpacing: '0',
+    },
+    displayLg: {
+      fontSize: '22px',
+      fontWeight: 500,
+      lineHeight: 1.18,
+      letterSpacing: '-0.44px',
+    },
+    displayMd: {
+      fontSize: '21px',
+      fontWeight: 700,
+      lineHeight: 1.43,
+      letterSpacing: '0',
+    },
+    displaySm: {
+      fontSize: '20px',
+      fontWeight: 600,
+      lineHeight: 1.2,
+      letterSpacing: '-0.18px',
+    },
+    titleMd: {
+      fontSize: '16px',
+      fontWeight: 600,
+      lineHeight: 1.25,
+      letterSpacing: '0',
+    },
+    titleSm: {
+      fontSize: '16px',
+      fontWeight: 500,
+      lineHeight: 1.25,
+      letterSpacing: '0',
+    },
+    ratingDisplay: {
+      fontSize: '64px',
+      fontWeight: 700,
+      lineHeight: 1.1,
+      letterSpacing: '-1px',
+    },
+    bodyMd: {
+      fontSize: '16px',
+      fontWeight: 400,
+      lineHeight: 1.5,
+      letterSpacing: '0',
+    },
+    bodySm: {
+      fontSize: '14px',
+      fontWeight: 400,
+      lineHeight: 1.43,
+      letterSpacing: '0',
+    },
+    caption: {
+      fontSize: '14px',
+      fontWeight: 500,
+      lineHeight: 1.29,
+      letterSpacing: '0',
+    },
+    captionSm: {
+      fontSize: '13px',
+      fontWeight: 400,
+      lineHeight: 1.23,
+      letterSpacing: '0',
+    },
+    badge: {
+      fontSize: '11px',
+      fontWeight: 600,
+      lineHeight: 1.18,
+      letterSpacing: '0',
+    },
+    microLabel: {
+      fontSize: '12px',
+      fontWeight: 700,
+      lineHeight: 1.33,
+      letterSpacing: '0',
+    },
+    uppercaseTag: {
+      fontSize: '8px',
+      fontWeight: 700,
+      lineHeight: 1.25,
+      letterSpacing: '0.32px',
+      textTransform: 'uppercase' as const,
+    },
+    buttonMd: {
+      fontSize: '16px',
+      fontWeight: 500,
+      lineHeight: 1.25,
+      letterSpacing: '0',
+    },
+    buttonSm: {
+      fontSize: '14px',
+      fontWeight: 500,
+      lineHeight: 1.29,
+      letterSpacing: '0',
+    },
+    link: {
+      fontSize: '14px',
+      fontWeight: 400,
+      lineHeight: 1.43,
+      letterSpacing: '0',
+    },
+    navLink: {
+      fontSize: '16px',
+      fontWeight: 600,
+      lineHeight: 1.25,
+      letterSpacing: '0',
+    },
+  },
+
+  rounded: {
+    none: '0px',
+    xs: '4px',
+    sm: '8px',
+    md: '14px',
+    lg: '20px',
+    xl: '32px',
+    full: '9999px',
+  },
+
+  spacing: {
+    xxs: '2px',
+    xs: '4px',
+    sm: '8px',
+    md: '12px',
+    base: '16px',
+    lg: '24px',
+    xl: '32px',
+    xxl: '48px',
+    section: '64px',
+  },
+
+  shadows: {
+    sm:  'rgba(0, 0, 0, 0.08) 0px 1px 2px 0px',
+    md:  'rgba(0, 0, 0, 0.12) 0px 6px 16px 0px',
+    lg:  'rgba(0, 0, 0, 0.02) 0 0 0 1px, rgba(0, 0, 0, 0.04) 0 2px 6px 0, rgba(0, 0, 0, 0.1) 0 4px 8px 0',
+  },
+
+  breakpoints: {
+    mobile: '744px',
+    tablet: '1128px',
+    desktop: '1440px',
+  },
+} as const;
+
+export type Theme = typeof theme;

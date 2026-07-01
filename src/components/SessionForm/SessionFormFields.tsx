@@ -1,0 +1,116 @@
+import { Control, Controller, useFieldArray } from 'react-hook-form';
+import { MINISTRIES } from '../../data/mock';
+import { Button } from '../Button';
+import { Select, TextInput } from '../Inputs';
+import {
+  Container,
+  DishesSection, FormSectionLabel,
+  Row, DishCard, DishCardHeader,
+  AddonRow, SmallInput, AddonSectionLabel,
+} from './styles';
+import { SessionFormValues } from './validators';
+
+function newId() {
+  return Math.random().toString(36).slice(2);
+}
+
+interface SessionFormFieldsProps {
+  control: Control<SessionFormValues>;
+}
+
+export function SessionFormFields({ control }: SessionFormFieldsProps) {
+  const { fields: dishes, remove: removeDish } = useFieldArray({ control, name: 'dishes' });
+
+  return (
+    <Container>
+      <FormSectionLabel>Informações gerais</FormSectionLabel>
+      <Select label="Ministério" control={control} name="ministry">
+        {MINISTRIES.map((m) => <option key={m}>{m}</option>)}
+      </Select>
+
+      <DishesSection>
+        <FormSectionLabel>Prato</FormSectionLabel>
+        {dishes.map((_, idx) => (
+          <DishFields
+            key={idx}
+            control={control}
+            dishIndex={idx}
+            canRemove={dishes.length > 1}
+            onRemove={() => removeDish(idx)}
+          />
+        ))}
+      </DishesSection>
+    </Container>
+  );
+}
+
+interface DishFieldsProps {
+  control: Control<SessionFormValues>;
+  dishIndex: number;
+  canRemove: boolean;
+  onRemove: () => void;
+}
+
+function DishFields({ control, dishIndex, canRemove, onRemove }: DishFieldsProps) {
+  const { fields: addons, append: appendAddon, remove: removeAddon } = useFieldArray({
+    control,
+    name: `dishes.${dishIndex}.availableAddons`,
+  });
+
+  return (
+    <DishCard>
+      <DishCardHeader>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <TextInput
+            label="Nome"
+            control={control}
+            name={`dishes.${dishIndex}.name` as const}
+            placeholder="ex: Frango com arroz e feijão"
+          />
+          <Row>
+            <TextInput
+              currency
+              label="Preço (R$)"
+              control={control}
+              name={`dishes.${dishIndex}.price` as const}
+              wrapperStyle={{ flex: 1 }}
+            />
+            <TextInput
+              label="Fichinhas"
+              type="number"
+              min={1}
+              control={control}
+              name={`dishes.${dishIndex}.totalTickets` as const}
+              wrapperStyle={{ flex: 1 }}
+            />
+          </Row>
+        </div>
+        {canRemove && (
+          <Button variant="danger" size="sm" onClick={onRemove}>Remover</Button>
+        )}
+      </DishCardHeader>
+
+      <AddonSectionLabel>Acréscimos disponíveis</AddonSectionLabel>
+      {addons.map((addon, addonIdx) => (
+        <AddonRow key={addon.id}>
+          <Controller
+            control={control}
+            name={`dishes.${dishIndex}.availableAddons.${addonIdx}.name`}
+            render={({ field }) => (
+              <SmallInput placeholder="Nome do acréscimo" {...field} />
+            )}
+          />
+          <Button variant="danger" size="sm" onClick={() => removeAddon(addonIdx)}>✕</Button>
+        </AddonRow>
+      ))}
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() => appendAddon({ id: newId(), name: '', price: 0 })}
+        style={{ marginTop: 6 }}
+      >
+        + Acréscimo
+      </Button>
+    </DishCard>
+  );
+}

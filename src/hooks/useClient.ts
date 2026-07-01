@@ -1,0 +1,100 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+
+export interface Client {
+  id: string;
+  name: string;
+  phone: string;
+}
+
+const CLIENT_STORAGE_KEY = 'cantina_client_session';
+
+export function useClient() {
+  const [client, setClient] = useState<Client | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(CLIENT_STORAGE_KEY);
+    if (stored) {
+      try {
+        setClient(JSON.parse(stored));
+      } catch {
+        localStorage.removeItem(CLIENT_STORAGE_KEY);
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  const loginClient = async (name: string, phone: string): Promise<Client> => {
+    const { data: existing } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('phone', phone)
+      .single();
+
+    let clientData: Client;
+
+    if (existing) {
+      // Atualiza nome se mudou
+      if (existing.name !== name) {
+        await supabase
+          .from('clients')
+          .update({ name, updated_at: new Date().toISOString() })
+          .eq('id', existing.id);
+      }
+      clientData = { id: existing.id, name, phone };
+    } else {
+      // Cria novo cliente
+      const { data: newClient, error } = await supabase
+        .from('clients')
+        .insert({ name, phone })
+        .select()
+        .single();
+
+      if (error) throw error;
+      clientData = newClient;
+    }
+
+    localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(clientData));
+    setClient(clientData);
+    return clientData;
+  };
+
+  const logoutClient = () => {
+    localStorage.removeItem(CLIENT_STORAGE_KEY);
+    setClient(null);
+  };
+
+  const updateClientName = async (name: string): Promise<void> => {
+    if (!client) return;
+
+    await supabase
+      .from('clients')
+      .update({ name, updated_at: new Date().toISOString() })
+      .eq('id', client.id);
+
+    const updated = { ...client, name };
+    localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(updated));
+    setClient(updated);
+  };
+
+  const updateClient = async (name: string, phone: string): Promise<void> => {
+    if (!client) return;
+    await supabase
+      .from('clients')
+      .update({ name, phone, updated_at: new Date().toISOString() })
+      .eq('id', client.id);
+    const updated = { ...client, name, phone };
+    localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(updated));
+    setClient(updated);
+  };
+
+  return {
+    client,
+    loading,
+    loginClient,
+    logoutClient,
+    updateClientName,
+    updateClient,
+  };
+}
