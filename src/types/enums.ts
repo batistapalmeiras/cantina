@@ -8,11 +8,6 @@ export enum OrderStatus {
   Sale = 'sale',
 }
 
-export enum CashierTab {
-  Sale = 'sale',
-  Reservations = 'reservations',
-}
-
 export enum SessionStatus {
   Open = 'open',
   Pending = 'pending',

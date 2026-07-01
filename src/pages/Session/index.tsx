@@ -3,9 +3,9 @@ import { Navigate } from 'react-router-dom';
 // Components
 import { Button } from '../../components/Button';
 import { PageHeader } from '../../components/PageHeader';
-import { SessionFormFields } from '../../components/SessionForm';
 import { AppRoute } from '../../routes/paths';
 // Local
+import { SessionFormFields } from './components';
 import { useSessionForm } from './hooks/useSessionForm';
 import { ActionsRow } from './styles';
 import { SessionMode } from './types';

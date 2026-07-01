@@ -118,9 +118,25 @@ Always import by folder path (`from './types'`), never from the specific file (`
 
 Pure functions reused by more than one page live in `src/utils/`. Do not duplicate them in each page's `domain/rules.ts`.
 
-Existing examples: `maskPhone`, `maskCurrencyInput`, `formatCurrency`.
+Existing examples: `maskPhone`, `maskCurrencyInput`, `formatCurrency`, `parseCurrency`, `parsePhone`.
 
-## Domain shared across pages
+`src/helpers/` does not exist in this project — do not create it. All shared utilities go in `src/utils/`.
+
+## Global types (`src/types/`)
+
+`src/types/` holds only shared domain concepts — types used by more than one page or layer:
+
+```
+src/types/
+  enums.ts       # domain enums: PaymentMethod, OrderStatus, SessionStatus
+  interfaces.ts  # domain entities: Session, Order, Dish, Addon, User, TicketItem
+  index.ts       # barrel
+```
+
+**What does NOT go in `src/types/`:**
+
+- **UI-only enums** (e.g. tab state, local toggles) — go in the page's own `types/enums.ts`
+- **Component props** (e.g. `ButtonProps`, `DishSelectorProps`) — go inside the component file itself and are exported from there if needed
 
 When a concept is used by more than one page (e.g. `Order`, `Dish`, `Session`), it does **not** go into any single page's `domain/`. It stays in `src/types/` (shared) until there is a real need for a formal shared domain layer — do not create this structure preemptively.
 
@@ -131,6 +147,39 @@ The project may grow to cover products beyond the cafeteria (e.g. course booking
 ## Global components (`src/components/`)
 
 A component moves out of a page and into `src/components/` only when it is **reused by more than one page** (e.g. `Button`, `IconButton`, `Tabs`, `Toast`, `BottomSheet`). Components used in a single page stay in `pages/<Page>/components/`.
+
+### Global component structure
+
+Each global component follows the same folder layout:
+
+```
+components/<Component>/
+  styles/
+    <Component>.ts    # all styled-components for this component
+    index.ts          # barrel: export * from './<Component>';
+  hooks/              # only when the component has its own logic (useToast, useLayout)
+    use<Component>.ts
+    index.ts
+  index.tsx           # JSX only — imports from ./styles and ./hooks, no styled.div here
+```
+
+Rules:
+- `index.tsx` contains **only JSX** — no `styled.div`, no `keyframes`, no `css` helper.
+- `styles/<Component>.ts` contains **all styled-components** for that component.
+- `hooks/` is created **only when needed** — when the component has non-trivial state or side-effects worth isolating (e.g. `useToast` manages timers, `useLayout` manages auth state and dropdown). Don't create it for simple `useState` inside the JSX.
+- Pure-style components with no JSX function (e.g. `Chip`, `Tabs`) use `index.tsx` as a re-export barrel: `export { ... } from './styles';`.
+- Styled components that are also part of the public API (e.g. `ModalTitle`, `ModalActions`, `StatusBadge`) are re-exported from `index.tsx` via `export { ... } from './styles';`.
+- Always import by folder path, never by internal file:
+
+```ts
+// ✅ correct
+import { useToast } from '../Toast';
+import { ModalTitle, ModalActions } from '../Modal';
+
+// ❌ wrong — leaks internal structure
+import { useToast } from '../Toast/hooks/useToast';
+import { ModalTitle } from '../Modal/styles/Modal';
+```
 
 ## Pages already structured in this pattern
 

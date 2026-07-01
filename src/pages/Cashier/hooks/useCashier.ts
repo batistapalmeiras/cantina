@@ -3,8 +3,9 @@ import { useState } from 'react';
 // Components
 import { useSessionCtx } from '../../../hooks/useSession';
 import { supabase } from '../../../lib/supabase';
-import { CashierTab, OrderStatus } from '../../../types';
+import { OrderStatus } from '../../../types';
 import { Dish, Order, TicketItem } from '../../../types';
+import { CashierTab } from '../types';
 import { CashierFormValues } from '../validators';
 
 type DishQty = { count: number; addonCounts: Record<string, number> };

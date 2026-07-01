@@ -3,10 +3,9 @@ import { Control, Controller, UseFormSetValue } from 'react-hook-form';
 // Libs
 import styled from 'styled-components';
 // Components
-import { DishSelector } from '../../../components/Inputs/DishSelector';
+import { DishQuantity,DishSelector } from '../../../components/Inputs/DishSelector';
 import { PaymentToggle } from '../../../components/PaymentToggle';
 import { Dish } from '../../../types';
-import { DishQuantity } from '../../../types/Inputs';
 import { CashierFormValues } from '../validators';
 // Local
 import { ClientSearch } from './ClientSearch';

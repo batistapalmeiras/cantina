@@ -4,11 +4,10 @@ import { useState } from 'react';
 import styled from 'styled-components';
 // Components
 import { Button } from '../../../components/Button';
-import { DishSelector } from '../../../components/Inputs';
+import { DishQuantity,DishSelector } from '../../../components/Inputs/DishSelector';
 import { ModalActions,ModalTitle } from '../../../components/Modal';
 import { useSessionCtx } from '../../../hooks/useSession';
 import { Dish,Order, OrderStatus, TicketItem } from '../../../types';
-import { DishQuantity } from '../../../types/Inputs';
 
 interface Props {
   order: Order;

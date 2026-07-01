@@ -1,6 +1,6 @@
 // Components
 import { ModalTitle } from '../../../components/Modal';
-import { OrderStatus, PaymentMethod } from '../../../types';
+import { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL } from '../../../utils';
 import { HistoryOrder } from '../domain';
 import {
   HistoryEmpty,
@@ -11,16 +11,6 @@ import {
   HistoryList,
   StatusBadge,
 } from '../styles';
-
-const PAYMENT_LABEL: Record<PaymentMethod, string> = {
-  [PaymentMethod.Pix]: 'Pix',
-  [PaymentMethod.Cash]: 'Dinheiro',
-};
-
-const STATUS_LABEL: Record<OrderStatus, string> = {
-  [OrderStatus.Sale]: 'Confirmado',
-  [OrderStatus.Reservation]: 'Pendente',
-};
 
 interface Props {
   history: HistoryOrder[];
@@ -46,10 +36,10 @@ export function HistoryModal({ history, loading }: Props) {
                   </HistoryItemSession>
                   <HistoryItemMeta>
                     {o.dishes.filter((d, i, arr) => arr.indexOf(d) === i).join(', ')}
-                    {' · '}R$ {o.total.toFixed(2)} · {PAYMENT_LABEL[o.paymentMethod]}
+                    {' · '}R$ {o.total.toFixed(2)} · {PAYMENT_METHOD_LABEL[o.paymentMethod]}
                   </HistoryItemMeta>
                 </div>
-                <StatusBadge $status={o.status}>{STATUS_LABEL[o.status]}</StatusBadge>
+                <StatusBadge $status={o.status}>{ORDER_STATUS_LABEL[o.status]}</StatusBadge>
               </HistoryItemHeader>
             </HistoryItem>
           ))}

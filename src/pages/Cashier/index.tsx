@@ -8,7 +8,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { Tab, TabBadge,TabBar } from '../../components/Tabs';
 import { useToast } from '../../components/Toast';
 import { Typography } from '../../components/Typography';
-import { CashierTab, PaymentMethod } from '../../types';
+import { PaymentMethod } from '../../types';
 // Local
 import { CashierDishSelector } from './components/DishSelector';
 import { OrderSummary } from './components/OrderSummary';
@@ -24,6 +24,7 @@ import {
   Grid,
   StickyAside,
 } from './styles';
+import { CashierTab } from './types';
 import { CashierFormValues,cashierSchema } from './validators';
 
 export function CashierPage() {
