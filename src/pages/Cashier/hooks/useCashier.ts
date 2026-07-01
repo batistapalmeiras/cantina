@@ -14,6 +14,7 @@ export function useCashier() {
   const [tab, setTab] = useState<CashierTab>(CashierTab.Sale);
   const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
   const [onSale, setOnSale] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
   const getQ = (id: string): DishQty => quantities[id] ?? { count: 0, addonCounts: {} };
 
@@ -76,17 +77,22 @@ export function useCashier() {
       });
     }
 
-    addOrder({
-      customerName: data.customerName.trim(),
-      customerPhone: data.customerPhone,
-      tickets,
-      paymentMethod: data.paymentMethod,
-      status: OrderStatus.Sale,
-      total,
-    });
-    setQuantities({});
-    setOnSale(true);
-    setTimeout(() => setOnSale(false), 100);
+    setOrderError(null);
+    try {
+      await addOrder({
+        customerName: data.customerName.trim(),
+        customerPhone: data.customerPhone,
+        tickets,
+        paymentMethod: data.paymentMethod,
+        status: OrderStatus.Sale,
+        total,
+      });
+      setQuantities({});
+      setOnSale(true);
+      setTimeout(() => setOnSale(false), 100);
+    } catch (err) {
+      setOrderError(err instanceof Error ? err.message : 'Erro ao registrar venda');
+    }
   };
 
   const reservations = session?.orders.filter((o: Order) => o.status === OrderStatus.Reservation) ?? [];
@@ -100,6 +106,7 @@ export function useCashier() {
     tickets,
     total,
     onSale,
+    orderError,
     reservations,
     pendingCount,
     increment,

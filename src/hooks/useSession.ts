@@ -319,10 +319,16 @@ export function useSession(): SessionContextValue {
     for (const dish of session.dishes) {
       const count = order.tickets.filter((t) => t.dishId === dish.id).length;
       if (count > 0) {
-        await supabase
-          .from('dishes')
-          .update({ sold_tickets: dish.soldTickets + count })
-          .eq('id', dish.id);
+        const { data: reserved, error: rpcError } = await supabase.rpc('reserve_tickets', {
+          p_dish_id: dish.id,
+          p_count: count,
+        });
+        if (rpcError) throw rpcError;
+        if (!reserved) {
+          await supabase.from('ticket_items').delete().eq('order_id', orderRow.id);
+          await supabase.from('orders').delete().eq('id', orderRow.id);
+          throw new Error(`Ingressos insuficientes para "${dish.name}"`);
+        }
       }
     }
 

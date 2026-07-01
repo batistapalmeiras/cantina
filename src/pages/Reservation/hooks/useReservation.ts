@@ -1,5 +1,5 @@
 // React
-import { useEffect,useState } from 'react';
+import { useCallback, useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Components
 import { useSessionCtx } from '../../../hooks/useSession';
@@ -15,6 +15,7 @@ export function useReservation(clientPhone?: string) {
   const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Pix);
   const [initialized, setInitialized] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
   const clientOrder: Order | null = clientPhone
     ? (session?.orders ?? []).find(
@@ -86,36 +87,46 @@ export function useReservation(clientPhone?: string) {
   const tickets = buildTickets();
   const total = tickets.reduce((s, t) => s + t.totalPrice, 0);
 
-  const submitReservation = (data: ReservationFormValues) => {
+  const submitReservation = useCallback(async (data: ReservationFormValues) => {
     if (!session || tickets.length === 0) return;
-    addOrder({
-      customerName: data.name.trim(),
-      customerPhone: data.phone.trim() || undefined,
-      tickets,
-      paymentMethod,
-      status: OrderStatus.Reservation,
-      total,
-    });
-    navigate(AppRoute.ReservationSuccess, {
-      state: { paymentMethod, total },
-    });
-  };
+    setOrderError(null);
+    try {
+      await addOrder({
+        customerName: data.name.trim(),
+        customerPhone: data.phone.trim() || undefined,
+        tickets,
+        paymentMethod,
+        status: OrderStatus.Reservation,
+        total,
+      });
+      navigate(AppRoute.ReservationSuccess, {
+        state: { paymentMethod, total },
+      });
+    } catch (err) {
+      setOrderError(err instanceof Error ? err.message : 'Erro ao registrar reserva');
+    }
+  }, [session, tickets, paymentMethod, total, addOrder, navigate]);
 
-  const saveReservation = (clientName: string, clientPhoneVal: string) => {
+  const saveReservation = useCallback(async (clientName: string, clientPhoneVal: string) => {
     if (!session || tickets.length === 0 || !clientOrder) return;
-    cancelOrder(clientOrder.id);
-    addOrder({
-      customerName: clientName,
-      customerPhone: clientPhoneVal || undefined,
-      tickets,
-      paymentMethod,
-      status: OrderStatus.Reservation,
-      total,
-    });
-    navigate(AppRoute.ReservationSuccess, {
-      state: { paymentMethod, total },
-    });
-  };
+    setOrderError(null);
+    try {
+      await cancelOrder(clientOrder.id);
+      await addOrder({
+        customerName: clientName,
+        customerPhone: clientPhoneVal || undefined,
+        tickets,
+        paymentMethod,
+        status: OrderStatus.Reservation,
+        total,
+      });
+      navigate(AppRoute.ReservationSuccess, {
+        state: { paymentMethod, total },
+      });
+    } catch (err) {
+      setOrderError(err instanceof Error ? err.message : 'Erro ao salvar reserva');
+    }
+  }, [session, tickets, paymentMethod, total, clientOrder, addOrder, cancelOrder, navigate]);
 
   const cancelReservation = async () => {
     if (!clientOrder) return;
@@ -131,6 +142,7 @@ export function useReservation(clientPhone?: string) {
     tickets,
     total,
     clientOrder,
+    orderError,
     increment,
     decrement,
     setAddonCount,
