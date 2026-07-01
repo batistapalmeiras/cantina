@@ -1,4 +1,5 @@
-import { PaymentMethod, OrderStatus } from './enums';
+// Local
+import { OrderStatus,PaymentMethod } from './enums';
 
 export type UserRole = 'admin' | 'operator';
 

@@ -1,4 +1,5 @@
-import { Order, OrderStatus, Dish } from '../../../types';
+// Components
+import { Dish,Order, OrderStatus } from '../../../types';
 
 export function selectConfirmedOrders(orders: Order[]): Order[] {
   return orders.filter((o) => o.status === OrderStatus.Sale);

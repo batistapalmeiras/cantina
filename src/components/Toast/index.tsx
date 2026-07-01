@@ -1,6 +1,9 @@
-import { useState, useCallback, useRef } from 'react';
+// React
+import { useCallback, useRef,useState } from 'react';
 import { createPortal } from 'react-dom';
+// Libs
 import styled, { keyframes } from 'styled-components';
+// Components
 import { fadeUp } from '../../styles/animations';
 
 const fadeOut = keyframes`

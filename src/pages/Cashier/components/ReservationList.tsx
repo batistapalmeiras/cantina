@@ -1,6 +1,8 @@
+// Libs
 import styled from 'styled-components';
-import { Order, PaymentMethod } from '../../../types';
+// Components
 import { Button } from '../../../components/Button';
+import { Order, PaymentMethod } from '../../../types';
 
 interface Props {
   reservations: Order[];

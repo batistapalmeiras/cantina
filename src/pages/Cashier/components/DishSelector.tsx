@@ -1,16 +1,19 @@
-import { Control, Controller, UseFormSetValue, UseFormReset } from 'react-hook-form';
+// React
+import { Control, Controller, UseFormSetValue } from 'react-hook-form';
+// Libs
 import styled from 'styled-components';
-import { Dish } from '../../../types';
-import { DishQuantity } from '../../../types/Inputs';
+// Components
 import { DishSelector } from '../../../components/Inputs/DishSelector';
 import { PaymentToggle } from '../../../components/PaymentToggle';
+import { Dish } from '../../../types';
+import { DishQuantity } from '../../../types/Inputs';
+import { CashierFormValues } from '../validators';
+// Local
 import { ClientSearch } from './ClientSearch';
-import { CashierFormValues } from '../validators/schema';
 
 interface Props {
   control: Control<CashierFormValues>;
   setValue: UseFormSetValue<CashierFormValues>;
-  reset: UseFormReset<CashierFormValues>;
   dishes: Dish[];
   quantities: Record<string, DishQuantity>;
   onIncrement: (dish: Dish) => void;
@@ -71,7 +74,7 @@ export function CashierDishSelector({ control, setValue, dishes, quantities, onI
           control={control}
           name="paymentMethod"
           render={({ field }) => (
-            <PaymentToggle value={field.value} onChange={field.onChange} />
+            <PaymentToggle label="Forma de pagamento" value={field.value} onChange={field.onChange} />
           )}
         />
       </MobileOnly>

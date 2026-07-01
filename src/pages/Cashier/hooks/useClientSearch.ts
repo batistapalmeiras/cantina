@@ -1,5 +1,8 @@
-import { useState, useCallback, useRef } from 'react';
+// React
+import { useCallback, useRef,useState } from 'react';
+// Components
 import { supabase } from '../../../lib/supabase';
+import { SelectedClient } from '../domain';
 
 interface ClientResult {
   id: string;
@@ -14,12 +17,6 @@ type SearchState =
   | { type: 'registering' }
   | { type: 'phone_conflict'; existing: ClientResult }
   | { type: 'selected'; client: ClientResult };
-
-export interface SelectedClient {
-  id: string;
-  name: string;
-  phone: string;
-}
 
 export function useClientSearch(onSelect: (client: SelectedClient) => void) {
   const [query, setQuery] = useState('');
@@ -77,7 +74,6 @@ export function useClientSearch(onSelect: (client: SelectedClient) => void) {
       return;
     }
 
-    // Telefone válido e sem conflito → auto-seleciona como novo cliente
     const newClient = { id: '__new__', name: query.trim(), phone: value };
     setState({ type: 'selected', client: newClient });
     onSelect(newClient);

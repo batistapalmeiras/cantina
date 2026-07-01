@@ -35,7 +35,35 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "plugins": [
+      "simple-import-sort"
+    ],
+    "rules": {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "args": "after-used",
+          "ignoreRestSiblings": true,
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_"
+        }
+      ],
+      "simple-import-sort/imports": [
+        "error",
+        {
+          "groups": [
+            ["^react$", "^react-dom", "^react-router-dom"],
+            ["^@?\\w"],
+            ["^(src|components|hooks|types|utils|styles|routes|contexts|pages)(/.*|$)"],
+            ["^\\."]
+          ]
+        }
+      ],
+      "simple-import-sort/exports": "error"
+    }
   },
   "browserslist": {
     "production": [
@@ -50,6 +78,7 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.36"
+    "@types/styled-components": "^5.1.36",
+    "eslint-plugin-simple-import-sort": "^13.0.0"
   }
 }

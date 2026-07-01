@@ -1,6 +1,9 @@
+// React
 import { Navigate } from 'react-router-dom';
+// Components
 import { useAuthCtx } from '../hooks';
 import { UserRole } from '../types';
+// Local
 import { AppRoute } from './paths';
 
 interface Props {

@@ -1,7 +1,9 @@
-import { useContext, useState, useCallback, useEffect } from 'react';
-import { Session, Order, Dish, Addon, TicketItem, OrderStatus } from '../types';
-import { supabase } from '../lib/supabase';
+// React
+import { useCallback, useContext, useEffect,useState } from 'react';
+// Components
 import { SessionContext, SessionContextValue } from '../contexts/SessionContext';
+import { supabase } from '../lib/supabase';
+import { Addon, Dish, Order, OrderStatus,Session, TicketItem } from '../types';
 
 function mapSession(raw: any, dishes: Dish[], orders: Order[]): Session {
   return {

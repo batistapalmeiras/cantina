@@ -1,17 +1,9 @@
-import { useState, useEffect } from 'react';
+// React
+import { useEffect,useState } from 'react';
+// Components
 import { supabase } from '../../../lib/supabase';
 import { OrderStatus, PaymentMethod } from '../../../types';
-
-export interface HistoryOrder {
-  id: string;
-  status: OrderStatus;
-  total: number;
-  paymentMethod: PaymentMethod;
-  createdAt: string;
-  dishes: string[];
-  sessionDate: string;
-  sessionMinistry: string;
-}
+import { HistoryOrder } from '../domain';
 
 export function useClientHistory(clientPhone?: string, currentSessionId?: string) {
   const [history, setHistory] = useState<HistoryOrder[]>([]);
@@ -36,9 +28,9 @@ export function useClientHistory(clientPhone?: string, currentSessionId?: string
     query.then(({ data }) => {
       const mapped: HistoryOrder[] = (data ?? []).map((o: any) => ({
         id: o.id,
-        status: o.status,
+        status: o.status as OrderStatus,
         total: o.total,
-        paymentMethod: o.payment_method,
+        paymentMethod: o.payment_method as PaymentMethod,
         createdAt: o.created_at,
         dishes: (o.ticket_items ?? []).map((t: any) => t.dish_name as string),
         sessionDate: o.sessions?.date ?? '',

@@ -1,3 +1,4 @@
+// Libs
 import styled from 'styled-components';
 
 interface PaginationProps {
@@ -23,7 +24,7 @@ const PageButton = styled.button<{ $active?: boolean }>`
   color: ${({ theme, $active }) => $active ? theme.colors.onDark : theme.colors.ink};
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
-  font-weight: ${({ theme, $active }) => $active ? 600 : 400};
+  font-weight: ${({ $active }) => $active ? 600 : 400};
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 

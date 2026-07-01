@@ -1,5 +1,7 @@
-import styled from 'styled-components';
+// Libs
 import { Minus, Plus } from 'lucide-react';
+import styled from 'styled-components';
+// Components
 import { Dish } from '../../types';
 import { DishQuantity } from '../../types/Inputs';
 
@@ -102,37 +104,12 @@ const TicketLabel = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
-const AddonChips = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-const AddonChip = styled.button<{ $selected: boolean }>`
-  display: inline-flex;
-  align-items: center;
-  height: 28px;
-  padding: 0 ${({ theme }) => theme.spacing.sm};
-  border-radius: ${({ theme }) => theme.rounded.full};
-  border: 1px solid ${({ theme, $selected }) => ($selected ? theme.colors.ink : theme.colors.hairline)};
-  background: ${({ theme, $selected }) => ($selected ? theme.colors.ink : theme.colors.canvas)};
-  color: ${({ theme, $selected }) => ($selected ? theme.colors.onDark : theme.colors.muted)};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.buttonSm.fontSize};
-  font-weight: ${({ theme }) => theme.typography.buttonSm.fontWeight};
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-
-  &:hover {
-    border-color: ${({ theme, $selected }) => ($selected ? theme.colors.ink : theme.colors.borderStrong)};
-  }
-`;
-
-const AddonHint = styled.span`
+const TicketQuestion = styled.p`
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-  color: ${({ theme }) => theme.colors.primary};
-  margin-top: 2px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.ink};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
 const SoldOut = styled.span`
@@ -194,6 +171,7 @@ export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onS
                   const addonCount = q.addonCounts[addon.id] ?? 0;
                   return (
                     <TicketRow key={addon.id}>
+                      <TicketQuestion>Quantos itens você quer com:</TicketQuestion>
                       <TicketLabel>{addon.name}{addon.price > 0 ? ` · +R$ ${addon.price.toFixed(2)}` : ''}</TicketLabel>
                       <Stepper>
                         <StepBtn

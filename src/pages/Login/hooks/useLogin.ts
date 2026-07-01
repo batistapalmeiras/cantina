@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+// React
+import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Components
 import { useAuthCtx } from '../../../hooks/useAuth';
-import { LoginFormValues } from '../validators/schema';
 import { AppRoute } from '../../../routes/paths';
+import { LoginFormValues } from '../validators';
 
 export function useLogin() {
   const [error, setError] = useState('');

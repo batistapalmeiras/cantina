@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+// React
+import { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSessionCtx, fetchSessionById } from '../../../hooks/useSession';
+// Components
 import { useAuthCtx } from '../../../hooks/useAuth';
 import { useOrdersList } from '../../../hooks/useOrdersList';
+import { fetchSessionById,useSessionCtx } from '../../../hooks/useSession';
 import { Session } from '../../../types';
 import { computeStats } from '../domain';
 

@@ -1,11 +1,14 @@
+// React
 import { useState } from 'react';
+// Libs
 import styled from 'styled-components';
-import { Order, OrderStatus, TicketItem, Dish } from '../../../types';
-import { DishQuantity } from '../../../types/Inputs';
-import { useSessionCtx } from '../../../hooks/useSession';
+// Components
 import { Button } from '../../../components/Button';
-import { ModalTitle, ModalActions } from '../../../components/Modal';
 import { DishSelector } from '../../../components/Inputs';
+import { ModalActions,ModalTitle } from '../../../components/Modal';
+import { useSessionCtx } from '../../../hooks/useSession';
+import { Dish,Order, OrderStatus, TicketItem } from '../../../types';
+import { DishQuantity } from '../../../types/Inputs';
 
 interface Props {
   order: Order;

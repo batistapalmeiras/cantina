@@ -1,9 +1,12 @@
+// React
 import { Control, Controller } from 'react-hook-form';
-import styled, { css } from 'styled-components';
-import { TicketItem } from '../../../types';
+// Libs
+import styled from 'styled-components';
+// Components
 import { Button } from '../../../components/Button';
 import { PaymentToggle } from '../../../components/PaymentToggle';
-import { CashierFormValues } from '../validators/schema';
+import { TicketItem } from '../../../types';
+import { CashierFormValues } from '../validators';
 
 interface Props {
   control: Control<CashierFormValues>;
@@ -56,13 +59,6 @@ const TicketName = styled.span`
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
   color: ${({ theme }) => theme.colors.ink};
-`;
-
-const TicketAddons = styled.span`
-  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  display: block;
-  margin-top: 2px;
 `;
 
 const TicketPrice = styled.span`
@@ -138,7 +134,7 @@ export function OrderSummary({ control, tickets, total, onConfirm }: Props) {
           control={control}
           name="paymentMethod"
           render={({ field }) => (
-            <PaymentToggle value={field.value} onChange={field.onChange} />
+            <PaymentToggle label="Forma de pagamento" value={field.value} onChange={field.onChange} />
           )}
         />
       </DesktopOnly>

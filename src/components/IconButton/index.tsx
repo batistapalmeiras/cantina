@@ -1,5 +1,7 @@
-import styled, { css } from 'styled-components';
+// React
 import { ButtonHTMLAttributes, ReactNode } from 'react';
+// Libs
+import styled, { css } from 'styled-components';
 
 type Variant = 'primary' | 'secondary' | 'danger';
 type Size = 'xs' | 'sm' | 'md' | 'lg';

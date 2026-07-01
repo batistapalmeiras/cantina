@@ -1,18 +1,22 @@
+// React
 import { useNavigate } from 'react-router-dom';
-import { useSetup } from './hooks/useSetup';
-import { AppRoute } from '../../routes/paths';
-import { useModal } from '../../hooks/useModal';
-import { Typography } from '../../components/Typography';
-import { Button } from '../../components/Button';
-import { Pagination } from '../../components/Pagination';
+// Libs
 import { AlertTriangle } from 'lucide-react';
-import { CloseSessionDialog } from './components/CloseSessionDialog';
+// Components
+import { Button } from '../../components/Button';
 import { PageHeader } from '../../components/PageHeader';
+import { Pagination } from '../../components/Pagination';
+import { Typography } from '../../components/Typography';
+import { useModal } from '../../hooks/useModal';
+import { AppRoute } from '../../routes/paths';
+// Local
+import { CloseSessionDialog } from './components/CloseSessionDialog';
+import { useSetup } from './hooks/useSetup';
 import {
+ActionsRow, HistoryBadge,
+HistoryItem, HistoryItemMeta, HistoryItemSub, HistoryItemTitle,   HistoryList, PendingAlert, PendingAlertBody,
   Section,
-  HistoryList, HistoryItem, HistoryItemMeta, HistoryItemTitle, HistoryItemSub, HistoryBadge,
-  SessionBanner, SessionInfo, ActionsRow, PendingAlert, PendingAlertBody,
-} from './styles';
+  SessionBanner, SessionInfo, } from './styles';
 
 export function SetupPage() {
   const { session, sessions, currentPage, totalPages, loadSessions, handleClose, viewSession } = useSetup();

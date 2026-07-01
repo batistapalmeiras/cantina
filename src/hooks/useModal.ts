@@ -1,5 +1,7 @@
-import { useState, ReactNode, createElement } from 'react';
+// React
+import { createElement,ReactNode, useState } from 'react';
 import { createPortal } from 'react-dom';
+// Components
 import { Modal } from '../components/Modal';
 
 export function useModal() {

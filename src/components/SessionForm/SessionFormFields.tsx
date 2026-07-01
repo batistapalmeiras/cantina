@@ -1,13 +1,16 @@
+// React
 import { Control, Controller, useFieldArray } from 'react-hook-form';
+// Components
 import { MINISTRIES } from '../../data/mock';
 import { Button } from '../Button';
 import { Select, TextInput } from '../Inputs';
+// Local
 import {
+  AddonRow, AddonSectionLabel,
   Container,
+DishCard, DishCardHeader,
   DishesSection, FormSectionLabel,
-  Row, DishCard, DishCardHeader,
-  AddonRow, SmallInput, AddonSectionLabel,
-} from './styles';
+  Row, SmallInput, } from './styles';
 import { SessionFormValues } from './validators';
 
 function newId() {

@@ -1,13 +1,16 @@
-import { useForm } from 'react-hook-form';
+// React
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useAuthCtx } from '../../hooks/useAuth';
-import { profileSchema, ProfileFormValues } from './validators/schema';
-import { TextInput } from '../../components/Inputs';
+// Components
 import { Button } from '../../components/Button';
+import { TextInput } from '../../components/Inputs';
 import { PageHeader } from '../../components/PageHeader';
 import { useToast } from '../../components/Toast';
-import { Wrap, Identity, Name, RoleLabel, Section, SectionTitle, Actions } from './styles';
+import { useAuthCtx } from '../../hooks/useAuth';
+// Local
+import { Actions,Identity, Name, RoleLabel, Section, SectionTitle, Wrap } from './styles';
+import { ProfileFormValues,profileSchema } from './validators/schema';
 
 export function ProfilePage() {
   const { user, userEmail, updateProfile } = useAuthCtx();

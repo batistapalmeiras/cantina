@@ -1,21 +1,25 @@
-import { Pencil, Check, X } from 'lucide-react';
+// React
 import { useNavigate } from 'react-router-dom';
-import { useReport } from './hooks/useReport';
-import { useSessionCtx } from '../../hooks/useSession';
-import { useModal } from '../../hooks/useModal';
-import { Order, OrderStatus, PaymentMethod } from '../../types';
-import { Typography } from '../../components/Typography';
-import { PageHeader } from '../../components/PageHeader';
+// Libs
+import { Check, Pencil, X } from 'lucide-react';
+// Components
 import { Button } from '../../components/Button';
 import { Chip, ChipBar } from '../../components/Chip';
 import { OrdersList } from '../../components/OrdersList';
-import { OrderEditForm } from './components/OrderEditForm';
+import { PageHeader } from '../../components/PageHeader';
+import { Typography } from '../../components/Typography';
+import { useModal } from '../../hooks/useModal';
+import { useSessionCtx } from '../../hooks/useSession';
 import { AppRoute } from '../../routes/paths';
+import { Order, OrderStatus, PaymentMethod } from '../../types';
+// Local
+import { OrderEditForm } from './components/OrderEditForm';
+import { useReport } from './hooks/useReport';
 import {
-  StatsGrid, StatCard, StatValue,
-  Section, SectionLabel,
-  BarRow, BarLabel, BarTrack, BarFill, BarCount,
-  OrderActions, IconBtn, Empty,
+BarCount,
+BarFill, BarLabel,   BarRow, BarTrack, Empty,
+IconBtn,   OrderActions,   Section, SectionLabel,
+StatCard,   StatsGrid, StatValue,
 } from './styles';
 
 export function ReportPage() {

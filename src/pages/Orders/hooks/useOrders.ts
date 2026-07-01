@@ -1,5 +1,6 @@
-import { useSessionCtx } from '../../../hooks/useSession';
+// Components
 import { useOrdersList } from '../../../hooks/useOrdersList';
+import { useSessionCtx } from '../../../hooks/useSession';
 import { selectConfirmedOrders, selectPendingOrders } from '../domain';
 
 export function useOrders() {

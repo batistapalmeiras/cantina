@@ -1,26 +1,29 @@
-import { useForm } from 'react-hook-form';
+// React
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLogin } from './hooks/useLogin';
-import { loginSchema, LoginFormValues } from './validators/schema';
+import { useForm } from 'react-hook-form';
+// Components
+import icon from '../../assets/icon.png';
 import { Button } from '../../components/Button';
 import { TextInput } from '../../components/Inputs';
-import icon from '../../assets/icon.png';
+// Local
+import { useLogin } from './hooks/useLogin';
 import {
-  Page,
   Brand,
   BrandMark,
-  BrandText,
   BrandName,
-  BrandSub,
   BrandQuote,
-  FormPanel,
+  BrandSub,
+  BrandText,
+  ErrorMsg,
+  Form,
   FormBox,
   FormHeader,
-  FormTitle,
+  FormPanel,
   FormSubtitle,
-  Form,
-  ErrorMsg,
+  FormTitle,
+  Page,
 } from './styles';
+import { LoginFormValues,loginSchema } from './validators';
 
 export function LoginPage() {
   const { error, submitting, handleLogin } = useLogin();

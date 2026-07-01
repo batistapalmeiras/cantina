@@ -1,9 +1,11 @@
-import { useForm } from 'react-hook-form';
+// React
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+// Components
+import { sessionFormSchema, type SessionFormValues } from '../../../components/SessionForm';
 import { useSessionCtx } from '../../../hooks/useSession';
 import { AppRoute } from '../../../routes/paths';
-import { sessionFormSchema, type SessionFormValues } from '../../../components/SessionForm';
 import { createDefaultDishes } from '../domain';
 import { SessionMode } from '../types';
 

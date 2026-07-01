@@ -1,5 +1,8 @@
+// React
 import React from 'react';
+// Libs
 import styled from 'styled-components';
+// Components
 import { fadeIn, fadeUp } from '../../styles/animations';
 
 const Overlay = styled.div`

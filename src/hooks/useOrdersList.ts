@@ -1,4 +1,6 @@
-import { useState, useMemo } from 'react';
+// React
+import { useMemo,useState } from 'react';
+// Components
 import { Order, OrderStatus, PaymentMethod } from '../types';
 
 const PAGE_SIZE = 10;

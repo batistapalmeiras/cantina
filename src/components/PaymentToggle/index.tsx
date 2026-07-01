@@ -1,10 +1,28 @@
+// Libs
 import styled from 'styled-components';
+// Components
 import { PaymentMethod } from '../../types';
 
 interface Props {
   value: PaymentMethod;
   onChange: (value: PaymentMethod) => void;
+  label?: string;
 }
+
+const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs};
+`;
+
+const Label = styled.p`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.caption.fontSize};
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.muted};
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
 
 const Toggle = styled.div`
   display: grid;
@@ -37,15 +55,18 @@ const Btn = styled.button<{ $selected: boolean }>`
   }
 `;
 
-export function PaymentToggle({ value, onChange }: Props) {
+export function PaymentToggle({ value, onChange, label }: Props) {
   return (
-    <Toggle>
-      <Btn type="button" $selected={value === PaymentMethod.Cash} onClick={() => onChange(PaymentMethod.Cash)}>
-        Dinheiro
-      </Btn>
-      <Btn type="button" $selected={value === PaymentMethod.Pix} onClick={() => onChange(PaymentMethod.Pix)}>
-        Pix
-      </Btn>
-    </Toggle>
+    <Wrap>
+      {label && <Label>{label}</Label>}
+      <Toggle>
+        <Btn type="button" $selected={value === PaymentMethod.Cash} onClick={() => onChange(PaymentMethod.Cash)}>
+          Dinheiro
+        </Btn>
+        <Btn type="button" $selected={value === PaymentMethod.Pix} onClick={() => onChange(PaymentMethod.Pix)}>
+          Pix
+        </Btn>
+      </Toggle>
+    </Wrap>
   );
 }

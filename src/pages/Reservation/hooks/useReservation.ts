@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+// React
+import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Components
 import { useSessionCtx } from '../../../hooks/useSession';
-import { Order, OrderStatus, PaymentMethod, TicketItem, Dish } from '../../../types';
-import { ReservationFormValues } from '../validators/schema';
 import { AppRoute } from '../../../routes/paths';
+import { Dish,Order, OrderStatus, PaymentMethod, TicketItem } from '../../../types';
+import { ReservationFormValues } from '../validators';
 
 export function useReservation(clientPhone?: string) {
   const { session, addOrder, cancelOrder } = useSessionCtx();
@@ -84,8 +86,6 @@ export function useReservation(clientPhone?: string) {
   const tickets = buildTickets();
   const total = tickets.reduce((s, t) => s + t.totalPrice, 0);
 
-  /* ── Ações ── */
-
   const submitReservation = (data: ReservationFormValues) => {
     if (!session || tickets.length === 0) return;
     addOrder({
@@ -102,7 +102,6 @@ export function useReservation(clientPhone?: string) {
     });
   };
 
-  // Salvar edição: cancela a existente e cria nova
   const saveReservation = (clientName: string, clientPhoneVal: string) => {
     if (!session || tickets.length === 0 || !clientOrder) return;
     cancelOrder(clientOrder.id);

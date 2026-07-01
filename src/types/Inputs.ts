@@ -1,5 +1,7 @@
-import { ReactNode, InputHTMLAttributes } from 'react';
+// React
+import { InputHTMLAttributes,ReactNode } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
+// Local
 import { Dish } from './interfaces';
 
 // BaseInput

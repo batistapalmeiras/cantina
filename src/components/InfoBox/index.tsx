@@ -1,12 +1,15 @@
+// React
 import React from 'react';
+// Libs
+import { AlertTriangle,Info } from 'lucide-react';
 import styled from 'styled-components';
-import { Info, AlertTriangle } from 'lucide-react';
 
 type Variant = 'info' | 'warning';
 
 interface Props {
   variant?: Variant;
   children: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
 const Box = styled.div<{ $variant: Variant }>`
@@ -24,9 +27,9 @@ const Box = styled.div<{ $variant: Variant }>`
   svg { flex-shrink: 0; margin-top: 1px; color: ${({ $variant }) => ($variant === 'warning' ? '#d97706' : '#3b82f6')}; }
 `;
 
-export function InfoBox({ variant = 'info', children }: Props) {
+export function InfoBox({ variant = 'info', children, style }: Props) {
   return (
-    <Box $variant={variant}>
+    <Box $variant={variant} style={style}>
       {variant === 'warning' ? <AlertTriangle size={16} /> : <Info size={16} />}
       <div>{children}</div>
     </Box>
