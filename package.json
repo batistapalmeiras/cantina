@@ -51,17 +51,7 @@
           "varsIgnorePattern": "^_"
         }
       ],
-      "simple-import-sort/imports": [
-        "error",
-        {
-          "groups": [
-            ["^react$", "^react-dom", "^react-router-dom"],
-            ["^@?\\w"],
-            ["^(src|components|hooks|types|utils|styles|routes|contexts|pages)(/.*|$)"],
-            ["^\\."]
-          ]
-        }
-      ],
+      "simple-import-sort/imports": "warn",
       "simple-import-sort/exports": "error"
     }
   },

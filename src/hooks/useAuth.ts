@@ -13,7 +13,7 @@ export async function fetchProfile(userId: string): Promise<User | null> {
     .single();
 
   if (!data) return null;
-  return { id: data.id, name: data.name, role: data.role, password: '' };
+  return { id: data.id, name: data.name, role: data.role };
 }
 
 export function useAuth(): AuthContextValue {

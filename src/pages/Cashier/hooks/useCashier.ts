@@ -83,7 +83,6 @@ export function useCashier() {
       paymentMethod: data.paymentMethod,
       status: OrderStatus.Sale,
       total,
-      confirmedAt: new Date().toISOString(),
     });
     setQuantities({});
     setOnSale(true);

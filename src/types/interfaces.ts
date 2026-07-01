@@ -7,7 +7,6 @@ export interface User {
   id: string;
   name: string;
   role: UserRole;
-  password: string;
 }
 
 export interface Addon {
@@ -42,7 +41,6 @@ export interface Order {
   status: OrderStatus;
   total: number;
   createdAt: string;
-  confirmedAt?: string;
   delivered: boolean;
 }
 
@@ -54,5 +52,4 @@ export interface Session {
   orders: Order[];
   isOpen: boolean;
   status: 'open' | 'pending' | 'closed';
-  pixKey: string;
 }

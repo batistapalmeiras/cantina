@@ -95,10 +95,9 @@ export function useReservation(clientPhone?: string) {
       paymentMethod,
       status: OrderStatus.Reservation,
       total,
-      confirmedAt: undefined,
     });
     navigate(AppRoute.ReservationSuccess, {
-      state: { paymentMethod, total, pixKey: session.pixKey },
+      state: { paymentMethod, total },
     });
   };
 
@@ -112,10 +111,9 @@ export function useReservation(clientPhone?: string) {
       paymentMethod,
       status: OrderStatus.Reservation,
       total,
-      confirmedAt: undefined,
     });
     navigate(AppRoute.ReservationSuccess, {
-      state: { paymentMethod, total, pixKey: session.pixKey },
+      state: { paymentMethod, total },
     });
   };
 

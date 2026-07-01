@@ -9,8 +9,6 @@ import { AppRoute } from '../../../routes/paths';
 import { createDefaultDishes } from '../domain';
 import { SessionMode } from '../types';
 
-const PIX_KEY = 'ibc.palmeiras@pix.com.br';
-
 export function useSessionForm(mode: SessionMode) {
   const { session, openSession, updateSession } = useSessionCtx();
   const navigate = useNavigate();
@@ -31,7 +29,6 @@ export function useSessionForm(mode: SessionMode) {
       await openSession({
         date: new Date().toISOString(),
         ministry: data.ministry,
-        pixKey: PIX_KEY,
         isOpen: true,
         status: 'open',
         dishes: data.dishes,

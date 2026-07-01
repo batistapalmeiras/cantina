@@ -10,7 +10,6 @@ function mapSession(raw: any, dishes: Dish[], orders: Order[]): Session {
     id: raw.id,
     date: raw.date,
     ministry: raw.ministry,
-    pixKey: raw.pix_key,
     isOpen: raw.is_open,
     status: raw.status ?? (raw.is_open ? 'open' : 'closed'),
     dishes,
@@ -38,7 +37,6 @@ function mapOrder(raw: any, tickets: TicketItem[]): Order {
     status: raw.status,
     total: raw.total,
     createdAt: raw.created_at,
-    confirmedAt: raw.confirmed_at ?? undefined,
     delivered: raw.delivered ?? false,
     tickets,
   };
@@ -257,7 +255,7 @@ export function useSession(): SessionContextValue {
   const openSession = useCallback(async (data: Omit<Session, 'id' | 'orders'>) => {
     const { data: sessionRow, error } = await supabase
       .from('sessions')
-      .insert({ date: data.date, ministry: data.ministry, pix_key: data.pixKey, is_open: true })
+      .insert({ date: data.date, ministry: data.ministry, is_open: true })
       .select()
       .single();
 
@@ -301,7 +299,6 @@ export function useSession(): SessionContextValue {
         payment_method: order.paymentMethod,
         status: order.status,
         total: order.total,
-        confirmed_at: order.confirmedAt ?? null,
       })
       .select()
       .single();
@@ -347,7 +344,7 @@ export function useSession(): SessionContextValue {
 
     await supabase
       .from('orders')
-      .update({ status: OrderStatus.Sale, confirmed_at: new Date().toISOString() })
+      .update({ status: OrderStatus.Sale })
       .eq('id', orderId);
 
     await autoFinalizePending(orderId);
