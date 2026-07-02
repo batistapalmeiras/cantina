@@ -3,15 +3,18 @@
   "configurations": [
     {
       "name": "bp-cantina",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "bp-cantina", "start"],
-      "port": 3000
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start"],
+      "port": 3000,
+      "autoPort": true,
+      "cwd": "apps/bp-cantina"
     },
     {
       "name": "bp-reserva",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter", "bp-reserva", "start"],
-      "port": 3001
+      "port": 3001,
+      "autoPort": true
     }
   ]
 }
