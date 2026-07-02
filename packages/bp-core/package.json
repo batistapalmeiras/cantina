@@ -1,0 +1,30 @@
+{
+  "name": "bp-core",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --target es2018",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --target es2018 --watch"
+  },
+  "peerDependencies": {
+    "react": "catalog:"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.2"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  }
+}

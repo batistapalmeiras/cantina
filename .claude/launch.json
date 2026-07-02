@@ -2,10 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "cantina",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["start"],
+      "name": "bp-cantina",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "bp-cantina", "start"],
       "port": 3000
+    },
+    {
+      "name": "bp-reserva",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "bp-reserva", "start"],
+      "port": 3001
     }
   ]
 }

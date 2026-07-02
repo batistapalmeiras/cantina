@@ -1,5 +1,41 @@
 # Project conventions
 
+## Monorepo layout
+
+This is a pnpm + Turborepo monorepo with two apps and two shared packages:
+
+```
+/
+  apps/
+    bp-cantina/     # internal admin panel (Setup, Cashier, Kitchen, Orders, Report, Profile, Login)
+    bp-reserva/     # public reservation flow (Reservation, ReservationSuccess) — guest only, no login
+  packages/
+    bp-ui/          # visual components, theme, animations, formatting utils — no domain knowledge
+    bp-core/        # domain types, contexts, hooks, Supabase client — shared by both apps
+  turbo.json        # build pipeline (packages build before apps)
+  tsconfig.base.json
+```
+
+Rule of thumb for where new code goes:
+
+- **Used by a single app, no domain coupling** → that app's own `src/components/` (e.g. `Layout`, admin-only).
+- **Used by both apps, purely visual** → `packages/bp-ui` (e.g. `Button`, `Modal`, `Typography`).
+- **Used by both apps, domain-aware** (needs `Order`, `Dish`, `PaymentMethod`, etc.) → `packages/bp-core` for contexts/hooks/types, or `packages/bp-ui` for components that render domain data (e.g. `OrdersList`, `DishSelector` — they depend on `bp-core` for types, which is fine; `bp-core` must never depend on `bp-ui`, to avoid a circular package dependency).
+- **Used by a single page only** → stays inside that page's own folder, per the page structure below.
+
+Each app and package still follows the same internal folder conventions described in this document (`styles/`, `hooks/`, `types/`, `domain/`, `validators/`, `index.tsx`/`index.ts` as the barrel). The rules below apply **inside** each app/package, not just at the old single-`src/` root.
+
+Import shared code by package name, never by relative path across a package boundary:
+
+```ts
+// ✅ correct
+import { Button } from 'bp-ui';
+import { useSessionCtx, Order } from 'bp-core';
+
+// ❌ wrong — cannot reach across package boundaries anyway, but never try to fake it
+import { Button } from '../../../packages/bp-ui/src/components/Button';
+```
+
 ## Page structure
 
 Each complex page (with its own business logic) follows this structure:
@@ -114,39 +150,41 @@ Always import by folder path (`from './types'`), never from the specific file (`
 - No Zod schema declarations (those go in `validators/`).
 - No loose domain enums/interfaces (those go in `domain/types/` or `types/`).
 
-## Global utilities (`src/utils/`)
+## Global utilities (`packages/bp-ui/src/utils/`)
 
-Pure functions reused by more than one page live in `src/utils/`. Do not duplicate them in each page's `domain/rules.ts`.
+Pure, UI-facing functions reused by more than one page/app live in `packages/bp-ui/src/utils/`. Do not duplicate them in each page's `domain/rules.ts`.
 
 Existing examples: `maskPhone`, `maskCurrencyInput`, `formatCurrency`, `parseCurrency`, `parsePhone`.
 
-`src/helpers/` does not exist in this project — do not create it. All shared utilities go in `src/utils/`.
+Domain-facing shared utilities (that need domain types) live in `packages/bp-core/src/utils/` instead — e.g. `ORDER_STATUS_LABEL`, `PAYMENT_METHOD_LABEL`.
 
-## Global types (`src/types/`)
+`helpers/` does not exist in this project — do not create it. All shared utilities go in `bp-ui/src/utils/` or `bp-core/src/utils/`.
 
-`src/types/` holds only shared domain concepts — types used by more than one page or layer:
+## Global types (`packages/bp-core/src/types/`)
+
+`packages/bp-core/src/types/` holds only shared domain concepts — types used by more than one app or layer:
 
 ```
-src/types/
+packages/bp-core/src/types/
   enums.ts       # domain enums: PaymentMethod, OrderStatus, SessionStatus
   interfaces.ts  # domain entities: Session, Order, Dish, Addon, User, TicketItem
   index.ts       # barrel
 ```
 
-**What does NOT go in `src/types/`:**
+**What does NOT go in `bp-core/src/types/`:**
 
 - **UI-only enums** (e.g. tab state, local toggles) — go in the page's own `types/enums.ts`
 - **Component props** (e.g. `ButtonProps`, `DishSelectorProps`) — go inside the component file itself and are exported from there if needed
 
-When a concept is used by more than one page (e.g. `Order`, `Dish`, `Session`), it does **not** go into any single page's `domain/`. It stays in `src/types/` (shared) until there is a real need for a formal shared domain layer — do not create this structure preemptively.
+When a concept is used by more than one page/app (e.g. `Order`, `Dish`, `Session`), it does **not** go into any single page's `domain/`. It stays in `bp-core` (shared) until there is a real need for a more formal shared domain layer — do not create this structure preemptively.
 
 ## Product domains (future)
 
 The project may grow to cover products beyond the cafeteria (e.g. course bookings, book sales). When that happens, do **not** create a global `domain/` that mixes concepts from different products. Each product should have its own grouping (e.g. `domains/courses/`, `domains/bookstore/`), avoiding collisions where "Order" means different things in different contexts. Do not create these folders ahead of time — only when the domain actually exists.
 
-## Global components (`src/components/`)
+## Global components (`packages/bp-ui/src/components/`)
 
-A component moves out of a page and into `src/components/` only when it is **reused by more than one page** (e.g. `Button`, `IconButton`, `Tabs`, `Toast`, `BottomSheet`). Components used in a single page stay in `pages/<Page>/components/`.
+A component moves out of a page and into `packages/bp-ui` only when it is **reused by more than one page/app and is purely visual** (e.g. `Button`, `IconButton`, `Tabs`, `Toast`, `BottomSheet`). Components used in a single page stay in `pages/<Page>/components/`. Components reused across apps but admin-only (e.g. `Layout`) stay inside that app's own `src/components/` instead of `bp-ui`, since they are not shared by both apps.
 
 ### Global component structure
 
@@ -183,8 +221,8 @@ import { ModalTitle } from '../Modal/styles/Modal';
 
 ## Pages already structured in this pattern
 
-- `pages/Kitchen/`
-- `pages/Login/`
-- `pages/Reservation/`
-- `pages/ReservationSuccess/`
-- `pages/Cashier/`
+- `apps/bp-cantina/src/pages/Kitchen/`
+- `apps/bp-cantina/src/pages/Login/`
+- `apps/bp-cantina/src/pages/Cashier/`
+- `apps/bp-reserva/src/pages/Reservation/`
+- `apps/bp-reserva/src/pages/ReservationSuccess/`

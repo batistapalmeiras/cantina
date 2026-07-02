@@ -1,0 +1,32 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+catalog:
+  # React
+  react: ^19.2.7
+  react-dom: ^19.2.7
+  react-hook-form: ^7.80.0
+  react-router-dom: ^7.18.0
+  "@hookform/resolvers": ^5.4.0
+  react-scripts: 5.0.1
+  # Libs
+  styled-components: ^6.4.3
+  lucide-react: ^1.21.0
+  zod: ^4.4.3
+  # Build tooling
+  typescript: ^4.9.5
+  tsup: ^8.3.0
+  # Types
+  "@types/react": ^19.2.17
+  "@types/react-dom": ^19.2.3
+  "@types/styled-components": ^5.1.36
+  "@types/react-router-dom": ^5.3.3
+  "@types/jest": ^27.5.2
+  "@types/node": ^16.18.126
+  # Testing
+  "@testing-library/dom": ^10.4.1
+  "@testing-library/jest-dom": ^6.9.1
+  "@testing-library/react": ^16.3.2
+  "@testing-library/user-event": ^13.5.0
+  web-vitals: ^2.1.4
