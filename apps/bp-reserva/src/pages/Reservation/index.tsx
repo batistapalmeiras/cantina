@@ -1,59 +1,27 @@
 // React
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect,useState } from 'react';
-import { Controller,useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 // Libs
-import { Pencil } from 'lucide-react';
-// Components
-import icon from '../../assets/icon.png';
-import { Button } from 'bp-ui';
-import { InfoBox } from 'bp-ui';
-import { DishSelector } from 'bp-ui';
-import { PaymentToggle } from 'bp-ui';
-import { useToast } from 'bp-ui';
-import { Typography } from 'bp-ui';
-import { useClient } from 'bp-core';
-import { useModal } from 'bp-ui';
-import { PaymentMethod } from 'bp-core';
-import { maskPhone } from 'bp-ui';
+import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, PaymentMethod, useClient } from 'bp-core';
+import { Button, DishSelector, InfoBox, PageHeader, PaymentToggle, Typography, useModal, useToast } from 'bp-ui';
 // Local
 import { CancelConfirmDialog } from './components/CancelConfirmDialog';
-import { EditProfileModal } from './components/EditProfileModal';
-import { HistoryModal } from './components/HistoryModal';
-import { useClientHistory } from './hooks/useClientHistory';
 import { useReservation } from './hooks/useReservation';
 import {
-  BrandLogo,
-  BrandName,
-  BrandRow,
-  BrandSub,
-  CancelLink,
   Card,
   CardLabel,
-  Container,
-  EditBtn,
+  CancelLink,
   Empty,
-  ErrorMsg,
-  FieldStack,
-  FieldWrap,
-  Header,
-  HistoryBtn,
-  Input,
-  Label,
-  Page,
-  SessionDate,
-  SessionName,
-  Skeleton,
+  StatusBadge,
+  SummaryHeader,
   TotalLabel,
   TotalLine,
   TotalValue,
 } from './styles';
-import { ReservationFormValues,reservationSchema } from './validators';
 
 export function ReservationPage() {
-  const { client, loginClient, updateClient, loading: clientLoading } = useClient();
+  const { client } = useClient();
   const { open, close, modal } = useModal();
-  const [loggingIn, setLoggingIn] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   const {
     session,
@@ -70,253 +38,139 @@ export function ReservationPage() {
     submitReservation,
     saveReservation,
     cancelReservation,
+    discardChanges,
   } = useReservation(client?.phone);
 
   const { show: showToast, toast } = useToast();
 
   useEffect(() => { if (orderError) showToast(orderError); }, [orderError]);
 
-  const { history, loading: historyLoading } = useClientHistory(client?.phone, session?.id);
-
-  const { control, handleSubmit, watch, formState: { errors } } = useForm<ReservationFormValues>({
-    resolver: zodResolver(reservationSchema),
-    defaultValues: { name: '', phone: '' },
-  });
-
-  const name = watch('name');
-  const phone = watch('phone');
-
-  const openEditProfile = () => {
-    if (!client) return;
-    open(
-      <EditProfileModal
-        name={client.name}
-        phone={client.phone}
-        close={close}
-        onSave={updateClient}
-      />
-    );
-  };
-
-  const brandHeader = (sub: string, showEdit = false) => (
-    <Header>
-      <BrandRow>
-        <BrandLogo src={icon} alt="Cantina IBC" />
-        <div>
-          <BrandName>Cantina IBC</BrandName>
-          <BrandSub>{sub}</BrandSub>
-        </div>
-      </BrandRow>
-      {showEdit && (
-        <EditBtn onClick={openEditProfile}>
-          <Pencil size={13} />
-          Editar dados
-        </EditBtn>
-      )}
-    </Header>
-  );
-
-  const paymentSection = (
-    <Card>
-      <PaymentToggle label="Forma de pagamento" value={paymentMethod} onChange={setPaymentMethod} />
-      {paymentMethod === PaymentMethod.Pix && (
-        <InfoBox variant="warning" style={{ marginTop: 12 }}>Apresente o comprovante Pix no caixa após o culto.</InfoBox>
-      )}
-      {paymentMethod === PaymentMethod.Cash && (
-        <InfoBox variant="warning" style={{ marginTop: 12 }}>Acerte o pagamento em dinheiro no caixa após o culto.</InfoBox>
-      )}
-      <TotalLine>
-        <TotalLabel>Total</TotalLabel>
-        <TotalValue>R$ {total.toFixed(2)}</TotalValue>
-      </TotalLine>
-    </Card>
-  );
-
-  const openHistory = () => open(<HistoryModal history={history} loading={historyLoading} />);
-
   if (!session || !session.isOpen) {
     return (
-      <Page>
-        <Container>
-          {brandHeader('Igreja Batista Palmeiras')}
-          <Empty>
-            <Typography type="h3">Reservas indisponíveis</Typography>
-            <Typography type="p">Nenhuma sessão está aberta no momento.</Typography>
-          </Empty>
-        </Container>
-      </Page>
+      <Empty>
+        <Typography type="h3">Reservas indisponíveis</Typography>
+        <Typography type="p">Nenhuma sessão está aberta no momento.</Typography>
+      </Empty>
     );
   }
 
-  if (clientLoading) {
-    return (
-      <Page>
-        <Container>
-          {brandHeader('Igreja Batista Palmeiras')}
-          <Card>
-            <Skeleton $h="20px" $w="55%" />
-            <Skeleton $h="13px" $w="35%" style={{ marginTop: 8 }} />
-          </Card>
-          <Card>
-            <Skeleton $h="13px" $w="30%" style={{ marginBottom: 16 }} />
-            <Skeleton $h="72px" />
-          </Card>
-          <Card>
-            <Skeleton $h="13px" $w="25%" style={{ marginBottom: 16 }} />
-            <Skeleton $h="44px" />
-            <Skeleton $h="48px" style={{ marginTop: 12 }} />
-          </Card>
-        </Container>
-      </Page>
+  if (!client) return null;
+
+  const openCancelDialog = () =>
+    open(
+      <CancelConfirmDialog
+        close={close}
+        onConfirm={() => {
+          cancelReservation();
+          setEditing(false);
+        }}
+      />
     );
-  }
 
-  if (!client) {
-    const handleLogin = async () => {
-      setLoggingIn(true);
-      try { await loginClient(name, phone); }
-      finally { setLoggingIn(false); }
-    };
+  if (clientOrder && !editing) {
+    const dishSummary = Object.values(
+      clientOrder.tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
+        if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
+        acc[t.dishName].qty++;
+        return acc;
+      }, {})
+    )
+      .map((g) => `${g.qty}× ${g.name}`)
+      .join(', ');
 
     return (
-      <Page>
-        <Container>
-          {brandHeader('Igreja Batista Palmeiras')}
-          <Card>
-            <CardLabel>Identificação</CardLabel>
-            <Typography type="p" style={{ marginBottom: 20 }}>
-              Digite seu nome e telefone para fazer uma reserva.
-            </Typography>
-            <FieldStack>
-              <FieldWrap>
-                <Label>Nome completo</Label>
-                <Controller
-                  control={control}
-                  name="name"
-                  render={({ field }) => (
-                    <Input {...field} placeholder="Seu nome" $error={!!errors.name} />
-                  )}
-                />
-                {errors.name && <ErrorMsg>{errors.name.message}</ErrorMsg>}
-              </FieldWrap>
-              <FieldWrap>
-                <Label>Telefone (WhatsApp)</Label>
-                <Controller
-                  control={control}
-                  name="phone"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="(11) 99999-0000"
-                      inputMode="numeric"
-                      $error={!!errors.phone}
-                      onChange={(e) => field.onChange(maskPhone(e.target.value))}
-                    />
-                  )}
-                />
-                {errors.phone && <ErrorMsg>{errors.phone.message}</ErrorMsg>}
-              </FieldWrap>
-            </FieldStack>
-            <Button
-              variant="primary"
-              size="lg"
-              fullWidth
-              onClick={handleSubmit(handleLogin)}
-              disabled={loggingIn || !name?.trim() || !phone?.trim()}
-              style={{ marginTop: 20 }}
-            >
-              {loggingIn ? 'Verificando...' : 'Continuar'}
-            </Button>
-          </Card>
-        </Container>
-      </Page>
-    );
-  }
+      <>
+        <PageHeader title="Sua reserva" subtitle="Confira os detalhes do seu pedido para este culto." />
 
-  if (clientOrder) {
-    return (
-      <Page>
-        <Container>
-          {brandHeader(`Olá, ${client.name}!`, true)}
+        <Card>
+          <SummaryHeader>
+            <CardLabel style={{ marginBottom: 0 }}>Resumo</CardLabel>
+            <StatusBadge $status={OrderStatus.Reservation}>{ORDER_STATUS_LABEL[OrderStatus.Reservation]}</StatusBadge>
+          </SummaryHeader>
+          <Typography type="p">{dishSummary}</Typography>
+          <Typography type="p" style={{ marginTop: 4 }}>
+            Pagamento: {PAYMENT_METHOD_LABEL[clientOrder.paymentMethod]}
+          </Typography>
+          <TotalLine>
+            <TotalLabel>Total</TotalLabel>
+            <TotalValue>R$ {clientOrder.total.toFixed(2)}</TotalValue>
+          </TotalLine>
+        </Card>
 
-          <Card>
-            <SessionName>{session.ministry}</SessionName>
-            <SessionDate>{new Date(session.date).toLocaleDateString('pt-BR')}</SessionDate>
-          </Card>
+        <Button variant="primary" size="lg" fullWidth onClick={() => setEditing(true)}>
+          Editar pedido
+        </Button>
 
-          <Card>
-            <CardLabel>Sua reserva</CardLabel>
-            <DishSelector
-              dishes={session.dishes}
-              quantities={quantities}
-              onIncrement={increment}
-              onDecrement={decrement}
-              onSetAddonCount={setAddonCount}
-            />
-          </Card>
+        <CancelLink onClick={openCancelDialog}>Cancelar pedido</CancelLink>
 
-          {paymentSection}
-
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={() => saveReservation(client.name, client.phone)}
-            disabled={tickets.length === 0}
-          >
-            Salvar alterações
-          </Button>
-
-          <CancelLink onClick={() => open(<CancelConfirmDialog close={close} onConfirm={cancelReservation} />)}>
-            Cancelar minha reserva
-          </CancelLink>
-
-          <HistoryBtn onClick={openHistory}>Ver histórico de pedidos</HistoryBtn>
-
-          {modal}
-        </Container>
-      </Page>
+        {modal}
+        {toast}
+      </>
     );
   }
 
   return (
-    <Page>
-      <Container>
-        {brandHeader(`Olá, ${client.name}!`, true)}
+    <>
+      <PageHeader
+        title={clientOrder ? 'Editar reserva' : 'Faça sua reserva aqui'}
+        subtitle="Escolha o prato e garanta sua fichinha para o culto."
+      />
 
-        <Card>
-          <SessionName>{session.ministry}</SessionName>
-          <SessionDate>{new Date(session.date).toLocaleDateString('pt-BR')}</SessionDate>
-        </Card>
+      <Card>
+        <CardLabel>{clientOrder ? 'Sua reserva' : 'Fichinhas'}</CardLabel>
+        <DishSelector
+          dishes={session.dishes}
+          quantities={quantities}
+          onIncrement={increment}
+          onDecrement={decrement}
+          onSetAddonCount={setAddonCount}
+        />
+      </Card>
 
-        <Card>
-          <CardLabel>Fichinhas</CardLabel>
-          <DishSelector
-            dishes={session.dishes}
-            quantities={quantities}
-            onIncrement={increment}
-            onDecrement={decrement}
-            onSetAddonCount={setAddonCount}
-          />
-        </Card>
+      <Card>
+        <PaymentToggle label="Forma de pagamento" value={paymentMethod} onChange={setPaymentMethod} />
+        {paymentMethod === PaymentMethod.Pix && (
+          <InfoBox variant="warning" style={{ marginTop: 12 }}>Apresente o comprovante Pix no caixa após o culto.</InfoBox>
+        )}
+        {paymentMethod === PaymentMethod.Cash && (
+          <InfoBox variant="warning" style={{ marginTop: 12 }}>Acerte o pagamento em dinheiro no caixa após o culto.</InfoBox>
+        )}
+        <TotalLine>
+          <TotalLabel>Total</TotalLabel>
+          <TotalValue>R$ {total.toFixed(2)}</TotalValue>
+        </TotalLine>
+      </Card>
 
-        {paymentSection}
+      <Button
+        variant="primary"
+        size="lg"
+        fullWidth
+        onClick={
+          clientOrder
+            ? () => saveReservation(client.name, client.phone, () => {
+                showToast('Reserva atualizada com sucesso!');
+                setEditing(false);
+              })
+            : () => submitReservation({ name: client.name, phone: client.phone })
+        }
+        disabled={tickets.length === 0}
+      >
+        {clientOrder ? 'Salvar alterações' : 'Confirmar reserva'}
+      </Button>
 
-        <Button
-          variant="primary"
-          size="lg"
-          fullWidth
-          onClick={() => submitReservation({ name: client.name, phone: client.phone })}
-          disabled={tickets.length === 0}
+      {clientOrder && (
+        <CancelLink
+          onClick={() => {
+            discardChanges();
+            setEditing(false);
+          }}
         >
-          Confirmar reserva
-        </Button>
+          Cancelar edição
+        </CancelLink>
+      )}
 
-        <HistoryBtn onClick={openHistory}>Ver histórico de pedidos</HistoryBtn>
-
-        {modal}
-        {toast}
-      </Container>
-    </Page>
+      {modal}
+      {toast}
+    </>
   );
 }

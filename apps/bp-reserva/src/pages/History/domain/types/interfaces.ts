@@ -1,4 +1,4 @@
-// Components
+// Libs
 import { OrderStatus, PaymentMethod } from 'bp-core';
 
 export interface HistoryOrder {
@@ -9,5 +9,4 @@ export interface HistoryOrder {
   createdAt: string;
   dishes: string[];
   sessionDate: string;
-  sessionMinistry: string;
 }

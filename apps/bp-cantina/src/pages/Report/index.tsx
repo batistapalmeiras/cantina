@@ -1,17 +1,18 @@
 // React
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { Check, Pencil, X } from 'lucide-react';
-// Components
+import { useSessionCtx } from 'bp-core';
+import { Order, OrderStatus, PaymentMethod } from 'bp-core';
 import { Button } from 'bp-ui';
 import { Chip, ChipBar } from 'bp-ui';
 import { OrdersList } from 'bp-ui';
 import { PageHeader } from 'bp-ui';
+import { Skeleton } from 'bp-ui';
 import { Typography } from 'bp-ui';
 import { useModal } from 'bp-ui';
-import { useSessionCtx } from 'bp-core';
+import { Check, Pencil, X } from 'lucide-react';
+// Components
 import { AppRoute } from '../../routes/paths';
-import { Order, OrderStatus, PaymentMethod } from 'bp-core';
 // Local
 import { OrderEditForm } from './components/OrderEditForm';
 import { useReport } from './hooks/useReport';
@@ -33,7 +34,24 @@ export function ReportPage() {
   const navigate = useNavigate();
 
   if (loading) {
-    return <Empty><Typography type="p">Carregando...</Typography></Empty>;
+    return (
+      <>
+        <StatsGrid>
+          {[1, 2, 3, 4].map((i) => (
+            <StatCard key={i}>
+              <Skeleton $h="12px" $w="60%" />
+              <Skeleton $h="24px" $w="40%" style={{ marginTop: 10 }} />
+            </StatCard>
+          ))}
+        </StatsGrid>
+        <Section>
+          <Skeleton $h="14px" $w="120px" style={{ marginBottom: 16 }} />
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} $h="40px" style={{ marginBottom: 8 }} />
+          ))}
+        </Section>
+      </>
+    );
   }
 
   if (!session) {

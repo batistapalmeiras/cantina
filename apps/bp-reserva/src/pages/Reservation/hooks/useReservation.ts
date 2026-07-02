@@ -1,11 +1,17 @@
 // React
 import { useCallback, useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Libs
+import { Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx } from 'bp-core';
 // Components
-import { useSessionCtx } from 'bp-core';
 import { AppRoute } from '../../../routes/paths';
-import { Dish,Order, OrderStatus, PaymentMethod, TicketItem } from 'bp-core';
-import { ReservationFormValues } from '../validators';
+
+interface ReservationFormValues {
+  name: string;
+  phone: string;
+}
+
+const CHURCH_PIX_KEY = '16886715000123';
 
 export function useReservation(clientPhone?: string) {
   const { session, addOrder, cancelOrder } = useSessionCtx();
@@ -99,15 +105,15 @@ export function useReservation(clientPhone?: string) {
         status: OrderStatus.Reservation,
         total,
       });
-      navigate(AppRoute.ReservationSuccess, {
-        state: { paymentMethod, total },
+      navigate(AppRoute.ReservationConfirmed, {
+        state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY },
       });
     } catch (err) {
       setOrderError(err instanceof Error ? err.message : 'Erro ao registrar reserva');
     }
   }, [session, tickets, paymentMethod, total, addOrder, navigate]);
 
-  const saveReservation = useCallback(async (clientName: string, clientPhoneVal: string) => {
+  const saveReservation = useCallback(async (clientName: string, clientPhoneVal: string, onSuccess?: () => void) => {
     if (!session || tickets.length === 0 || !clientOrder) return;
     setOrderError(null);
     try {
@@ -120,19 +126,19 @@ export function useReservation(clientPhone?: string) {
         status: OrderStatus.Reservation,
         total,
       });
-      navigate(AppRoute.ReservationSuccess, {
-        state: { paymentMethod, total },
-      });
+      onSuccess?.();
     } catch (err) {
       setOrderError(err instanceof Error ? err.message : 'Erro ao salvar reserva');
     }
-  }, [session, tickets, paymentMethod, total, clientOrder, addOrder, cancelOrder, navigate]);
+  }, [session, tickets, paymentMethod, total, clientOrder, addOrder, cancelOrder]);
 
   const cancelReservation = async () => {
     if (!clientOrder) return;
     await cancelOrder(clientOrder.id);
     resetForm();
   };
+
+  const discardChanges = () => setInitialized(false);
 
   return {
     session,
@@ -149,5 +155,6 @@ export function useReservation(clientPhone?: string) {
     submitReservation,
     saveReservation,
     cancelReservation,
+    discardChanges,
   };
 }

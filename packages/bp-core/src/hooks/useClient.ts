@@ -27,6 +27,21 @@ export function useClient() {
     setLoading(false);
   }, []);
 
+  const findClientByPhone = async (phone: string): Promise<Client | null> => {
+    const { data } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('phone', phone)
+      .single();
+
+    return data ?? null;
+  };
+
+  const loginWithClient = (clientData: Client) => {
+    localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(clientData));
+    setClient(clientData);
+  };
+
   const loginClient = async (name: string, phone: string): Promise<Client> => {
     const { data: existing } = await supabase
       .from('clients')
@@ -94,6 +109,8 @@ export function useClient() {
   return {
     client,
     loading,
+    findClientByPhone,
+    loginWithClient,
     loginClient,
     logoutClient,
     updateClientName,

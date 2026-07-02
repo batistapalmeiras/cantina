@@ -1,8 +1,9 @@
 // React
 import { useEffect,useState } from 'react';
-// Components
+// Libs
 import { supabase } from 'bp-core';
 import { OrderStatus, PaymentMethod } from 'bp-core';
+// Components
 import { HistoryOrder } from '../domain';
 
 export function useClientHistory(clientPhone?: string, currentSessionId?: string) {
@@ -16,7 +17,7 @@ export function useClientHistory(clientPhone?: string, currentSessionId?: string
 
     let query = supabase
       .from('orders')
-      .select('id, status, total, payment_method, created_at, ticket_items(dish_name), sessions(date, ministry)')
+      .select('id, status, total, payment_method, created_at, ticket_items(dish_name), sessions(date)')
       .eq('customer_phone', clientPhone)
       .order('created_at', { ascending: false })
       .limit(30);
@@ -34,7 +35,6 @@ export function useClientHistory(clientPhone?: string, currentSessionId?: string
         createdAt: o.created_at,
         dishes: (o.ticket_items ?? []).map((t: any) => t.dish_name as string),
         sessionDate: o.sessions?.date ?? '',
-        sessionMinistry: o.sessions?.ministry ?? '',
       }));
       setHistory(mapped);
       setLoading(false);

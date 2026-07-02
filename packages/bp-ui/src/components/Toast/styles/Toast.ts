@@ -10,9 +10,9 @@ const fadeOut = keyframes`
 
 export const ToastEl = styled.div<{ $leaving: boolean }>`
   position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 80px;
+  left: 16px;
+  right: 16px;
   background: ${({ theme }) => theme.colors.ink};
   color: ${({ theme }) => theme.colors.onDark};
   font-family: ${({ theme }) => theme.typography.fontFamily};
@@ -23,6 +23,7 @@ export const ToastEl = styled.div<{ $leaving: boolean }>`
   box-shadow: ${({ theme }) => theme.shadows.md};
   pointer-events: none;
   z-index: 500;
-  white-space: nowrap;
+  word-wrap: break-word;
+  text-align: center;
   animation: ${({ $leaving }) => ($leaving ? fadeOut : fadeUp)} 0.25s ease forwards;
 `;

@@ -1,4 +1,7 @@
 export enum AppRoute {
+  Identify = '/identificar',
   Reservation = '/reserva',
-  ReservationSuccess = '/reserva/confirmacao',
+  History = '/historico',
+  Profile = '/perfil',
+  ReservationConfirmed = '/reserva-confirmada',
 }

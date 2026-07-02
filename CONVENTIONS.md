@@ -8,7 +8,7 @@ This is a pnpm + Turborepo monorepo with two apps and two shared packages:
 /
   apps/
     bp-cantina/     # internal admin panel (Setup, Cashier, Kitchen, Orders, Report, Profile, Login)
-    bp-reserva/     # public reservation flow (Reservation, ReservationSuccess) — guest only, no login
+    bp-reserva/     # public reservation flow (Reservation, ReservationConfirmed) — guest only, no login
   packages/
     bp-ui/          # visual components, theme, animations, formatting utils — no domain knowledge
     bp-core/        # domain types, contexts, hooks, Supabase client — shared by both apps
@@ -225,4 +225,4 @@ import { ModalTitle } from '../Modal/styles/Modal';
 - `apps/bp-cantina/src/pages/Login/`
 - `apps/bp-cantina/src/pages/Cashier/`
 - `apps/bp-reserva/src/pages/Reservation/`
-- `apps/bp-reserva/src/pages/ReservationSuccess/`
+- `apps/bp-reserva/src/pages/ReservationConfirmed/`
