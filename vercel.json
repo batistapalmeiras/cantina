@@ -1,4 +1,4 @@
 {
-  "buildCommand": "pnpm build",
+  "buildCommand": "turbo run build --filter=bp-cantina",
   "installCommand": "pnpm install"
 }
