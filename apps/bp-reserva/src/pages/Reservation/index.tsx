@@ -44,7 +44,7 @@ export function ReservationPage() {
 
   const { show: showToast, toast } = useToast();
 
-  useEffect(() => { if (orderError) showToast(orderError); }, [orderError]);
+  useEffect(() => { if (orderError) showToast(orderError); }, [orderError, showToast]);
 
   if (!session || !session.isOpen) {
     return (
