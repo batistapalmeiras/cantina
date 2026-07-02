@@ -32,6 +32,7 @@ export function ReservationPage() {
     total,
     clientOrder,
     orderError,
+    isSaving,
     increment,
     decrement,
     setAddonCount,
@@ -67,7 +68,7 @@ export function ReservationPage() {
       />
     );
 
-  if (clientOrder && !editing) {
+  if (clientOrder && !editing && !isSaving) {
     const dishSummary = Object.values(
       clientOrder.tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
         if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
@@ -148,10 +149,12 @@ export function ReservationPage() {
         onClick={
           clientOrder
             ? () => saveReservation(client.name, client.phone, () => {
-                showToast('Reserva atualizada com sucesso!');
+                showToast('Salvo!');
                 setEditing(false);
               })
-            : () => submitReservation({ name: client.name, phone: client.phone })
+            : () => submitReservation({ name: client.name, phone: client.phone }, () => {
+                showToast('Confirmado!');
+              })
         }
         disabled={tickets.length === 0}
       >

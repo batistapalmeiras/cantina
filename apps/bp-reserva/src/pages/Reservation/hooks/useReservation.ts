@@ -1,5 +1,5 @@
 // React
-import { useCallback, useEffect,useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx } from 'bp-core';
@@ -22,6 +22,7 @@ export function useReservation(clientPhone?: string) {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Pix);
   const [initialized, setInitialized] = useState(false);
   const [orderError, setOrderError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const clientOrder: Order | null = clientPhone
     ? (session?.orders ?? []).find(
@@ -93,9 +94,10 @@ export function useReservation(clientPhone?: string) {
   const tickets = buildTickets();
   const total = tickets.reduce((s, t) => s + t.totalPrice, 0);
 
-  const submitReservation = useCallback(async (data: ReservationFormValues) => {
+  const submitReservation = useCallback(async (data: ReservationFormValues, onSuccess?: () => void) => {
     if (!session || tickets.length === 0) return;
     setOrderError(null);
+    setIsSaving(true);
     try {
       await addOrder({
         customerName: data.name.trim(),
@@ -105,17 +107,21 @@ export function useReservation(clientPhone?: string) {
         status: OrderStatus.Reservation,
         total,
       });
+      onSuccess?.();
       navigate(AppRoute.ReservationConfirmed, {
         state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY },
       });
     } catch (err) {
       setOrderError(err instanceof Error ? err.message : 'Erro ao registrar reserva');
+    } finally {
+      setIsSaving(false);
     }
   }, [session, tickets, paymentMethod, total, addOrder, navigate]);
 
   const saveReservation = useCallback(async (clientName: string, clientPhoneVal: string, onSuccess?: () => void) => {
     if (!session || tickets.length === 0 || !clientOrder) return;
     setOrderError(null);
+    setIsSaving(true);
     try {
       await cancelOrder(clientOrder.id);
       await addOrder({
@@ -129,6 +135,8 @@ export function useReservation(clientPhone?: string) {
       onSuccess?.();
     } catch (err) {
       setOrderError(err instanceof Error ? err.message : 'Erro ao salvar reserva');
+    } finally {
+      setIsSaving(false);
     }
   }, [session, tickets, paymentMethod, total, clientOrder, addOrder, cancelOrder]);
 
@@ -149,6 +157,7 @@ export function useReservation(clientPhone?: string) {
     total,
     clientOrder,
     orderError,
+    isSaving,
     increment,
     decrement,
     setAddonCount,
