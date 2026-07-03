@@ -41,8 +41,35 @@ export function useAuth(): AuthContextValue {
       }
     });
 
-    return () => listener.subscription.unsubscribe();
-  }, []);
+    // Refresh automático do token a cada 50 minutos (antes dos 60 de expiração)
+    const refreshInterval = setInterval(async () => {
+      const { error } = await supabase.auth.refreshSession();
+      if (error) {
+        console.error('Erro ao renovar token:', error);
+        setUser(null);
+        setUserEmail('');
+      }
+    }, 50 * 60 * 1000);
+
+    // Refresh quando volta ao foco (abrir aba, deslocar app)
+    const handleVisibilityChange = async () => {
+      if (!document.hidden && user) {
+        const { error } = await supabase.auth.refreshSession();
+        if (error) {
+          setUser(null);
+          setUserEmail('');
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(refreshInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      listener.subscription.unsubscribe();
+    };
+  }, [user]);
 
   const login = useCallback(async (email: string, password: string): Promise<string | null> => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });

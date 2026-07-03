@@ -16,6 +16,7 @@ export function useClient() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Carrega cliente do localStorage (sessão eterna até logout manual)
     const stored = localStorage.getItem(CLIENT_STORAGE_KEY);
     if (stored) {
       try {
@@ -25,6 +26,34 @@ export function useClient() {
       }
     }
     setLoading(false);
+
+    // Refresh automático e silencioso do token a cada 50 minutos
+    const refreshInterval = setInterval(async () => {
+      const { error } = await supabase.auth.refreshSession();
+      if (error) {
+        console.warn('Falha ao renovar sessão, limpando dados do cliente');
+        localStorage.removeItem(CLIENT_STORAGE_KEY);
+        setClient(null);
+      }
+    }, 50 * 60 * 1000);
+
+    // Refresh quando volta ao foco (abrir aba, deslocar app)
+    const handleVisibilityChange = async () => {
+      if (!document.hidden) {
+        const { error } = await supabase.auth.refreshSession();
+        if (error) {
+          localStorage.removeItem(CLIENT_STORAGE_KEY);
+          setClient(null);
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(refreshInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const findClientByPhone = async (phone: string): Promise<Client | null> => {
