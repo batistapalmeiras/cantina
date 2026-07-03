@@ -41,7 +41,6 @@ export function useAuth(): AuthContextValue {
       }
     });
 
-    // Refresh automático do token a cada 50 minutos (antes dos 60 de expiração)
     const refreshInterval = setInterval(async () => {
       const { error } = await supabase.auth.refreshSession();
       if (error) {
@@ -51,7 +50,6 @@ export function useAuth(): AuthContextValue {
       }
     }, 50 * 60 * 1000);
 
-    // Refresh quando volta ao foco (abrir aba, deslocar app)
     const handleVisibilityChange = async () => {
       if (!document.hidden && user) {
         const { error } = await supabase.auth.refreshSession();

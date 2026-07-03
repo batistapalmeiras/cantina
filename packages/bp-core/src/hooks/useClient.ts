@@ -16,7 +16,6 @@ export function useClient() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Carrega cliente do localStorage (sessão eterna até logout manual)
     const stored = localStorage.getItem(CLIENT_STORAGE_KEY);
     if (stored) {
       try {
@@ -27,7 +26,6 @@ export function useClient() {
     }
     setLoading(false);
 
-    // Refresh automático e silencioso do token a cada 50 minutos
     const refreshInterval = setInterval(async () => {
       const { error } = await supabase.auth.refreshSession();
       if (error) {
@@ -37,7 +35,6 @@ export function useClient() {
       }
     }, 50 * 60 * 1000);
 
-    // Refresh quando volta ao foco (abrir aba, deslocar app)
     const handleVisibilityChange = async () => {
       if (!document.hidden) {
         const { error } = await supabase.auth.refreshSession();
