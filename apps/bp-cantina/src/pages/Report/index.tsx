@@ -24,7 +24,7 @@ import {
 
 export function ReportPage() {
   const {
-    session, orders, stats, dishMap, loading, isEditable, canEditSession,
+    session, orders, stats, loading, isEditable, canEditSession,
     page, totalPages, filterStatus, filterPayment, hasFilter,
     setPage, handleFilterStatus, handleFilterPayment,
   } = useReport();
