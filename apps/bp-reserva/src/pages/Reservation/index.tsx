@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
 import { Button, DishSelector, InfoBox, PageHeader, PaymentToggle, Typography, useModal, useToast } from 'bp-ui';
@@ -38,9 +39,7 @@ export function ReservationPage() {
     cancelReservation,
   } = useReservation();
 
-  if (orderError) {
-    showToast(orderError);
-  }
+  useEffect(() => { if (orderError) showToast(orderError); }, [orderError, showToast]);
 
   if (!session || !session.isOpen) {
     return (
