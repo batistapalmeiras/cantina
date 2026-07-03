@@ -68,7 +68,6 @@ export function CashierDishSelector({ control, setValue, dishes, quantities, onI
       />
 
       <MobileOnly>
-        <SectionLabel>Pagamento</SectionLabel>
         <Controller
           control={control}
           name="paymentMethod"
