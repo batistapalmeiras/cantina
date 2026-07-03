@@ -30,25 +30,6 @@ export const Header = styled.div`
   padding: ${({ theme }) => theme.spacing.base} 0;
 `;
 
-export const BrandRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-`;
-
-export const BrandLogo = styled.img`
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-`;
-
-export const BrandName = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.titleMd.fontSize};
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
 export const DesktopTabBarWrap = styled.div`
   display: none;
 

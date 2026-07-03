@@ -89,7 +89,7 @@ export function AppRouter() {
                       <Route
                         path={AppRoute.Kitchen}
                         element={
-                          <ProtectedRoute roles={['admin', 'operator']}>
+                          <ProtectedRoute roles={['admin', 'operator', 'kitchen']}>
                             <KitchenPage />
                           </ProtectedRoute>
                         }

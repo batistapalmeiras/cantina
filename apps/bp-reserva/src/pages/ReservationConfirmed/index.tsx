@@ -9,18 +9,9 @@ import { InfoBox } from 'bp-ui';
 import { Typography } from 'bp-ui';
 import { useToast } from 'bp-ui';
 import { Check, CheckCircle, Copy } from 'lucide-react';
-// Components
-import icon from '../../assets/icon.png';
-import { AppRoute } from '../../routes/paths';
 // Local
 import {
-  BrandLogo,
-  BrandName,
-  BrandSub,
-  Container,
   CopyBtn,
-  Header,
-  Page,
   PixKeyBox,
   PixKeyLabel,
   PixKeyRow,
@@ -33,6 +24,7 @@ import {
   SummaryRow,
   SummaryValue,
 } from './styles';
+import { AppRoute } from '../../routes/paths';
 
 interface SuccessState {
   paymentMethod: PaymentMethod;
@@ -63,17 +55,8 @@ export function ReservationConfirmedPage() {
   };
 
   return (
-    <Page>
-      <Container>
-        <Header>
-          <BrandLogo src={icon} alt="Cantina Batista Palmeiras" />
-          <div>
-            <BrandName>Cantina Batista Palmeiras</BrandName>
-            <BrandSub>Reserva confirmada</BrandSub>
-          </div>
-        </Header>
-
-        <SuccessWrap>
+    <>
+      <SuccessWrap>
           <SuccessIcon>
             <CheckCircle size={32} />
           </SuccessIcon>
@@ -122,7 +105,6 @@ export function ReservationConfirmedPage() {
         </Button>
 
         {toast}
-      </Container>
-    </Page>
+    </>
   );
 }

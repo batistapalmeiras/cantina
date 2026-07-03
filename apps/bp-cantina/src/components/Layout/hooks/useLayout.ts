@@ -15,6 +15,7 @@ export function useLayout() {
   const ref = useRef<HTMLDivElement>(null);
 
   const isAdmin = user?.role === 'admin';
+  const isKitchen = user?.role === 'kitchen';
   const hasOpenSession = session?.isOpen === true;
   const hasActiveSession = hasOpenSession || !!pendingSession;
 
@@ -47,8 +48,8 @@ export function useLayout() {
     handleLogout,
     isActive,
     showSetup: isAdmin,
-    showCashier: hasOpenSession,
-    showOrders: hasActiveSession,
+    showCashier: hasOpenSession && !isKitchen,
+    showOrders: hasActiveSession && !isKitchen,
     showKitchen: hasActiveSession,
   };
 }

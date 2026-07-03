@@ -17,10 +17,9 @@ import { AppRoute } from '../../routes/paths';
 import { OrderEditForm } from './components/OrderEditForm';
 import { useReport } from './hooks/useReport';
 import {
-BarCount,
-BarFill, BarLabel,   BarRow, BarTrack, Empty,
-IconBtn,   OrderActions,   Section, SectionLabel,
-StatCard,   StatsGrid, StatValue,
+  Empty, IconBtn, OrderActions,
+  Section, SectionLabel,
+  StatCard,   StatsGrid, StatValue,
 } from './styles';
 
 export function ReportPage() {
@@ -58,7 +57,7 @@ export function ReportPage() {
     return (
       <Empty>
         <Typography type="h3">Nenhuma sessão disponível</Typography>
-        <Typography type="p">Abra uma sessão pelo Configurar para ver o relatório.</Typography>
+        <Typography type="p">Aguarde o administrador abrir uma sessão</Typography>
       </Empty>
     );
   }
@@ -115,19 +114,6 @@ export function ReportPage() {
             <StatValue $muted>{stats.pendingReservations}</StatValue>
           </StatCard>
         </StatsGrid>
-      )}
-
-      {dishMap && dishMap.length > 0 && (
-        <Section>
-          <SectionLabel>Fichinhas por prato</SectionLabel>
-          {dishMap.map((d) => (
-            <BarRow key={d.name}>
-              <BarLabel>{d.name}</BarLabel>
-              <BarTrack><BarFill $pct={d.total > 0 ? (d.sold / d.total) * 100 : 0} /></BarTrack>
-              <BarCount>{d.sold}/{d.total}</BarCount>
-            </BarRow>
-          ))}
-        </Section>
       )}
 
       <Section>

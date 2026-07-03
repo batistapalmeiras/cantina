@@ -9,11 +9,10 @@ export async function fetchProfile(userId: string): Promise<User | null> {
   const { data } = await supabase
     .from('profiles')
     .select('id, name, role')
-    .eq('id', userId)
-    .single();
+    .eq('id', userId);
 
-  if (!data) return null;
-  return { id: data.id, name: data.name, role: data.role };
+  if (!data || data.length === 0) return null;
+  return { id: data[0].id, name: data[0].name, role: data[0].role };
 }
 
 export function useAuth(): AuthContextValue {

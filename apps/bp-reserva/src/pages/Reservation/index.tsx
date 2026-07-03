@@ -1,9 +1,6 @@
-// React
-import { useEffect, useState } from 'react';
-// Libs
-import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, PaymentMethod, useClient } from 'bp-core';
+import { useNavigate } from 'react-router-dom';
+import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
 import { Button, DishSelector, InfoBox, PageHeader, PaymentToggle, Typography, useModal, useToast } from 'bp-ui';
-// Local
 import { CancelConfirmDialog } from './components/CancelConfirmDialog';
 import { useReservation } from './hooks/useReservation';
 import {
@@ -17,11 +14,13 @@ import {
   TotalLine,
   TotalValue,
 } from './styles';
+import { AppRoute } from '../../routes/paths';
 
 export function ReservationPage() {
   const { client } = useClient();
   const { open, close, modal } = useModal();
-  const [editing, setEditing] = useState(false);
+  const navigate = useNavigate();
+  const { show: showToast, toast } = useToast();
 
   const {
     session,
@@ -30,21 +29,18 @@ export function ReservationPage() {
     quantities,
     tickets,
     total,
-    clientOrder,
     orderError,
     isSaving,
     increment,
     decrement,
     setAddonCount,
     submitReservation,
-    saveReservation,
     cancelReservation,
-    discardChanges,
-  } = useReservation(client?.phone);
+  } = useReservation();
 
-  const { show: showToast, toast } = useToast();
-
-  useEffect(() => { if (orderError) showToast(orderError); }, [orderError]);
+  if (orderError) {
+    showToast(orderError);
+  }
 
   if (!session || !session.isOpen) {
     return (
@@ -57,18 +53,11 @@ export function ReservationPage() {
 
   if (!client) return null;
 
-  const openCancelDialog = () =>
-    open(
-      <CancelConfirmDialog
-        close={close}
-        onConfirm={() => {
-          cancelReservation();
-          setEditing(false);
-        }}
-      />
-    );
+  const clientOrder = (session.orders ?? []).find(
+    (o) => o.customerPhone === client.phone && o.status === OrderStatus.Reservation
+  ) ?? null;
 
-  if (clientOrder && !editing && !isSaving) {
+  if (clientOrder) {
     const dishSummary = Object.values(
       clientOrder.tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
         if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
@@ -81,12 +70,17 @@ export function ReservationPage() {
 
     return (
       <>
-        <PageHeader title="Sua reserva" subtitle="Confira os detalhes do seu pedido para este culto." />
+        <PageHeader
+          title="Sua reserva"
+          subtitle="Resumo do seu pedido e opções de edição."
+        />
 
         <Card>
           <SummaryHeader>
             <CardLabel style={{ marginBottom: 0 }}>Resumo</CardLabel>
-            <StatusBadge $status={OrderStatus.Reservation}>{ORDER_STATUS_LABEL[OrderStatus.Reservation]}</StatusBadge>
+            <StatusBadge $status={OrderStatus.Reservation}>
+              {ORDER_STATUS_LABEL[OrderStatus.Reservation]}
+            </StatusBadge>
           </SummaryHeader>
           <Typography type="p">{dishSummary}</Typography>
           <Typography type="p" style={{ marginTop: 4 }}>
@@ -98,11 +92,29 @@ export function ReservationPage() {
           </TotalLine>
         </Card>
 
-        <Button variant="primary" size="lg" fullWidth onClick={() => setEditing(true)}>
+        <Button
+          variant="primary"
+          size="lg"
+          fullWidth
+          onClick={() => navigate(`${AppRoute.ReservationEdit}/${clientOrder.id}`)}
+        >
           Editar pedido
         </Button>
 
-        <CancelLink onClick={openCancelDialog}>Cancelar pedido</CancelLink>
+        <CancelLink
+          onClick={() =>
+            open(
+              <CancelConfirmDialog
+                close={close}
+                onConfirm={() => {
+                  cancelReservation(clientOrder.id);
+                }}
+              />
+            )
+          }
+        >
+          Cancelar pedido
+        </CancelLink>
 
         {modal}
         {toast}
@@ -113,12 +125,12 @@ export function ReservationPage() {
   return (
     <>
       <PageHeader
-        title={clientOrder ? 'Editar reserva' : 'Faça sua reserva aqui'}
+        title="Faça sua reserva aqui"
         subtitle="Escolha o prato e garanta sua fichinha para o culto."
       />
 
       <Card>
-        <CardLabel>{clientOrder ? 'Sua reserva' : 'Fichinhas'}</CardLabel>
+        <CardLabel>Fichinhas</CardLabel>
         <DishSelector
           dishes={session.dishes}
           quantities={quantities}
@@ -131,10 +143,14 @@ export function ReservationPage() {
       <Card>
         <PaymentToggle label="Forma de pagamento" value={paymentMethod} onChange={setPaymentMethod} />
         {paymentMethod === PaymentMethod.Pix && (
-          <InfoBox variant="warning" style={{ marginTop: 12 }}>Apresente o comprovante Pix no caixa após o culto.</InfoBox>
+          <InfoBox variant="warning" style={{ marginTop: 12 }}>
+            Apresente o comprovante Pix no caixa após o culto.
+          </InfoBox>
         )}
         {paymentMethod === PaymentMethod.Cash && (
-          <InfoBox variant="warning" style={{ marginTop: 12 }}>Acerte o pagamento em dinheiro no caixa após o culto.</InfoBox>
+          <InfoBox variant="warning" style={{ marginTop: 12 }}>
+            Acerte o pagamento em dinheiro no caixa após o culto.
+          </InfoBox>
         )}
         <TotalLine>
           <TotalLabel>Total</TotalLabel>
@@ -146,31 +162,15 @@ export function ReservationPage() {
         variant="primary"
         size="lg"
         fullWidth
-        onClick={
-          clientOrder
-            ? () => saveReservation(client.name, client.phone, () => {
-                showToast('Salvo!');
-                setEditing(false);
-              })
-            : () => submitReservation({ name: client.name, phone: client.phone }, () => {
-                showToast('Confirmado!');
-              })
+        onClick={() =>
+          submitReservation({ name: client.name, phone: client.phone }, () => {
+            showToast('Confirmado!');
+          })
         }
-        disabled={tickets.length === 0}
+        disabled={tickets.length === 0 || isSaving}
       >
-        {clientOrder ? 'Salvar alterações' : 'Confirmar reserva'}
+        {isSaving ? 'Confirmando...' : 'Confirmar reserva'}
       </Button>
-
-      {clientOrder && (
-        <CancelLink
-          onClick={() => {
-            discardChanges();
-            setEditing(false);
-          }}
-        >
-          Cancelar edição
-        </CancelLink>
-      )}
 
       {modal}
       {toast}

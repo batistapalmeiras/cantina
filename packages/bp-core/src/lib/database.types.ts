@@ -2,7 +2,6 @@ export interface DbSession {
   id: string;
   date: string;
   ministry: string;
-  pix_key: string;
   is_open: boolean;
   created_at: string;
 }

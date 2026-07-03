@@ -16,9 +16,9 @@ export function IdentifyPage() {
       <Container>
         <Header>
           <BrandRow>
-            <BrandLogo src={icon} alt="Cantina IBC" />
+            <BrandLogo src={icon} alt="Cantina Batista Palmeiras" />
             <div>
-              <BrandName>Cantina IBC</BrandName>
+              <BrandName>Cantina Batista Palmeiras</BrandName>
             </div>
           </BrandRow>
         </Header>

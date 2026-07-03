@@ -1,7 +1,7 @@
 // Libs
 import { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL, useClient } from 'bp-core';
 import { useSessionCtx } from 'bp-core';
-import { PageHeader, Skeleton } from 'bp-ui';
+import { Skeleton } from 'bp-ui';
 // Local
 import { useClientHistory } from './hooks/useClientHistory';
 import {
@@ -21,7 +21,6 @@ export function HistoryPage() {
 
   return (
     <>
-      <PageHeader title="Histórico" back />
       {loading ? (
         <HistoryList>
           {[1, 2, 3].map((i) => (

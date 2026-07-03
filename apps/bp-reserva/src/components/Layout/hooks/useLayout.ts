@@ -6,7 +6,7 @@ import { useClient } from 'bp-core';
 // Components
 import { AppRoute } from '../../../routes/paths';
 
-export function useReservaLayout() {
+export function useLayout() {
   const { client, loading: clientLoading, logoutClient } = useClient();
   const location = useLocation();
   const navigate = useNavigate();

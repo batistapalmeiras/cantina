@@ -13,7 +13,10 @@ export function useLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) navigate(user.role === 'admin' ? AppRoute.Setup : AppRoute.Cashier, { replace: true });
+    if (user) {
+      const route = user.role === 'admin' ? AppRoute.Setup : user.role === 'kitchen' ? AppRoute.Kitchen : AppRoute.Cashier;
+      navigate(route, { replace: true });
+    }
   }, [user, navigate]);
 
   const handleLogin = async (data: LoginFormValues) => {
