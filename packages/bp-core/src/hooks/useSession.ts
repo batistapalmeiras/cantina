@@ -288,7 +288,7 @@ export function useSession(): SessionContextValue {
   }, [session, reload]);
 
 
-  const addOrder = useCallback(async (order: Omit<Order, 'id' | 'createdAt' | 'delivered'> & { stayForMeal?: boolean }) => {
+  const addOrder = useCallback(async (order: Omit<Order, 'id' | 'createdAt' | 'delivered' | 'stayForMeal'> & { stayForMeal?: boolean }) => {
     if (!session) return;
 
     const { data: orderRow, error } = await supabase
