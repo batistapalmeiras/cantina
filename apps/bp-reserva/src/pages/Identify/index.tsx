@@ -16,9 +16,9 @@ export function IdentifyPage() {
       <Container>
         <Header>
           <BrandRow>
-            <BrandLogo src={icon} alt="Cantina IBC" />
+            <BrandLogo src={icon} alt="Cantina Batista Palmeiras" />
             <div>
-              <BrandName>Cantina IBC</BrandName>
+              <BrandName>Cantina Batista Palmeiras</BrandName>
             </div>
           </BrandRow>
         </Header>
@@ -33,7 +33,7 @@ export function IdentifyPage() {
               <Input
                 value={phone}
                 onChange={(e) => setPhone(maskPhone(e.target.value))}
-                placeholder="(11) 99999-0000"
+                placeholder="(31) 99999-0000"
                 inputMode="numeric"
                 autoFocus
               />

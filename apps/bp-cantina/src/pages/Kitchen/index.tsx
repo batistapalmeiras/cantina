@@ -32,7 +32,7 @@ export function KitchenPage() {
     return (
       <Empty>
         <Typography type="h3">Nenhuma sessão disponível</Typography>
-        <Typography type="p">Abra uma sessão pelo Configurar para ver os pedidos.</Typography>
+        <Typography type="p">Aguarde o administrador abrir uma sessão</Typography>
       </Empty>
     );
   }

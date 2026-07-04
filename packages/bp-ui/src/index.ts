@@ -1,4 +1,5 @@
 export { BottomSheet } from './components/BottomSheet';
+export { Brand } from './components/Brand';
 export { Button } from './components/Button';
 export type { ButtonProps } from './components/Button/types';
 export { Chip, ChipBar } from './components/Chip';
@@ -16,7 +17,8 @@ export { Modal, ModalActions, ModalTitle } from './components/Modal';
 export { OrdersList } from './components/OrdersList';
 export { Pagination } from './components/Pagination';
 export { PageHeader } from './components/PageHeader';
-export { PaymentToggle } from './components/PaymentToggle';
+export { SegmentedControl } from './components/Inputs/SegmentedControl';
+export type { SegmentedControlOption, SegmentedControlTone } from './components/Inputs/SegmentedControl';
 export { Skeleton } from './components/Skeleton';
 export { Tab, TabBadge, TabBar } from './components/Tabs';
 export { Toast, useToast } from './components/Toast';

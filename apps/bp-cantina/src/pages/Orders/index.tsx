@@ -104,11 +104,11 @@ export function OrdersPage() {
                 <Check size={16} /> Confirmar reserva
               </Button>
             )}
-            <Button variant="secondary" size="sm" onClick={() => { open(<OrderEditForm order={order} close={close} />); closeSheet(); }}>
-              <Pencil size={16} /> Editar
-            </Button>
             <Button variant="danger" size="sm" onClick={() => { cancelOrder(order.id); closeSheet(); }}>
               <X size={16} /> Cancelar pedido
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => { open(<OrderEditForm order={order} close={close} />); closeSheet(); }}>
+              <Pencil size={16} /> Editar
             </Button>
           </OrderActions>
         )}

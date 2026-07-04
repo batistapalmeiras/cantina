@@ -9,11 +9,10 @@ export async function fetchProfile(userId: string): Promise<User | null> {
   const { data } = await supabase
     .from('profiles')
     .select('id, name, role')
-    .eq('id', userId)
-    .single();
+    .eq('id', userId);
 
-  if (!data) return null;
-  return { id: data.id, name: data.name, role: data.role };
+  if (!data || data.length === 0) return null;
+  return { id: data[0].id, name: data[0].name, role: data[0].role };
 }
 
 export function useAuth(): AuthContextValue {
@@ -42,7 +41,32 @@ export function useAuth(): AuthContextValue {
       }
     });
 
-    return () => listener.subscription.unsubscribe();
+    const refreshInterval = setInterval(async () => {
+      const { error } = await supabase.auth.refreshSession();
+      if (error) {
+        console.error('Erro ao renovar token:', error);
+        setUser(null);
+        setUserEmail('');
+      }
+    }, 50 * 60 * 1000);
+
+    const handleVisibilityChange = async () => {
+      if (!document.hidden && user) {
+        const { error } = await supabase.auth.refreshSession();
+        if (error) {
+          setUser(null);
+          setUserEmail('');
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(refreshInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      listener?.subscription.unsubscribe();
+    };
   }, []);
 
   const login = useCallback(async (email: string, password: string): Promise<string | null> => {

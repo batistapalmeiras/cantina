@@ -7,7 +7,7 @@ import { Button } from 'bp-ui';
 import { TextInput } from 'bp-ui';
 import { PageHeader } from 'bp-ui';
 import { useToast } from 'bp-ui';
-import { useAuthCtx } from 'bp-core';
+import { useAuthCtx, UserRole } from 'bp-core';
 // Local
 import { Actions,Identity, Name, RoleLabel, Section, SectionTitle, Wrap } from './styles';
 import { ProfileFormValues,profileSchema } from './validators/schema';
@@ -35,7 +35,7 @@ export function ProfilePage() {
       <Wrap>
         <Identity>
           <Name>{user?.name ?? '—'}</Name>
-          <RoleLabel>{user?.role === 'admin' ? 'Administrador' : 'Operador'}</RoleLabel>
+          <RoleLabel>{user?.role === UserRole.Admin ? 'Administrador' : 'Operador'}</RoleLabel>
         </Identity>
 
         <Section>

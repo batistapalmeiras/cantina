@@ -1,17 +1,15 @@
 // React
-import { Control, Controller, UseFormSetValue } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 // Libs
 import styled from 'styled-components';
 // Components
-import { DishQuantity,DishSelector } from 'bp-ui';
-import { PaymentToggle } from 'bp-ui';
+import { DishQuantity, DishSelector } from 'bp-ui';
 import { Dish } from 'bp-core';
 import { CashierFormValues } from '../validators';
 // Local
 import { ClientSearch } from './ClientSearch';
 
 interface Props {
-  control: Control<CashierFormValues>;
   setValue: UseFormSetValue<CashierFormValues>;
   dishes: Dish[];
   quantities: Record<string, DishQuantity>;
@@ -30,16 +28,7 @@ const SectionLabel = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
-const MobileOnly = styled.div`
-  display: none;
-
-  @media (max-width: 900px) {
-    display: block;
-    margin-top: ${({ theme }) => theme.spacing.lg};
-  }
-`;
-
-export function CashierDishSelector({ control, setValue, dishes, quantities, onIncrement, onDecrement, onSetAddonCount }: Props) {
+export function CashierDishSelector({ setValue, dishes, quantities, onIncrement, onDecrement, onSetAddonCount }: Props) {
   return (
     <div>
       <SectionLabel>Cliente</SectionLabel>
@@ -66,17 +55,6 @@ export function CashierDishSelector({ control, setValue, dishes, quantities, onI
         onDecrement={onDecrement}
         onSetAddonCount={onSetAddonCount}
       />
-
-      <MobileOnly>
-        <SectionLabel>Pagamento</SectionLabel>
-        <Controller
-          control={control}
-          name="paymentMethod"
-          render={({ field }) => (
-            <PaymentToggle label="Forma de pagamento" value={field.value} onChange={field.onChange} />
-          )}
-        />
-      </MobileOnly>
     </div>
   );
 }

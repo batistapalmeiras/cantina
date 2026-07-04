@@ -1,26 +1,39 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dish, OrderStatus, PaymentMethod, TicketItem, useSessionCtx } from 'bp-core';
+import { Addon, Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx } from 'bp-core';
 import { AppRoute } from '../../../routes/paths';
-
-interface ReservationFormValues {
-  name: string;
-  phone: string;
-}
-
-const CHURCH_PIX_KEY = '16886715000123';
 
 type DishQty = { count: number; addonCounts: Record<string, number> };
 
-export function useReservation() {
-  const { session, addOrder, cancelOrder } = useSessionCtx();
+export function useEditReservation(orderId: string) {
+  const { session, cancelOrder, addOrder } = useSessionCtx();
   const navigate = useNavigate();
 
   const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Pix);
   const [stayForMeal, setStayForMeal] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   const [orderError, setOrderError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  const currentOrder: Order | null = session?.orders?.find((o) => o.id === orderId) ?? null;
+
+  useEffect(() => {
+    if (initialized || !currentOrder || !session) return;
+    const next: Record<string, DishQty> = {};
+    currentOrder.tickets.forEach((t: TicketItem) => {
+      const cur = next[t.dishId] ?? { count: 0, addonCounts: {} };
+      const addonCounts = { ...cur.addonCounts };
+      t.addons.forEach((a: Addon) => {
+        addonCounts[a.id] = (addonCounts[a.id] ?? 0) + 1;
+      });
+      next[t.dishId] = { count: cur.count + 1, addonCounts };
+    });
+    setQuantities(next);
+    setPaymentMethod(currentOrder.paymentMethod);
+    setStayForMeal(currentOrder.stayForMeal ?? false);
+    setInitialized(true);
+  }, [currentOrder, session, initialized]);
 
   const getQ = (id: string): DishQty => quantities[id] ?? { count: 0, addonCounts: {} };
 
@@ -72,15 +85,16 @@ export function useReservation() {
   const tickets = buildTickets();
   const total = tickets.reduce((s, t) => s + t.totalPrice, 0);
 
-  const submitReservation = useCallback(
-    async (data: ReservationFormValues, onSuccess?: () => void) => {
-      if (!session || tickets.length === 0) return;
+  const saveReservation = useCallback(
+    async (clientName: string, clientPhone: string, onSuccess?: () => void) => {
+      if (!session || tickets.length === 0 || !currentOrder) return;
       setOrderError(null);
       setIsSaving(true);
       try {
+        await cancelOrder(currentOrder.id);
         await addOrder({
-          customerName: data.name.trim(),
-          customerPhone: data.phone.trim() || undefined,
+          customerName: clientName,
+          customerPhone: clientPhone || undefined,
           tickets,
           paymentMethod,
           status: OrderStatus.Reservation,
@@ -88,24 +102,21 @@ export function useReservation() {
           stayForMeal,
         });
         onSuccess?.();
-        navigate(AppRoute.ReservationConfirmed, {
-          state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY },
-        });
+        navigate(AppRoute.Reservation);
       } catch (err) {
-        setOrderError(err instanceof Error ? err.message : 'Erro ao registrar reserva');
+        setOrderError(err instanceof Error ? err.message : 'Erro ao salvar reserva');
       } finally {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, stayForMeal, total, addOrder, navigate]
+    [session, tickets, paymentMethod, stayForMeal, total, currentOrder, addOrder, cancelOrder, navigate]
   );
 
-  const cancelReservation = async (orderId: string) => {
-    await cancelOrder(orderId);
-  };
+  const cancelEdit = () => navigate(AppRoute.Reservation);
 
   return {
     session,
+    currentOrder,
     quantities,
     paymentMethod,
     setPaymentMethod,
@@ -118,7 +129,7 @@ export function useReservation() {
     increment,
     decrement,
     setAddonCount,
-    submitReservation,
-    cancelReservation,
+    saveReservation,
+    cancelEdit,
   };
 }

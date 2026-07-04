@@ -1,21 +1,18 @@
 // React
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 // Libs
-import { Skeleton, Tab, TabBar } from 'bp-ui';
+import { Brand, Skeleton, Tab, TabBar } from 'bp-ui';
 import { ChevronDown, ClipboardList, History as HistoryIcon, LogOut, User, UserCircle } from 'lucide-react';
 // Components
 import icon from '../../assets/icon.png';
 import { AppRoute } from '../../routes/paths';
 // Local
-import { useReservaLayout } from './hooks';
+import { useLayout } from './hooks';
 import {
   BottomTab,
   BottomTabBar,
   BottomTabLabel,
-  BrandLogo,
-  BrandName,
-  BrandRow,
   Card,
   Container,
   DesktopTabBarWrap,
@@ -32,23 +29,23 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function ReservaLayout({ children }: Props) {
-  const { client, clientLoading, navigate, open, setOpen, ref, handleLogout, isActive } = useReservaLayout();
-
-  const brand = (
-    <BrandRow>
-      <BrandLogo src={icon} alt="Cantina IBC" />
-      <div>
-        <BrandName>Cantina IBC</BrandName>
-      </div>
-    </BrandRow>
-  );
+export function Layout({ children }: Props) {
+  const { client, clientLoading, navigate, open, setOpen, ref, handleLogout, isActive } = useLayout();
+  const location = useLocation();
+  const isEditingReservation = location.pathname.startsWith('/reserva/editar');
+  const isConfirmedReservation = location.pathname === '/reserva-confirmada';
 
   if (clientLoading) {
     return (
       <Page>
         <Container>
-          <Header>{brand}</Header>
+          <Header>
+            <Brand
+              icon={icon}
+              alt="Cantina Batista Palmeiras"
+              name="Cantina Batista Palmeiras"
+            />
+          </Header>
           <Card>
             <Skeleton $h="20px" $w="55%" />
             <Skeleton $h="13px" $w="35%" style={{ marginTop: 8 }} />
@@ -70,8 +67,11 @@ export function ReservaLayout({ children }: Props) {
     <Page>
       <Container>
         <Header>
-          {brand}
-
+          <Brand
+            icon={icon}
+            alt="Cantina Batista Palmeiras"
+            name="Cantina Batista Palmeiras"
+          />
           <UserArea ref={ref}>
             <UserBtn onClick={() => setOpen((v) => !v)}>
               <UserCircle size={18} />
@@ -98,7 +98,7 @@ export function ReservaLayout({ children }: Props) {
           </UserArea>
         </Header>
 
-        {!onProfile && (
+        {!onProfile && !isEditingReservation && !isConfirmedReservation && (
           <DesktopTabBarWrap>
             <TabBar>
               <Tab
@@ -117,7 +117,7 @@ export function ReservaLayout({ children }: Props) {
         {children}
       </Container>
 
-      {!onProfile && (
+      {!onProfile && !isEditingReservation && !isConfirmedReservation && (
         <BottomTabBar>
           <BottomTab to={AppRoute.Reservation} $active={isActive(AppRoute.Reservation) && !isActive(AppRoute.History)}>
             <ClipboardList size={22} />

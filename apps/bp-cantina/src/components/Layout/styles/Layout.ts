@@ -28,29 +28,6 @@ export const HeaderInner = styled.div`
   gap: ${({ theme }) => theme.spacing.lg};
 `;
 
-export const Brand = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-  text-decoration: none;
-  flex-shrink: 0;
-`;
-
-export const BrandLogo = styled.img`
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-`;
-
-export const BrandName = styled.span`
-  font-size: ${({ theme }) => theme.typography.titleMd.fontSize};
-  font-weight: ${({ theme }) => theme.typography.titleMd.fontWeight};
-  color: ${({ theme }) => theme.colors.primary};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-
-  @media (max-width: 480px) { display: none; }
-`;
-
 export const Nav = styled.nav`
   display: flex;
   align-items: center;

@@ -2,10 +2,8 @@
 import { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 // Components
-import { useAuthCtx } from 'bp-core';
+import { useAuthCtx, fetchSessionById, useSessionCtx, Session, UserRole } from 'bp-core';
 import { useOrdersList } from '../../../hooks/useOrdersList';
-import { fetchSessionById,useSessionCtx } from 'bp-core';
-import { Session } from 'bp-core';
 import { computeStats } from '../domain';
 
 export function useReport() {
@@ -13,7 +11,7 @@ export function useReport() {
   const { user } = useAuthCtx();
   const { id } = useParams<{ id: string }>();
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === UserRole.Admin;
   const sessionId = isAdmin ? (id ?? null) : null;
 
   const [historicalSession, setHistoricalSession] = useState<Session | null>(null);
@@ -30,13 +28,12 @@ export function useReport() {
 
   const list = useOrdersList(session?.orders ?? []);
 
-  const isEditable = !!session && isAdmin;
   const canEditSession = !sessionId && !!session && session.isOpen === true && isAdmin;
 
   if (!session) {
-    return { session: null, stats: null, dishMap: null, loading, isEditable: false, canEditSession: false, isAdmin, ...list };
+    return { session: null, stats: null, dishMap: null, loading, canEditSession: false, isAdmin, ...list };
   }
 
   const { stats, dishMap } = computeStats(session);
-  return { session, stats, dishMap, loading, isEditable, canEditSession, isAdmin, ...list };
+  return { session, stats, dishMap, loading, canEditSession, isAdmin, ...list };
 }

@@ -2,8 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 // Components
-import { useAuthCtx } from 'bp-core';
-import { useSessionCtx } from 'bp-core';
+import { useAuthCtx, useSessionCtx, UserRole } from 'bp-core';
 import { AppRoute } from '../../../routes/paths';
 
 export function useLayout() {
@@ -14,7 +13,8 @@ export function useLayout() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === UserRole.Admin;
+  const isKitchen = user?.role === UserRole.Kitchen;
   const hasOpenSession = session?.isOpen === true;
   const hasActiveSession = hasOpenSession || !!pendingSession;
 
@@ -35,6 +35,10 @@ export function useLayout() {
   const isActive = (path: string) =>
     location.pathname === path || location.pathname.startsWith(path + '/');
 
+  const tabRoutes = [AppRoute.Setup, AppRoute.Cashier, AppRoute.Orders, AppRoute.Kitchen];
+  const hiddenRoutes = [AppRoute.NewSession, AppRoute.EditSession, AppRoute.Report, AppRoute.Profile];
+  const isTabRoute = tabRoutes.some(route => location.pathname === route) && !hiddenRoutes.some(route => location.pathname.startsWith(route));
+
   return {
     user,
     navigate,
@@ -46,9 +50,9 @@ export function useLayout() {
     hasActiveSession,
     handleLogout,
     isActive,
-    showSetup: isAdmin,
-    showCashier: hasOpenSession,
-    showOrders: hasActiveSession,
-    showKitchen: hasActiveSession,
+    showSetup: isTabRoute && isAdmin,
+    showCashier: isTabRoute && hasOpenSession && !isKitchen,
+    showOrders: isTabRoute && hasActiveSession && !isKitchen,
+    showKitchen: isTabRoute && hasActiveSession,
   };
 }

@@ -2,7 +2,7 @@
 import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Components
-import { useAuthCtx } from 'bp-core';
+import { useAuthCtx, UserRole } from 'bp-core';
 import { AppRoute } from '../../../routes/paths';
 import { LoginFormValues } from '../validators';
 
@@ -13,7 +13,10 @@ export function useLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) navigate(user.role === 'admin' ? AppRoute.Setup : AppRoute.Cashier, { replace: true });
+    if (user) {
+      const route = user.role === UserRole.Admin ? AppRoute.Setup : user.role === UserRole.Kitchen ? AppRoute.Kitchen : AppRoute.Cashier;
+      navigate(route, { replace: true });
+    }
   }, [user, navigate]);
 
   const handleLogin = async (data: LoginFormValues) => {

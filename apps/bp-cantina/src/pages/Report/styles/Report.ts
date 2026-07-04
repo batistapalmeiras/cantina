@@ -48,45 +48,6 @@ export const SectionLabel = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
-export const BarRow = styled.div`
-  display: grid;
-  grid-template-columns: 140px 1fr 48px;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-`;
-
-export const BarLabel = styled.span`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
-  color: ${({ theme }) => theme.colors.ink};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-export const BarTrack = styled.div`
-  height: 8px;
-  background: ${({ theme }) => theme.colors.surfaceStrong};
-  border-radius: ${({ theme }) => theme.rounded.full};
-  overflow: hidden;
-`;
-
-export const BarFill = styled.div<{ $pct: number }>`
-  height: 100%;
-  width: ${({ $pct }) => $pct}%;
-  background: ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.rounded.full};
-  transition: width 0.4s ease;
-`;
-
-export const BarCount = styled.span`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  text-align: right;
-`;
-
 export const OrderActions = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xs};

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 // Libs
 import { useClient } from 'bp-core';
-import { Button, maskPhone, PageHeader } from 'bp-ui';
+import { Button, PageHeader, maskPhone } from 'bp-ui';
 // Local
 import { EditFieldWrap, EditInput, Label } from './styles';
 
@@ -31,7 +31,11 @@ export function ProfilePage() {
 
   return (
     <>
-      <PageHeader title="Meus dados" back />
+      <PageHeader
+        back
+        title="Meu perfil"
+        subtitle="Atualize seus dados pessoais."
+      />
       <EditFieldWrap>
         <Label>Nome completo</Label>
         <EditInput value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome" />
@@ -41,7 +45,7 @@ export function ProfilePage() {
         <EditInput
           value={phone}
           onChange={(e) => setPhone(maskPhone(e.target.value))}
-          placeholder="(11) 99999-0000"
+          placeholder="(31) 99999-0000"
           inputMode="numeric"
         />
       </EditFieldWrap>

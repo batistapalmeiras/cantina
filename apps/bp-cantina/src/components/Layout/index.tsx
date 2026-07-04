@@ -1,7 +1,9 @@
 // React
 import React from 'react';
 // Libs
+import { Brand } from 'bp-ui';
 import { ChefHat, ChevronDown, ClipboardList, LogOut, Settings, ShoppingBag, User, UserCircle } from 'lucide-react';
+import { UserRole } from 'bp-core';
 // Components
 import icon from '../../assets/icon.png';
 import { AppRoute } from '../../routes/paths';
@@ -11,9 +13,6 @@ import {
   BottomBar,
   BottomTab,
   BottomTabLabel,
-  Brand,
-  BrandLogo,
-  BrandName,
   Dropdown,
   DropdownDivider,
   DropdownHeader,
@@ -30,11 +29,11 @@ import {
   UserBtn,
 } from './styles';
 
-interface LayoutProps {
+interface ILayoutProps {
   children: React.ReactNode;
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ children }: ILayoutProps) {
   const {
     user,
     navigate,
@@ -50,14 +49,19 @@ export function Layout({ children }: LayoutProps) {
     showKitchen,
   } = useLayout();
 
+  const visibleTabs = [showSetup, showCashier, showOrders, showKitchen].filter(Boolean).length;
+  const shouldShowBottomBar = visibleTabs > 1;
+
   return (
     <>
       <Header>
         <HeaderInner>
-          <Brand to={isAdmin ? AppRoute.Setup : AppRoute.Cashier}>
-            <BrandLogo src={icon} alt="Cantina Batista Palmeiras" />
-            <BrandName>Cantina Batista Palmeiras</BrandName>
-          </Brand>
+          <Brand
+            to={isAdmin ? AppRoute.Setup : AppRoute.Cashier}
+            icon={icon}
+            alt="Cantina Batista Palmeiras"
+            name="Cantina Batista Palmeiras"
+          />
 
           <Nav>
             {showSetup && (
@@ -93,18 +97,24 @@ export function Layout({ children }: LayoutProps) {
               <Dropdown $open={open}>
                 <DropdownHeader>
                   <DropdownName>{user?.name}</DropdownName>
-                  <DropdownRole>{isAdmin ? 'Administrador' : 'Operador'}</DropdownRole>
+                  <DropdownRole>
+                    {user?.role === UserRole.Admin ? 'Administrador' : user?.role === UserRole.Kitchen ? 'Cozinha' : 'Operador'}
+                  </DropdownRole>
                 </DropdownHeader>
-                <DropdownItem
-                  onClick={() => {
-                    setOpen(false);
-                    navigate(AppRoute.Profile);
-                  }}
-                >
-                  <User size={16} />
-                  Meu perfil
-                </DropdownItem>
-                <DropdownDivider />
+                {user?.role !== 'kitchen' && (
+                  <>
+                    <DropdownItem
+                      onClick={() => {
+                        setOpen(false);
+                        navigate(AppRoute.Profile);
+                      }}
+                    >
+                      <User size={16} />
+                      Meu perfil
+                    </DropdownItem>
+                    <DropdownDivider />
+                  </>
+                )}
                 <DropdownItem className="danger" onClick={handleLogout}>
                   <LogOut size={16} />
                   Sair
@@ -119,10 +129,7 @@ export function Layout({ children }: LayoutProps) {
         <MainInner>{children}</MainInner>
       </Main>
 
-      {(isActive(AppRoute.Setup) ||
-        isActive(AppRoute.Cashier) ||
-        isActive(AppRoute.Orders) ||
-        isActive(AppRoute.Kitchen)) && (
+      {shouldShowBottomBar && (
         <BottomBar>
           {showSetup && (
             <BottomTab to={AppRoute.Setup} $active={isActive(AppRoute.Setup)}>

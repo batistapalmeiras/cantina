@@ -25,6 +25,33 @@ export function useClient() {
       }
     }
     setLoading(false);
+
+    // Clientes convidados (bp-reserva) não têm sessão de auth no Supabase —
+    // só renova/limpa quando uma sessão de auth realmente existe.
+    const refreshAuthSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) return;
+
+      const { error } = await supabase.auth.refreshSession();
+      if (error) {
+        console.warn('Falha ao renovar sessão, limpando dados do cliente');
+        localStorage.removeItem(CLIENT_STORAGE_KEY);
+        setClient(null);
+      }
+    };
+
+    const refreshInterval = setInterval(refreshAuthSession, 50 * 60 * 1000);
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) refreshAuthSession();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(refreshInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const findClientByPhone = async (phone: string): Promise<Client | null> => {

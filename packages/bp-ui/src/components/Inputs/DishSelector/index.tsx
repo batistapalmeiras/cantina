@@ -17,6 +17,7 @@ import {
   TicketRow,
 } from './styles';
 import { DishSelectorProps } from './types';
+import { Addon } from 'bp-core';
 
 export type { DishQuantity } from './types';
 
@@ -55,7 +56,7 @@ export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onS
 
             {q.count > 0 && dish.availableAddons.length > 0 && (
               <TicketList>
-                {dish.availableAddons.map((addon) => {
+                {dish.availableAddons.map((addon: Addon) => {
                   const addonCount = q.addonCounts[addon.id] ?? 0;
                   return (
                     <TicketRow key={addon.id}>

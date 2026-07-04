@@ -10,11 +10,11 @@ export interface SessionContextValue {
   loading: boolean;
   openSession: (session: Omit<Session, 'id' | 'orders'>) => Promise<void>;
   closeSession: () => Promise<void>;
-  addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'delivered'>) => Promise<void>;
+  addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'delivered' | 'stayForMeal'> & { stayForMeal?: boolean }) => Promise<void>;
   confirmReservation: (orderId: string) => Promise<void>;
   cancelOrder: (orderId: string) => Promise<void>;
   updateSession: (data: { ministry?: string; dishes?: Dish[] }) => Promise<void>;
-  updateOrder: (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total'>>) => Promise<void>;
+  updateOrder: (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total' | 'stayForMeal'>>) => Promise<void>;
   toggleDelivered: (orderId: string, delivered: boolean) => Promise<void>;
 }
 
