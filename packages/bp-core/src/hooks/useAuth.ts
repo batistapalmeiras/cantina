@@ -30,7 +30,7 @@ export function useAuth(): AuthContextValue {
       setLoading(false);
     });
 
-    const subscription = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         const profile = await fetchProfile(session.user.id);
         setUser(profile);
@@ -65,7 +65,7 @@ export function useAuth(): AuthContextValue {
     return () => {
       clearInterval(refreshInterval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      subscription.unsubscribe();
+      listener?.subscription.unsubscribe();
     };
   }, []);
 
