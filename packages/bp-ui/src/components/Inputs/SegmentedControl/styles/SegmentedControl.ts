@@ -18,13 +18,16 @@ export const Label = styled.p`
 
 export const Toggle = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
   border: 1px solid ${({ theme }) => theme.colors.hairline};
   border-radius: ${({ theme }) => theme.rounded.sm};
   overflow: hidden;
 `;
 
-export const Btn = styled.button<{ $selected: boolean }>`
+export type SegmentedControlTone = 'ink' | 'primary';
+
+export const Btn = styled.button<{ $selected: boolean; $tone: SegmentedControlTone }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,9 +38,14 @@ export const Btn = styled.button<{ $selected: boolean }>`
   cursor: pointer;
   border: none;
   transition: background 0.15s, color 0.15s;
-  background: ${({ theme, $selected }) => ($selected ? theme.colors.ink : theme.colors.canvas)};
+  background: ${({ theme, $selected, $tone }) => ($selected ? theme.colors[$tone] : theme.colors.canvas)};
   color: ${({ theme, $selected }) => ($selected ? theme.colors.onDark : theme.colors.muted)};
 
   & + & { border-left: 1px solid ${({ theme }) => theme.colors.hairline}; }
-  &:hover { background: ${({ theme, $selected }) => ($selected ? theme.colors.ink : theme.colors.surfaceSoft)}; }
+  &:hover {
+    background: ${({ theme, $selected, $tone }) =>
+      $selected
+        ? $tone === 'primary' ? theme.colors.primaryActive : theme.colors.ink
+        : theme.colors.surfaceSoft};
+  }
 `;

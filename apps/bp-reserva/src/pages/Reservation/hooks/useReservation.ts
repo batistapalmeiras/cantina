@@ -18,6 +18,7 @@ export function useReservation() {
 
   const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Pix);
+  const [stayForMeal, setStayForMeal] = useState(false);
   const [orderError, setOrderError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -84,6 +85,7 @@ export function useReservation() {
           paymentMethod,
           status: OrderStatus.Reservation,
           total,
+          stayForMeal,
         });
         onSuccess?.();
         navigate(AppRoute.ReservationConfirmed, {
@@ -95,7 +97,7 @@ export function useReservation() {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, total, addOrder, navigate]
+    [session, tickets, paymentMethod, stayForMeal, total, addOrder, navigate]
   );
 
   const cancelReservation = async (orderId: string) => {
@@ -107,6 +109,8 @@ export function useReservation() {
     quantities,
     paymentMethod,
     setPaymentMethod,
+    stayForMeal,
+    setStayForMeal,
     tickets,
     total,
     orderError,

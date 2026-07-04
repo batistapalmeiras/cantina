@@ -1,35 +1,29 @@
 // React
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { useSessionCtx } from 'bp-core';
-import { Order, OrderStatus, PaymentMethod } from 'bp-core';
+import { OrderStatus, PaymentMethod } from 'bp-core';
 import { Button } from 'bp-ui';
 import { Chip, ChipBar } from 'bp-ui';
 import { OrdersList } from 'bp-ui';
 import { PageHeader } from 'bp-ui';
 import { Skeleton } from 'bp-ui';
 import { Typography } from 'bp-ui';
-import { useModal } from 'bp-ui';
-import { Check, Pencil, X } from 'lucide-react';
 // Components
 import { AppRoute } from '../../routes/paths';
 // Local
-import { OrderEditForm } from './components/OrderEditForm';
 import { useReport } from './hooks/useReport';
 import {
-  Empty, IconBtn, OrderActions,
+  Empty,
   Section, SectionLabel,
-  StatCard,   StatsGrid, StatValue,
+  StatCard, StatsGrid, StatValue,
 } from './styles';
 
 export function ReportPage() {
   const {
-    session, orders, stats, loading, isEditable, canEditSession,
+    session, orders, stats, loading, canEditSession,
     page, totalPages, filterStatus, filterPayment, hasFilter,
     setPage, handleFilterStatus, handleFilterPayment,
   } = useReport();
-  const { confirmReservation, cancelOrder } = useSessionCtx();
-  const { open, close, modal } = useModal();
   const navigate = useNavigate();
 
   if (loading) {
@@ -61,22 +55,6 @@ export function ReportPage() {
       </Empty>
     );
   }
-
-  const renderActions = isEditable ? (order: Order) => (
-    <OrderActions>
-      <IconBtn title="Editar" onClick={() => open(<OrderEditForm order={order} close={close} />)}>
-        <Pencil size={14} />
-      </IconBtn>
-      {order.status === OrderStatus.Reservation && (
-        <IconBtn $variant="success" title="Confirmar" onClick={() => confirmReservation(order.id)}>
-          <Check size={14} />
-        </IconBtn>
-      )}
-      <IconBtn $variant="danger" title="Cancelar" onClick={() => cancelOrder(order.id)}>
-        <X size={14} />
-      </IconBtn>
-    </OrderActions>
-  ) : undefined;
 
   return (
     <>
@@ -130,26 +108,8 @@ export function ReportPage() {
           totalPages={totalPages}
           hasFilter={hasFilter}
           onPageChange={setPage}
-          renderActions={renderActions}
-          renderSheetActions={isEditable ? (order, closeSheet) => (
-            <OrderActions>
-              <IconBtn title="Editar" onClick={() => { open(<OrderEditForm order={order} close={close} />); closeSheet(); }}>
-                <Pencil size={14} /> Editar
-              </IconBtn>
-              {order.status === OrderStatus.Reservation && (
-                <IconBtn $variant="success" title="Confirmar" onClick={() => { confirmReservation(order.id); closeSheet(); }}>
-                  <Check size={14} /> Confirmar reserva
-                </IconBtn>
-              )}
-              <IconBtn $variant="danger" title="Cancelar" onClick={() => { cancelOrder(order.id); closeSheet(); }}>
-                <X size={14} /> Cancelar pedido
-              </IconBtn>
-            </OrderActions>
-          ) : undefined}
         />
       </Section>
-
-      {modal}
     </>
   );
 }

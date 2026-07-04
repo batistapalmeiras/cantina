@@ -26,23 +26,24 @@ export function useClient() {
     }
     setLoading(false);
 
-    const refreshInterval = setInterval(async () => {
+    // Clientes convidados (bp-reserva) não têm sessão de auth no Supabase —
+    // só renova/limpa quando uma sessão de auth realmente existe.
+    const refreshAuthSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) return;
+
       const { error } = await supabase.auth.refreshSession();
       if (error) {
         console.warn('Falha ao renovar sessão, limpando dados do cliente');
         localStorage.removeItem(CLIENT_STORAGE_KEY);
         setClient(null);
       }
-    }, 50 * 60 * 1000);
+    };
 
-    const handleVisibilityChange = async () => {
-      if (!document.hidden) {
-        const { error } = await supabase.auth.refreshSession();
-        if (error) {
-          localStorage.removeItem(CLIENT_STORAGE_KEY);
-          setClient(null);
-        }
-      }
+    const refreshInterval = setInterval(refreshAuthSession, 50 * 60 * 1000);
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) refreshAuthSession();
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);

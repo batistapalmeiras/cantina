@@ -1,23 +1,15 @@
 // React
-import { Control, Controller } from 'react-hook-form';
 // Libs
 import styled from 'styled-components';
 // Components
 import { Button } from 'bp-ui';
-import { PaymentToggle } from 'bp-ui';
 import { TicketItem } from 'bp-core';
-import { CashierFormValues } from '../validators';
 
 interface Props {
-  control: Control<CashierFormValues>;
   tickets: TicketItem[];
   total: number;
   onConfirm: () => void;
 }
-
-const DesktopOnly = styled.div`
-  @media (max-width: 900px) { display: none; }
-`;
 
 const Card = styled.div`
   background: ${({ theme }) => theme.colors.canvas};
@@ -96,7 +88,7 @@ const TotalValue = styled.span`
 `;
 
 
-export function OrderSummary({ control, tickets, total, onConfirm }: Props) {
+export function OrderSummary({ tickets, total, onConfirm }: Props) {
   return (
     <Card>
       <SectionLabel>Resumo</SectionLabel>
@@ -128,16 +120,6 @@ export function OrderSummary({ control, tickets, total, onConfirm }: Props) {
         <TotalLabel>Total</TotalLabel>
         <TotalValue>R$ {total.toFixed(2)}</TotalValue>
       </TotalLine>
-
-      <DesktopOnly>
-        <Controller
-          control={control}
-          name="paymentMethod"
-          render={({ field }) => (
-            <PaymentToggle label="Forma de pagamento" value={field.value} onChange={field.onChange} />
-          )}
-        />
-      </DesktopOnly>
 
       <Button variant="primary" size="lg" fullWidth onClick={onConfirm} disabled={tickets.length === 0}>
         Confirmar venda

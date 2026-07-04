@@ -12,6 +12,7 @@ import { PaymentMethod } from 'bp-core';
 // Local
 import { CashierDishSelector } from './components/DishSelector';
 import { OrderSummary } from './components/OrderSummary';
+import { PaymentSection } from './components/PaymentSection';
 import { ReservationList } from './components/ReservationList';
 import { useCashier } from './hooks/useCashier';
 import {
@@ -59,6 +60,7 @@ export function CashierPage() {
       customerPhone: '',
       clientId: '',
       paymentMethod: PaymentMethod.Cash,
+      stayForMeal: false,
     },
   });
 
@@ -96,18 +98,21 @@ export function CashierPage() {
       {tab === CashierTab.Sale && (
         <>
           <Grid>
-            <CashierDishSelector
-              control={control}
-              setValue={setValue}
-              dishes={session.dishes}
-              quantities={quantities}
-              onIncrement={increment}
-              onDecrement={decrement}
-              onSetAddonCount={setAddonCount}
-            />
+            <div>
+              <CashierDishSelector
+                setValue={setValue}
+                dishes={session.dishes}
+                quantities={quantities}
+                onIncrement={increment}
+                onDecrement={decrement}
+                onSetAddonCount={setAddonCount}
+              />
+              <div style={{ marginTop: '24px' }}>
+                <PaymentSection control={control} />
+              </div>
+            </div>
             <StickyAside>
               <OrderSummary
-                control={control}
                 tickets={tickets}
                 total={total}
                 onConfirm={handleSubmit(onSubmit)}

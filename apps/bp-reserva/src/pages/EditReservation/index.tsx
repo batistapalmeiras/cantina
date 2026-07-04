@@ -1,15 +1,17 @@
 import { useParams } from 'react-router-dom';
-import { useClient, PaymentMethod } from 'bp-core';
-import { Button, DishSelector, InfoBox, PageHeader, PaymentToggle, Typography, useToast } from 'bp-ui';
+import { useClient, PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
+import { Button, DishSelector, PageHeader, SegmentedControl, Typography, useToast } from 'bp-ui';
 import { useEditReservation } from './hooks';
+import { CardLabel } from '../Reservation/styles';
 import {
-  Card,
-  CardLabel,
-  TotalLabel,
-  TotalLine,
-  TotalValue,
-} from '../Reservation/styles';
-import { ButtonGroup } from './styles';
+  BottomBar,
+  BottomBarInfo,
+  BottomBarItems,
+  BottomBarRow,
+  BottomBarTotal,
+  BottomSpacer,
+  ButtonRow,
+} from './styles';
 
 export function EditReservationPage() {
   const { orderId } = useParams<{ orderId: string }>();
@@ -21,6 +23,8 @@ export function EditReservationPage() {
     currentOrder,
     paymentMethod,
     setPaymentMethod,
+    stayForMeal,
+    setStayForMeal,
     quantities,
     tickets,
     total,
@@ -65,7 +69,7 @@ export function EditReservationPage() {
         subtitle="Escolha o prato e atualize sua fichinha para o culto."
       />
 
-      <Card>
+      <div>
         <CardLabel>Sua reserva</CardLabel>
         <DishSelector
           dishes={session.dishes}
@@ -74,44 +78,70 @@ export function EditReservationPage() {
           onDecrement={decrement}
           onSetAddonCount={setAddonCount}
         />
-      </Card>
+      </div>
 
-      <Card>
-        <PaymentToggle label="Forma de pagamento" value={paymentMethod} onChange={setPaymentMethod} />
-        {paymentMethod === PaymentMethod.Pix && (
-          <InfoBox variant="warning" style={{ marginTop: 12 }}>
-            Apresente o comprovante Pix no caixa após o culto.
-          </InfoBox>
-        )}
-        {paymentMethod === PaymentMethod.Cash && (
-          <InfoBox variant="warning" style={{ marginTop: 12 }}>
-            Acerte o pagamento em dinheiro no caixa após o culto.
-          </InfoBox>
-        )}
-        <TotalLine>
-          <TotalLabel>Total</TotalLabel>
-          <TotalValue>R$ {total.toFixed(2)}</TotalValue>
-        </TotalLine>
-      </Card>
+      <div>
+        <SegmentedControl
+          label="Forma de pagamento"
+          value={paymentMethod}
+          onChange={setPaymentMethod}
+          options={[
+            { value: PaymentMethod.Cash, label: PAYMENT_METHOD_LABEL[PaymentMethod.Cash] },
+            { value: PaymentMethod.Pix, label: PAYMENT_METHOD_LABEL[PaymentMethod.Pix] },
+          ]}
+        />
+        <div style={{ marginTop: 16 }}>
+          <SegmentedControl
+            label="Ficará no Espaço de Convivência?"
+            tone="primary"
+            value={stayForMeal}
+            onChange={setStayForMeal}
+            options={[
+              { value: false, label: 'Não, vou levar' },
+              { value: true, label: 'Sim' },
+            ]}
+          />
+        </div>
+      </div>
 
-      <ButtonGroup>
-        <Button fullWidth  variant="secondary" size="md" onClick={cancelEdit}>
-          Cancelar edição
-        </Button>
-        <Button
-          fullWidth
-          variant="primary"
-          size="md"
-          onClick={() =>
-            saveReservation(client.name, client.phone, () => {
-              showToast('Pedido atualizado!');
-            })
-          }
-          disabled={tickets.length === 0 || isSaving}
-        >
-          {isSaving ? 'Salvando...' : 'Salvar alterações'}
-        </Button>
-      </ButtonGroup>
+      <BottomSpacer />
+
+      <BottomBar>
+        <CardLabel>Resumo</CardLabel>
+
+        <BottomBarRow>
+          <BottomBarInfo>
+            <BottomBarItems>
+              {Object.values(
+                tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
+                  if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
+                  acc[t.dishName].qty++;
+                  return acc;
+                }, {})
+              ).map((g) => `${g.qty}× ${g.name}`).join(', ')}
+            </BottomBarItems>
+            <BottomBarTotal>R$ {total.toFixed(2)}</BottomBarTotal>
+          </BottomBarInfo>
+        </BottomBarRow>
+        <ButtonRow>
+          <Button fullWidth variant="secondary" size="md" onClick={cancelEdit}>
+            Cancelar edição
+          </Button>
+          <Button
+            fullWidth
+            variant="primary"
+            size="md"
+            onClick={() =>
+              saveReservation(client.name, client.phone, () => {
+                showToast('Pedido atualizado!');
+              })
+            }
+            disabled={tickets.length === 0 || isSaving}
+          >
+            {isSaving ? 'Salvando...' : 'Salvar alterações'}
+          </Button>
+        </ButtonRow>
+      </BottomBar>
       {toast}
     </>
   );

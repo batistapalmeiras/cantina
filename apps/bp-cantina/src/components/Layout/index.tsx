@@ -3,6 +3,7 @@ import React from 'react';
 // Libs
 import { Brand } from 'bp-ui';
 import { ChefHat, ChevronDown, ClipboardList, LogOut, Settings, ShoppingBag, User, UserCircle } from 'lucide-react';
+import { UserRole } from 'bp-core';
 // Components
 import icon from '../../assets/icon.png';
 import { AppRoute } from '../../routes/paths';
@@ -28,11 +29,11 @@ import {
   UserBtn,
 } from './styles';
 
-interface LayoutProps {
+interface ILayoutProps {
   children: React.ReactNode;
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ children }: ILayoutProps) {
   const {
     user,
     navigate,
@@ -97,7 +98,7 @@ export function Layout({ children }: LayoutProps) {
                 <DropdownHeader>
                   <DropdownName>{user?.name}</DropdownName>
                   <DropdownRole>
-                    {user?.role === 'admin' ? 'Administrador' : user?.role === 'kitchen' ? 'Cozinha' : 'Operador'}
+                    {user?.role === UserRole.Admin ? 'Administrador' : user?.role === UserRole.Kitchen ? 'Cozinha' : 'Operador'}
                   </DropdownRole>
                 </DropdownHeader>
                 {user?.role !== 'kitchen' && (

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
-import { Button, DishSelector, InfoBox, PageHeader, PaymentToggle, Typography, useModal, useToast } from 'bp-ui';
+import { Button, DishSelector, PageHeader, SegmentedControl, Typography, useModal, useToast } from 'bp-ui';
 import { CancelConfirmDialog } from './components/CancelConfirmDialog';
 import { useReservation } from './hooks/useReservation';
 import {
@@ -27,6 +27,8 @@ export function ReservationPage() {
     session,
     paymentMethod,
     setPaymentMethod,
+    stayForMeal,
+    setStayForMeal,
     quantities,
     tickets,
     total,
@@ -140,17 +142,27 @@ export function ReservationPage() {
       </Card>
 
       <Card>
-        <PaymentToggle label="Forma de pagamento" value={paymentMethod} onChange={setPaymentMethod} />
-        {paymentMethod === PaymentMethod.Pix && (
-          <InfoBox variant="warning" style={{ marginTop: 12 }}>
-            Apresente o comprovante Pix no caixa após o culto.
-          </InfoBox>
-        )}
-        {paymentMethod === PaymentMethod.Cash && (
-          <InfoBox variant="warning" style={{ marginTop: 12 }}>
-            Acerte o pagamento em dinheiro no caixa após o culto.
-          </InfoBox>
-        )}
+        <SegmentedControl
+          label="Forma de pagamento"
+          value={paymentMethod}
+          onChange={setPaymentMethod}
+          options={[
+            { value: PaymentMethod.Cash, label: PAYMENT_METHOD_LABEL[PaymentMethod.Cash] },
+            { value: PaymentMethod.Pix, label: PAYMENT_METHOD_LABEL[PaymentMethod.Pix] },
+          ]}
+        />
+        <div style={{ marginTop: 16 }}>
+          <SegmentedControl
+            label="Vai comer no Espaço de Convivência?"
+            tone="primary"
+            value={stayForMeal}
+            onChange={setStayForMeal}
+            options={[
+              { value: false, label: 'Não, vou levar' },
+              { value: true, label: 'Sim' },
+            ]}
+          />
+        </div>
         <TotalLine>
           <TotalLabel>Total</TotalLabel>
           <TotalValue>R$ {total.toFixed(2)}</TotalValue>

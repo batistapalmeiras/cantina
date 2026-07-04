@@ -11,6 +11,7 @@ export function useEditReservation(orderId: string) {
 
   const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Pix);
+  const [stayForMeal, setStayForMeal] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [orderError, setOrderError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -30,6 +31,7 @@ export function useEditReservation(orderId: string) {
     });
     setQuantities(next);
     setPaymentMethod(currentOrder.paymentMethod);
+    setStayForMeal(currentOrder.stayForMeal ?? false);
     setInitialized(true);
   }, [currentOrder, session, initialized]);
 
@@ -97,6 +99,7 @@ export function useEditReservation(orderId: string) {
           paymentMethod,
           status: OrderStatus.Reservation,
           total,
+          stayForMeal,
         });
         onSuccess?.();
         navigate(AppRoute.Reservation);
@@ -106,7 +109,7 @@ export function useEditReservation(orderId: string) {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, total, currentOrder, addOrder, cancelOrder, navigate]
+    [session, tickets, paymentMethod, stayForMeal, total, currentOrder, addOrder, cancelOrder, navigate]
   );
 
   const cancelEdit = () => navigate(AppRoute.Reservation);
@@ -117,6 +120,8 @@ export function useEditReservation(orderId: string) {
     quantities,
     paymentMethod,
     setPaymentMethod,
+    stayForMeal,
+    setStayForMeal,
     tickets,
     total,
     orderError,

@@ -85,6 +85,7 @@ export function useCashier() {
         paymentMethod: data.paymentMethod,
         status: OrderStatus.Sale,
         total,
+        stayForMeal: data.stayForMeal,
       });
       setQuantities({});
       setOnSale(true);

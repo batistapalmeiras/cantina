@@ -1,7 +1,5 @@
 // Local
-import { OrderStatus,PaymentMethod } from './enums';
-
-export type UserRole = 'admin' | 'operator' | 'kitchen';
+import { OrderStatus, PaymentMethod, UserRole } from './enums';
 
 export interface User {
   id: string;

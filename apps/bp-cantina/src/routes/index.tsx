@@ -1,7 +1,7 @@
 // React
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // Libs
-import { AuthProvider, SessionProvider } from 'bp-core';
+import { AuthProvider, SessionProvider, UserRole } from 'bp-core';
 // Components
 import { Layout } from '../components/Layout';
 import { CashierPage } from '../pages/Cashier';
@@ -33,7 +33,7 @@ export function AppRouter() {
                       <Route
                         path={AppRoute.Cashier}
                         element={
-                          <ProtectedRoute roles={['admin', 'operator']}>
+                          <ProtectedRoute roles={[UserRole.Admin, UserRole.Operator]}>
                             <CashierPage />
                           </ProtectedRoute>
                         }
@@ -41,7 +41,7 @@ export function AppRouter() {
                       <Route
                         path={AppRoute.Setup}
                         element={
-                          <ProtectedRoute roles={['admin']}>
+                          <ProtectedRoute roles={[UserRole.Admin]}>
                             <SetupPage />
                           </ProtectedRoute>
                         }
@@ -49,7 +49,7 @@ export function AppRouter() {
                       <Route
                         path={AppRoute.NewSession}
                         element={
-                          <ProtectedRoute roles={['admin']}>
+                          <ProtectedRoute roles={[UserRole.Admin]}>
                             <SessionPage mode="create" />
                           </ProtectedRoute>
                         }
@@ -57,7 +57,7 @@ export function AppRouter() {
                       <Route
                         path={AppRoute.EditSession}
                         element={
-                          <ProtectedRoute roles={['admin']}>
+                          <ProtectedRoute roles={[UserRole.Admin]}>
                             <SessionPage mode="edit" />
                           </ProtectedRoute>
                         }
@@ -65,7 +65,7 @@ export function AppRouter() {
                       <Route
                         path={AppRoute.Report}
                         element={
-                          <ProtectedRoute roles={['admin']}>
+                          <ProtectedRoute roles={[UserRole.Admin]}>
                             <ReportPage />
                           </ProtectedRoute>
                         }
@@ -73,7 +73,7 @@ export function AppRouter() {
                       <Route
                         path={`${AppRoute.Report}/:id`}
                         element={
-                          <ProtectedRoute roles={['admin']}>
+                          <ProtectedRoute roles={[UserRole.Admin]}>
                             <ReportPage />
                           </ProtectedRoute>
                         }
@@ -81,7 +81,7 @@ export function AppRouter() {
                       <Route
                         path={AppRoute.Orders}
                         element={
-                          <ProtectedRoute roles={['admin', 'operator']}>
+                          <ProtectedRoute roles={[UserRole.Admin, UserRole.Operator]}>
                             <OrdersPage />
                           </ProtectedRoute>
                         }
@@ -89,7 +89,7 @@ export function AppRouter() {
                       <Route
                         path={AppRoute.Kitchen}
                         element={
-                          <ProtectedRoute roles={['admin', 'operator', 'kitchen']}>
+                          <ProtectedRoute roles={[UserRole.Admin, UserRole.Operator, UserRole.Kitchen]}>
                             <KitchenPage />
                           </ProtectedRoute>
                         }

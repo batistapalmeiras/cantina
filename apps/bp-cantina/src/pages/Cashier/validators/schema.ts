@@ -8,6 +8,7 @@ export const cashierSchema = z.object({
   customerPhone: z.string().min(1, 'Selecione um cliente'),
   clientId: z.string().min(1, 'Selecione um cliente'),
   paymentMethod: z.nativeEnum(PaymentMethod),
+  stayForMeal: z.boolean(),
 });
 
 export type CashierFormValues = z.infer<typeof cashierSchema>;
