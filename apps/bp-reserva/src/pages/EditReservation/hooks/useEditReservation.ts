@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Addon, Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx } from 'bp-core';
+import { Addon, Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
 import { AppRoute } from '../../../routes/paths';
 
 type DishQty = { count: number; addonCounts: Record<string, number> };
@@ -83,7 +83,8 @@ export function useEditReservation(orderId: string) {
   };
 
   const tickets = buildTickets();
-  const total = tickets.reduce((s, t) => s + t.totalPrice, 0);
+  const baseTotal = tickets.reduce((s, t) => s + t.totalPrice, 0);
+  const total = calculateTotalWithPixSurcharge(baseTotal, paymentMethod);
 
   const saveReservation = useCallback(
     async (clientName: string, clientPhone: string, onSuccess?: () => void) => {

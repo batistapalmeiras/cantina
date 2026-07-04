@@ -1,7 +1,7 @@
 // React
 import { useState } from 'react';
 // Libs
-import { Dish, Order, OrderStatus, supabase, TicketItem, useSessionCtx } from 'bp-core';
+import { Dish, Order, OrderStatus, supabase, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
 // Components
 import { CashierTab } from '../types';
 import { CashierFormValues } from '../validators';
@@ -78,13 +78,14 @@ export function useCashier() {
 
     setOrderError(null);
     try {
+      const finalTotal = calculateTotalWithPixSurcharge(total, data.paymentMethod);
       await addOrder({
         customerName: data.customerName.trim(),
         customerPhone: data.customerPhone,
         tickets,
         paymentMethod: data.paymentMethod,
         status: OrderStatus.Sale,
-        total,
+        total: finalTotal,
         stayForMeal: data.stayForMeal,
       });
       setQuantities({});
