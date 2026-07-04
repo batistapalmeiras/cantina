@@ -14,7 +14,7 @@ export interface SessionContextValue {
   confirmReservation: (orderId: string) => Promise<void>;
   cancelOrder: (orderId: string) => Promise<void>;
   updateSession: (data: { ministry?: string; dishes?: Dish[] }) => Promise<void>;
-  updateOrder: (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total'>>) => Promise<void>;
+  updateOrder: (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total' | 'stayForMeal'>>) => Promise<void>;
   toggleDelivered: (orderId: string, delivered: boolean) => Promise<void>;
 }
 

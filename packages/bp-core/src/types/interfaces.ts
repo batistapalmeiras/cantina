@@ -42,6 +42,7 @@ export interface Order {
   total: number;
   createdAt: string;
   delivered: boolean;
+  stayForMeal: boolean;
 }
 
 export interface Session {

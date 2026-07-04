@@ -38,6 +38,7 @@ function mapOrder(raw: any, tickets: TicketItem[]): Order {
     total: raw.total,
     createdAt: raw.created_at,
     delivered: raw.delivered ?? false,
+    stayForMeal: raw.stay_for_meal ?? false,
     tickets,
   };
 }
@@ -299,6 +300,7 @@ export function useSession(): SessionContextValue {
         payment_method: order.paymentMethod,
         status: order.status,
         total: order.total,
+        stay_for_meal: order.stayForMeal,
       })
       .select()
       .single();
@@ -423,6 +425,7 @@ export function useSession(): SessionContextValue {
     if (data.customerPhone !== undefined) updates.customer_phone = data.customerPhone ?? null;
     if (data.paymentMethod !== undefined) updates.payment_method = data.paymentMethod;
     if (data.total !== undefined) updates.total = data.total;
+    if (data.stayForMeal !== undefined) updates.stay_for_meal = data.stayForMeal;
     if (Object.keys(updates).length > 0) {
       await supabase.from('orders').update(updates).eq('id', orderId);
     }
