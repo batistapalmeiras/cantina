@@ -70,8 +70,8 @@ export function EditReservationPage() {
       />
 
       <div>
-        <CardLabel>Sua reserva</CardLabel>
         <DishSelector
+          label="Sua reserva"
           dishes={session.dishes}
           quantities={quantities}
           onIncrement={increment}
