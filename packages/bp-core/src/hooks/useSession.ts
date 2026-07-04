@@ -288,7 +288,7 @@ export function useSession(): SessionContextValue {
   }, [session, reload]);
 
 
-  const addOrder = useCallback(async (order: Omit<Order, 'id' | 'createdAt' | 'delivered'>) => {
+  const addOrder = useCallback(async (order: Omit<Order, 'id' | 'createdAt' | 'delivered'> & { stayForMeal?: boolean }) => {
     if (!session) return;
 
     const { data: orderRow, error } = await supabase
@@ -300,7 +300,7 @@ export function useSession(): SessionContextValue {
         payment_method: order.paymentMethod,
         status: order.status,
         total: order.total,
-        stay_for_meal: order.stayForMeal,
+        stay_for_meal: order.stayForMeal ?? false,
       })
       .select()
       .single();
@@ -417,7 +417,7 @@ export function useSession(): SessionContextValue {
     await reload();
   }, [session, reload]);
 
-  const updateOrder = useCallback(async (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total'>>) => {
+  const updateOrder = useCallback(async (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total' | 'stayForMeal'>>) => {
     if (!session) return;
 
     const updates: Record<string, unknown> = {};
