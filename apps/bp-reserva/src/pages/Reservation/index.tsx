@@ -130,44 +130,39 @@ export function ReservationPage() {
         subtitle="Escolha o prato e garanta sua fichinha para o culto."
       />
 
-      <Card>
-        <CardLabel>Fichinhas</CardLabel>
-        <DishSelector
-          dishes={session.dishes}
-          quantities={quantities}
-          onIncrement={increment}
-          onDecrement={decrement}
-          onSetAddonCount={setAddonCount}
-        />
-      </Card>
-
-      <Card>
+      <DishSelector
+        label="Fichinhas"
+        dishes={session.dishes}
+        quantities={quantities}
+        onIncrement={increment}
+        onDecrement={decrement}
+        onSetAddonCount={setAddonCount}
+      />
+      <SegmentedControl
+        label="Forma de pagamento"
+        value={paymentMethod}
+        onChange={setPaymentMethod}
+        options={[
+          { value: PaymentMethod.Cash, label: PAYMENT_METHOD_LABEL[PaymentMethod.Cash] },
+          { value: PaymentMethod.Pix, label: PAYMENT_METHOD_LABEL[PaymentMethod.Pix] },
+        ]}
+      />
+      <div style={{ marginTop: 16 }}>
         <SegmentedControl
-          label="Forma de pagamento"
-          value={paymentMethod}
-          onChange={setPaymentMethod}
+          label="Ficará no Espaço de Convivência?"
+          tone="primary"
+          value={stayForMeal}
+          onChange={setStayForMeal}
           options={[
-            { value: PaymentMethod.Cash, label: PAYMENT_METHOD_LABEL[PaymentMethod.Cash] },
-            { value: PaymentMethod.Pix, label: PAYMENT_METHOD_LABEL[PaymentMethod.Pix] },
+            { value: false, label: 'Não, vou levar' },
+            { value: true, label: 'Sim' },
           ]}
         />
-        <div style={{ marginTop: 16 }}>
-          <SegmentedControl
-            label="Vai comer no Espaço de Convivência?"
-            tone="primary"
-            value={stayForMeal}
-            onChange={setStayForMeal}
-            options={[
-              { value: false, label: 'Não, vou levar' },
-              { value: true, label: 'Sim' },
-            ]}
-          />
-        </div>
-        <TotalLine>
-          <TotalLabel>Total</TotalLabel>
-          <TotalValue>R$ {total.toFixed(2)}</TotalValue>
-        </TotalLine>
-      </Card>
+      </div>
+      <TotalLine>
+        <TotalLabel>Total</TotalLabel>
+        <TotalValue>R$ {total.toFixed(2)}</TotalValue>
+      </TotalLine>
 
       <Button
         variant="primary"

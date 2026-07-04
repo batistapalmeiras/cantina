@@ -75,7 +75,7 @@ export function Layout({ children }: Props) {
           <UserArea ref={ref}>
             <UserBtn onClick={() => setOpen((v) => !v)}>
               <UserCircle size={18} />
-              <span>Olá, {client.name.split(' ')[0]}!</span>
+              <span>{client.name.split(' ')[0]}</span>
               <ChevronDown size={14} />
             </UserBtn>
 

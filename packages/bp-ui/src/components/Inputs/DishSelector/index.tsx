@@ -8,6 +8,7 @@ import {
   DishMeta,
   DishName,
   SoldOut,
+  SelectorLabel,
   StepBtn,
   StepCount,
   Stepper,
@@ -21,9 +22,10 @@ import { Addon } from 'bp-core';
 
 export type { DishQuantity } from './types';
 
-export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onSetAddonCount }: DishSelectorProps) {
+export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onSetAddonCount, label }: DishSelectorProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <SelectorLabel>{label}</SelectorLabel>
       {dishes.map((dish) => {
         const q = quantities[dish.id] ?? { count: 0, addonCounts: {} };
         const maxAvailable = dish.totalTickets - dish.soldTickets;

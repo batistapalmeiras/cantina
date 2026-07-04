@@ -47,8 +47,8 @@ export function CashierDishSelector({ setValue, dishes, quantities, onIncrement,
         />
       </div>
 
-      <SectionLabel>Fichinhas</SectionLabel>
       <DishSelector
+        label="Fichinhas"
         dishes={dishes}
         quantities={quantities}
         onIncrement={onIncrement}

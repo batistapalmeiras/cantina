@@ -109,3 +109,13 @@ export const SoldOut = styled.span`
   padding: 2px 8px;
   border-radius: ${({ theme }) => theme.rounded.full};
 `;
+
+export const SelectorLabel = styled.p`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.caption.fontSize};
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.muted};
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
