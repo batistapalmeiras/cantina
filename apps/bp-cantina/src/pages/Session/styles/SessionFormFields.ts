@@ -28,9 +28,6 @@ export const Row = styled.div`
 `;
 
 export const DishCard = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.sm};
-  padding: ${({ theme }) => theme.spacing.base};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.sm};

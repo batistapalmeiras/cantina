@@ -32,7 +32,7 @@ export const BottomSummary = styled.div`
     flex-direction: column;
     gap: ${({ theme }) => theme.spacing.sm};
     position: fixed;
-    bottom: calc(64px + env(safe-area-inset-bottom));
+    bottom: 0;
     left: 0;
     right: 0;
     z-index: 90;
@@ -41,6 +41,10 @@ export const BottomSummary = styled.div`
     box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
     padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.base};
     animation: ${fadeUp} 0.2s ease;
+  }
+
+  @media (max-width: 744px) {
+    bottom: calc(56px + env(safe-area-inset-bottom));
   }
 `;
 

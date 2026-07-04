@@ -11,7 +11,6 @@ import {
   DishCardHeader,
   DishesSection,
   FormContainer,
-  FormSectionLabel,
   Row,
   SmallInput,
 } from '../styles';
@@ -25,18 +24,17 @@ interface SessionFormFieldsProps {
   control: Control<SessionFormValues>;
 }
 
+
 export function SessionFormFields({ control }: SessionFormFieldsProps) {
   const { fields: dishes, remove: removeDish } = useFieldArray({ control, name: 'dishes' });
 
   return (
     <FormContainer>
-      <FormSectionLabel>Informações gerais</FormSectionLabel>
       <Select label="Ministério" control={control} name="ministry">
         {MINISTRIES.map((m) => <option key={m}>{m}</option>)}
       </Select>
 
       <DishesSection>
-        <FormSectionLabel>Prato</FormSectionLabel>
         {dishes.map((_, idx) => (
           <DishFields
             key={idx}
@@ -69,7 +67,7 @@ function DishFields({ control, dishIndex, canRemove, onRemove }: DishFieldsProps
       <DishCardHeader>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
           <TextInput
-            label="Nome"
+            label="Nome do Prato"
             control={control}
             name={`dishes.${dishIndex}.name` as const}
             placeholder="ex: Frango com arroz e feijão"

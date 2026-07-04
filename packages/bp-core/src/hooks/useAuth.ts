@@ -67,7 +67,7 @@ export function useAuth(): AuthContextValue {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       listener.subscription.unsubscribe();
     };
-  }, [user]);
+  }, []);
 
   const login = useCallback(async (email: string, password: string): Promise<string | null> => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
