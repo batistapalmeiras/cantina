@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const Back = styled.button`
