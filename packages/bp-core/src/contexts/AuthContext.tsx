@@ -1,5 +1,5 @@
 // React
-import { createContext, ReactNode, useRef } from 'react';
+import { createContext, ReactNode } from 'react';
 // Components
 import { useAuth } from '../hooks/useAuth';
 
@@ -15,12 +15,9 @@ export interface AuthContextValue {
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const authValueRef = useRef<AuthContextValue | null>(null);
-  if (!authValueRef.current) {
-    authValueRef.current = useAuth();
-  }
+  const authValue = useAuth();
   return (
-    <AuthContext.Provider value={authValueRef.current}>
+    <AuthContext.Provider value={authValue}>
       {children}
     </AuthContext.Provider>
   );
