@@ -21,6 +21,7 @@ export function EditReservationPage() {
     stayForMeal,
     setStayForMeal,
     quantities,
+    reservedByDish,
     tickets,
     baseTotal,
     total: _total,
@@ -70,6 +71,7 @@ export function EditReservationPage() {
           label="Fichinhas"
           dishes={session.dishes}
           quantities={quantities}
+          reserved={reservedByDish}
           onIncrement={increment}
           onDecrement={decrement}
           onSetAddonCount={setAddonCount}

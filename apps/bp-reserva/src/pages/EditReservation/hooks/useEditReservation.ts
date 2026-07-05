@@ -22,6 +22,10 @@ export function useEditReservation(orderId: string) {
   const [isSaving, setIsSaving] = useState(false);
 
   const currentOrder: Order | null = session?.orders?.find((o) => o.id === orderId) ?? null;
+  const reservedByDish = (currentOrder?.tickets ?? []).reduce<Record<string, number>>((acc, t) => {
+    acc[t.dishId] = (acc[t.dishId] ?? 0) + 1;
+    return acc;
+  }, {});
 
   useEffect(() => {
     if (initialized || !currentOrder || !session) return;
@@ -43,9 +47,8 @@ export function useEditReservation(orderId: string) {
 
   const increment = (dish: Dish) => {
     const q = getQ(dish.id);
-    // In edit mode, allow user to modify their own reservation even if globally sold out
-    // available = global available + what user already has reserved
-    const available = dish.totalTickets - dish.soldTickets + q.count;
+    // Disponível = capacidade global + o que o cliente já reservou deste prato (devolvido na edição).
+    const available = dish.totalTickets - dish.soldTickets + (reservedByDish[dish.id] ?? 0);
     if (q.count >= available) return;
     setQuantities((prev) => ({ ...prev, [dish.id]: { ...q, count: q.count + 1 } }));
   };
@@ -126,6 +129,7 @@ export function useEditReservation(orderId: string) {
     session,
     currentOrder,
     quantities,
+    reservedByDish,
     paymentMethod,
     setPaymentMethod,
     stayForMeal,

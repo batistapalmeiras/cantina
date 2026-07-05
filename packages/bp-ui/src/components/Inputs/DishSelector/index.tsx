@@ -24,14 +24,14 @@ import { DishSelectorProps } from './types';
 
 export type { DishQuantity } from './types';
 
-export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onSetAddonCount, label, isEditMode }: DishSelectorProps) {
+export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onSetAddonCount, label, reserved }: DishSelectorProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <SelectorLabel>{label}</SelectorLabel>
       {dishes.map((dish) => {
         const q = quantities[dish.id] ?? { count: 0, addonCounts: {} };
         const globalAvailable = dish.totalTickets - dish.soldTickets;
-        const maxAvailable = isEditMode && q.count > 0 ? globalAvailable + q.count : globalAvailable;
+        const maxAvailable = globalAvailable + (reserved?.[dish.id] ?? 0);
         const remaining = maxAvailable - q.count;
         const soldOut = maxAvailable <= 0 && q.count === 0;
 
