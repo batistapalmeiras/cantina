@@ -1,11 +1,11 @@
 // Libs
-import { Button, Typography } from 'bp-ui';
+import { Brand, Button, Typography } from 'bp-ui';
 import { maskPhone } from 'bp-ui';
 // Components
 import icon from '../../assets/icon.png';
 // Local
 import { useIdentify } from './hooks';
-import { BackLink, BrandLogo, BrandName, BrandRow, Container, FieldWrap, Header, Input, Label, Page } from './styles';
+import { BackLink, Container, FieldWrap, Header, Input, Label, Page } from './styles';
 
 export function IdentifyPage() {
   const { phase, phone, setPhone, name, setName, checking, registering, handleCheckPhone, handleRegister, handleBack } =
@@ -15,12 +15,11 @@ export function IdentifyPage() {
     <Page>
       <Container>
         <Header>
-          <BrandRow>
-            <BrandLogo src={icon} alt="Cantina Batista Palmeiras" />
-            <div>
-              <BrandName>Cantina Batista Palmeiras</BrandName>
-            </div>
-          </BrandRow>
+          <Brand
+            icon={icon}
+            alt="Cantina Batista Palmeiras"
+            name="Cantina Batista Palmeiras"
+          />
         </Header>
 
         {phase === 'phone' ? (

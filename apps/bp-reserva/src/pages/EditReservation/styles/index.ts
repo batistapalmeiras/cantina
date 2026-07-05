@@ -72,3 +72,20 @@ export const BottomSpacer = styled.div`
     height: 140px;
   }
 `;
+
+export const BottomWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.base};
+  background: white;
+  z-index: 80;
+
+  @media (max-width: 744px) {
+    bottom: 80px;
+    padding-bottom: calc(${({ theme }) => theme.spacing.md} + env(safe-area-inset-bottom));
+  }
+`;

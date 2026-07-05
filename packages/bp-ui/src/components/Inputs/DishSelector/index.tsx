@@ -22,15 +22,16 @@ import { Addon } from 'bp-core';
 
 export type { DishQuantity } from './types';
 
-export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onSetAddonCount, label }: DishSelectorProps) {
+export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onSetAddonCount, label, isEditMode }: DishSelectorProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <SelectorLabel>{label}</SelectorLabel>
       {dishes.map((dish) => {
         const q = quantities[dish.id] ?? { count: 0, addonCounts: {} };
-        const maxAvailable = dish.totalTickets - dish.soldTickets;
+        const globalAvailable = dish.totalTickets - dish.soldTickets;
+        const maxAvailable = isEditMode && q.count > 0 ? globalAvailable + q.count : globalAvailable;
         const remaining = maxAvailable - q.count;
-        const soldOut = maxAvailable <= 0;
+        const soldOut = maxAvailable <= 0 && q.count === 0;
 
         return (
           <DishCard key={dish.id}>

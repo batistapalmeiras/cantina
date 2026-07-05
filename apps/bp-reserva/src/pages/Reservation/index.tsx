@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
-import { Button, DishSelector, PageHeader, SegmentedControl, Typography, useModal, useToast } from 'bp-ui';
+import { Button, DishSelector, PageHeader, SegmentedControl, SummaryCard, Typography, useModal, useToast } from 'bp-ui';
 import { CancelConfirmDialog } from './components/CancelConfirmDialog';
 import { useReservation } from './hooks/useReservation';
 import {
@@ -159,24 +159,26 @@ export function ReservationPage() {
           ]}
         />
       </div>
-      <TotalLine>
-        <TotalLabel>Total</TotalLabel>
-        <TotalValue>R$ {total.toFixed(2)}</TotalValue>
-      </TotalLine>
 
-      <Button
-        variant="primary"
-        size="lg"
-        fullWidth
-        onClick={() =>
-          submitReservation({ name: client.name, phone: client.phone }, () => {
-            showToast('Confirmado!');
-          })
-        }
-        disabled={tickets.length === 0 || isSaving}
-      >
-        {isSaving ? 'Confirmando...' : 'Confirmar reserva'}
-      </Button>
+      {tickets.length > 0 && (
+        <SummaryCard
+          items={Object.values(
+            tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
+              if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
+              acc[t.dishName].qty++;
+              return acc;
+            }, {})
+          )}
+          total={total}
+          onConfirm={() =>
+            submitReservation({ name: client.name, phone: client.phone }, () => {
+              showToast('Confirmado!');
+            })
+          }
+          confirmText="Confirmar reserva"
+          loading={isSaving}
+        />
+      )}
 
       {modal}
       {toast}

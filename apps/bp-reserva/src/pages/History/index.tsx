@@ -1,7 +1,7 @@
 // Libs
 import { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL, useClient } from 'bp-core';
 import { useSessionCtx } from 'bp-core';
-import { Skeleton } from 'bp-ui';
+import { PageHeader, Skeleton } from 'bp-ui';
 // Local
 import { useClientHistory } from './hooks/useClientHistory';
 import {
@@ -21,6 +21,11 @@ export function HistoryPage() {
 
   return (
     <>
+      <PageHeader
+        title="Histórico de pedidos"
+        subtitle="Veja seu histórico de pedidos."
+      />
+
       {loading ? (
         <HistoryList>
           {[1, 2, 3].map((i) => (
@@ -36,7 +41,7 @@ export function HistoryPage() {
           ))}
         </HistoryList>
       ) : history.length === 0 ? (
-        <HistoryEmpty>Nenhum pedido em domingos anteriores.</HistoryEmpty>
+        <HistoryEmpty>Sem pedidos anteriores.</HistoryEmpty>
       ) : (
         <HistoryList>
           {history.map((o) => (

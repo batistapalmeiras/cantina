@@ -20,6 +20,8 @@ export { PageHeader } from './components/PageHeader';
 export { SegmentedControl } from './components/Inputs/SegmentedControl';
 export type { SegmentedControlOption, SegmentedControlTone } from './components/Inputs/SegmentedControl';
 export { Skeleton } from './components/Skeleton';
+export { SummaryCard } from './components/SummaryCard';
+export type { SummaryCardProps, SummaryItem, SummaryCardButton } from './components/SummaryCard/types';
 export { Tab, TabBadge, TabBar } from './components/Tabs';
 export { Toast, useToast } from './components/Toast';
 export { Typography } from './components/Typography';

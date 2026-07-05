@@ -10,4 +10,5 @@ export interface DishSelectorProps {
   onDecrement: (dishId: string) => void;
   onSetAddonCount: (dishId: string, addonId: string, count: number) => void;
   label: string;
+  isEditMode?: boolean;
 }

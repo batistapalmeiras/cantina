@@ -5,13 +5,13 @@ import { useForm } from 'react-hook-form';
 // Components
 import { Button } from 'bp-ui';
 import { PageHeader } from 'bp-ui';
+import { SummaryCard } from 'bp-ui';
 import { Tab, TabBadge,TabBar } from 'bp-ui';
 import { useToast } from 'bp-ui';
 import { Typography } from 'bp-ui';
 import { PaymentMethod } from 'bp-core';
 // Local
 import { CashierDishSelector } from './components/DishSelector';
-import { OrderSummary } from './components/OrderSummary';
 import { PaymentSection } from './components/PaymentSection';
 import { ReservationList } from './components/ReservationList';
 import { useCashier } from './hooks/useCashier';
@@ -112,11 +112,22 @@ export function CashierPage() {
               </div>
             </div>
             <StickyAside>
-              <OrderSummary
-                tickets={tickets}
-                total={total}
-                onConfirm={handleSubmit(onSubmit)}
-              />
+              {tickets.length > 0 && (
+                <SummaryCard
+                  items={Object.values(
+                    tickets.reduce<Record<string, { name: string; qty: number; subtotal: number }>>((acc, t) => {
+                      const key = t.dishName;
+                      if (!acc[key]) acc[key] = { name: t.dishName, qty: 0, subtotal: 0 };
+                      acc[key].qty++;
+                      acc[key].subtotal += t.totalPrice;
+                      return acc;
+                    }, {})
+                  )}
+                  total={total}
+                  onConfirm={handleSubmit(onSubmit)}
+                  confirmText="Confirmar venda"
+                />
+              )}
             </StickyAside>
           </Grid>
 

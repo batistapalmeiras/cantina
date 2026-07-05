@@ -38,8 +38,10 @@ export function useEditReservation(orderId: string) {
   const getQ = (id: string): DishQty => quantities[id] ?? { count: 0, addonCounts: {} };
 
   const increment = (dish: Dish) => {
-    const available = dish.totalTickets - dish.soldTickets;
     const q = getQ(dish.id);
+    // In edit mode, allow user to modify their own reservation even if globally sold out
+    // available = global available + what user already has reserved
+    const available = dish.totalTickets - dish.soldTickets + q.count;
     if (q.count >= available) return;
     setQuantities((prev) => ({ ...prev, [dish.id]: { ...q, count: q.count + 1 } }));
   };
@@ -124,6 +126,7 @@ export function useEditReservation(orderId: string) {
     stayForMeal,
     setStayForMeal,
     tickets,
+    baseTotal,
     total,
     orderError,
     isSaving,
