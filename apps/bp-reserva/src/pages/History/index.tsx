@@ -1,7 +1,7 @@
 // Libs
 import { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL, useClient } from 'bp-core';
 import { useSessionCtx } from 'bp-core';
-import { PageHeader, Skeleton } from 'bp-ui';
+import { formatCurrency, PageHeader, Skeleton } from 'bp-ui';
 // Local
 import { useClientHistory } from './hooks/useClientHistory';
 import {
@@ -53,7 +53,7 @@ export function HistoryPage() {
                   </HistoryItemSession>
                   <HistoryItemMeta>
                     {o.dishes.filter((d, i, arr) => arr.indexOf(d) === i).join(', ')}
-                    {' · '}R$ {o.total.toFixed(2)} · {PAYMENT_METHOD_LABEL[o.paymentMethod]}
+                    {' · '}{formatCurrency(o.total)} · {PAYMENT_METHOD_LABEL[o.paymentMethod]}
                   </HistoryItemMeta>
                 </div>
                 <StatusBadge $status={o.status}>{ORDER_STATUS_LABEL[o.status]}</StatusBadge>

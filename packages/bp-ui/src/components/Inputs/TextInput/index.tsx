@@ -4,18 +4,18 @@ import { FieldPath, FieldValues } from 'react-hook-form';
 // Libs
 import { Eye, EyeOff } from 'lucide-react';
 // Components
-import { maskCurrencyInput, parseCurrency } from '../../../utils/mask';
-import { BaseInput, ControlledBase, InputField } from '../BaseInput';
+import { maskCurrencyInput, maskPhone, parseCurrency } from '../../../utils/mask';
+import { ControlledBase, InputField } from '../BaseInput';
 // Local
 import { EyeButton, InputWrapper } from './styles';
-import { CurrencyFieldProps, RawTextInputProps, TextFieldProps } from './types';
+import { CurrencyFieldProps, TextFieldProps } from './types';
 
-export type { CurrencyFieldProps, RawTextInputProps, TextFieldProps } from './types';
+export type { CurrencyFieldProps, TextFieldProps } from './types';
 
 type Props<T extends FieldValues, N extends FieldPath<T>> = TextFieldProps<T, N> | CurrencyFieldProps<T, N>;
 
 export function TextInput<T extends FieldValues, N extends FieldPath<T>>(props: Props<T, N>) {
-  const { label, control, name, wrapperStyle, placeholder, currency, ...rest } = props as TextFieldProps<T, N> & {
+  const { label, control, name, wrapperStyle, placeholder, currency, mask, ...rest } = props as TextFieldProps<T, N> & {
     currency?: boolean;
   };
   const isPassword = rest.type === 'password';
@@ -38,6 +38,8 @@ export function TextInput<T extends FieldValues, N extends FieldPath<T>>(props: 
             onChange={(e) => {
               if (currency) {
                 field.onChange(parseCurrency(e.target.value));
+              } else if (mask === 'phone') {
+                field.onChange(maskPhone(e.target.value));
               } else if (rest.type === 'number') {
                 field.onChange(e.target.valueAsNumber);
               } else {
@@ -55,13 +57,5 @@ export function TextInput<T extends FieldValues, N extends FieldPath<T>>(props: 
         </InputWrapper>
       )}
     </ControlledBase>
-  );
-}
-
-export function RawTextInput({ label, wrapperStyle, error, ...rest }: RawTextInputProps) {
-  return (
-    <BaseInput label={label} wrapperStyle={wrapperStyle} error={error}>
-      <InputField {...rest} />
-    </BaseInput>
   );
 }

@@ -1,5 +1,6 @@
 export { BottomSheet } from './components/BottomSheet';
 export { Brand } from './components/Brand';
+export { Card } from './components/Card';
 export { Button } from './components/Button';
 export type { ButtonProps } from './components/Button/types';
 export { Chip, ChipBar } from './components/Chip';
@@ -11,8 +12,8 @@ export type { IBaseInputProps } from './components/Inputs/BaseInput/types';
 export { DishSelector } from './components/Inputs/DishSelector';
 export type { DishQuantity } from './components/Inputs/DishSelector/types';
 export { RawSelect, Select } from './components/Inputs/Select';
-export { RawTextInput, TextInput } from './components/Inputs/TextInput';
-export type { CurrencyFieldProps, RawTextInputProps, TextFieldProps } from './components/Inputs/TextInput/types';
+export { TextInput } from './components/Inputs/TextInput';
+export type { CurrencyFieldProps, TextFieldProps } from './components/Inputs/TextInput/types';
 export { Modal, ModalActions, ModalTitle } from './components/Modal';
 export { OrdersList } from './components/OrdersList';
 export { Pagination } from './components/Pagination';

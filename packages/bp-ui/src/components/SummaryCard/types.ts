@@ -22,4 +22,6 @@ export interface SummaryCardProps {
   disabled?: boolean;
   buttons?: SummaryCardButton[];
   emptyMessage?: string;
+  /** Distância do rodapé quando fixo no mobile. Use '0' em páginas sem tab bar. Padrão: '80px'. */
+  bottomOffset?: string;
 }

@@ -11,8 +11,6 @@ export function useIdentify() {
   const navigate = useNavigate();
 
   const [phase, setPhase] = useState<'phone' | 'name'>('phone');
-  const [phone, setPhone] = useState('');
-  const [name, setName] = useState('');
   const [checking, setChecking] = useState(false);
   const [registering, setRegistering] = useState(false);
 
@@ -20,8 +18,7 @@ export function useIdentify() {
     if (client) navigate(AppRoute.Reservation, { replace: true });
   }, [client, navigate]);
 
-  const handleCheckPhone = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCheckPhone = async (phone: string) => {
     if (!phone.trim()) return;
     setChecking(true);
     try {
@@ -36,8 +33,7 @@ export function useIdentify() {
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleRegister = async (name: string, phone: string) => {
     if (!name.trim() || !phone.trim()) return;
     setRegistering(true);
     try {
@@ -51,10 +47,6 @@ export function useIdentify() {
 
   return {
     phase,
-    phone,
-    setPhone,
-    name,
-    setName,
     checking,
     registering,
     handleCheckPhone,

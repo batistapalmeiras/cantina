@@ -2,13 +2,15 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 // Libs
-import { PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
+import { PAYMENT_METHOD_LABEL, PIX_SURCHARGE, PaymentMethod } from 'bp-core';
 import { Button } from 'bp-ui';
-import { formatCNPJ } from 'bp-ui';
+import { formatCNPJ, formatCurrency } from 'bp-ui';
 import { InfoBox } from 'bp-ui';
 import { Typography } from 'bp-ui';
 import { useToast } from 'bp-ui';
 import { Check, CheckCircle, Copy } from 'lucide-react';
+// Components
+import { AppRoute } from '../../routes/paths';
 // Local
 import {
   CopyBtn,
@@ -24,7 +26,6 @@ import {
   SummaryRow,
   SummaryValue,
 } from './styles';
-import { AppRoute } from '../../routes/paths';
 
 interface SuccessState {
   paymentMethod: PaymentMethod;
@@ -71,9 +72,16 @@ export function ReservationConfirmedPage() {
             <SummaryDivider />
             <SummaryItem>
               <SummaryLabel>Total</SummaryLabel>
-              <SummaryValue>R$ {total.toFixed(2)}</SummaryValue>
+              <SummaryValue>{formatCurrency(total)}</SummaryValue>
             </SummaryItem>
           </SummaryRow>
+
+          {paymentMethod === PaymentMethod.Pix && (
+            <InfoBox variant="info">
+              Os {formatCurrency(PIX_SURCHARGE)} extras identificam o pagamento como da cantina na contabilidade
+              da igreja.
+            </InfoBox>
+          )}
 
           {paymentMethod === PaymentMethod.Pix && (
             <PixKeyBox>

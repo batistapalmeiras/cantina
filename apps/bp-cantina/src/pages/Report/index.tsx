@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { OrderStatus, PaymentMethod } from 'bp-core';
 import { Button } from 'bp-ui';
 import { Chip, ChipBar } from 'bp-ui';
+import { formatCurrency } from 'bp-ui';
 import { OrdersList } from 'bp-ui';
 import { PageHeader } from 'bp-ui';
 import { Skeleton } from 'bp-ui';
@@ -81,7 +82,7 @@ export function ReportPage() {
           </StatCard>
           <StatCard>
             <label>Receita total</label>
-            <StatValue>R$ {stats.revenue.toFixed(2)}</StatValue>
+            <StatValue>{formatCurrency(stats.revenue)}</StatValue>
           </StatCard>
           <StatCard>
             <label>Pedidos confirmados</label>

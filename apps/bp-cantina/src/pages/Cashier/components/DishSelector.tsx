@@ -1,15 +1,15 @@
 // React
-import { UseFormSetValue } from 'react-hook-form';
+import { Control, UseFormSetValue } from 'react-hook-form';
 // Libs
-import styled from 'styled-components';
-// Components
-import { DishQuantity, DishSelector } from 'bp-ui';
 import { Dish } from 'bp-core';
+import { DishQuantity, DishSelector } from 'bp-ui';
+// Components
 import { CashierFormValues } from '../validators';
 // Local
 import { ClientSearch } from './ClientSearch';
 
 interface Props {
+  control: Control<CashierFormValues>;
   setValue: UseFormSetValue<CashierFormValues>;
   dishes: Dish[];
   quantities: Record<string, DishQuantity>;
@@ -18,33 +18,11 @@ interface Props {
   onSetAddonCount: (dishId: string, addonId: string, count: number) => void;
 }
 
-const SectionLabel = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.caption.fontSize};
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.muted};
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-`;
-
-export function CashierDishSelector({ setValue, dishes, quantities, onIncrement, onDecrement, onSetAddonCount }: Props) {
+export function CashierDishSelector({ control, setValue, dishes, quantities, onIncrement, onDecrement, onSetAddonCount }: Props) {
   return (
     <div>
-      <SectionLabel>Cliente</SectionLabel>
       <div style={{ marginBottom: 24 }}>
-        <ClientSearch
-          onSelect={(client) => {
-            setValue('customerName', client.name, { shouldValidate: true });
-            setValue('customerPhone', client.phone, { shouldValidate: true });
-            setValue('clientId', client.id, { shouldValidate: true });
-          }}
-          onClear={() => {
-            setValue('customerName', '');
-            setValue('customerPhone', '');
-            setValue('clientId', '');
-          }}
-        />
+        <ClientSearch control={control} setValue={setValue} />
       </div>
 
       <DishSelector
