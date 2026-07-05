@@ -226,3 +226,24 @@ import { ModalTitle } from '../Modal/styles/Modal';
 - `apps/bp-cantina/src/pages/Cashier/`
 - `apps/bp-reserva/src/pages/Reservation/`
 - `apps/bp-reserva/src/pages/ReservationConfirmed/`
+
+## Supabase Realtime configuration
+
+The application uses Supabase Realtime to push live updates to clients. **Only these tables need Realtime enabled:**
+
+| Table | Why | Enabled |
+|---|---|---|
+| `orders` | New orders/reservations created or updated | ✅ **REQUIRED** |
+| `dishes` | Inventory (`sold_tickets`) updates in real time | ✅ **REQUIRED** |
+| `sessions` | Session status changes | ❌ Not currently used |
+| `ticket_items` | Order item details | ❌ Not currently used |
+| `addons`, `clients`, `profiles` | Rarely change or not watched | ❌ Not needed |
+
+When the application detects a change in `orders` or `dishes`, the `useSession` hook in `packages/bp-core/src/hooks/useSession.ts` calls `reload()` to refresh the entire session (dishes + orders). This cascading reload is more reliable than subscribing to many tables.
+
+**Setup:**
+1. In Supabase Dashboard → **Database** → **Tables**
+2. For each table in the "REQUIRED" column, enable **Realtime**
+3. Ensure RLS is disabled (or policies allow public read/write)
+
+**Important:** If Realtime is disabled on `orders` or `dishes`, live updates will not work and users won't see new reservations/changes without manually refreshing the page.
