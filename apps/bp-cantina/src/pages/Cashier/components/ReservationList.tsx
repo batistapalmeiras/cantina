@@ -1,8 +1,7 @@
 // Libs
-import styled from 'styled-components';
-// Components
-import { Button } from 'bp-ui';
 import { Order, PaymentMethod } from 'bp-core';
+import { Button, Card } from 'bp-ui';
+import styled from 'styled-components';
 
 interface Props {
   reservations: Order[];
@@ -14,19 +13,6 @@ const List = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.sm};
-`;
-
-const Card = styled.div`
-  background: ${({ theme }) => theme.colors.canvas};
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.md};
-  padding: ${({ theme }) => theme.spacing.base};
-  transition: box-shadow 0.2s;
-
-  &:hover {
-    box-shadow: ${({ theme }) => theme.shadows.lg};
-    border-color: transparent;
-  }
 `;
 
 const CardTop = styled.div`
@@ -111,7 +97,7 @@ export function ReservationList({ reservations, onConfirm, onCancel }: Props) {
   return (
     <List>
       {reservations.map((order) => (
-        <Card key={order.id}>
+        <Card key={order.id} $hoverable>
           <CardTop>
             <div>
               <CustomerName>{order.customerName}</CustomerName>

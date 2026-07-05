@@ -1,5 +1,6 @@
 export { BottomSheet } from './components/BottomSheet';
 export { Brand } from './components/Brand';
+export { Card } from './components/Card';
 export { Button } from './components/Button';
 export type { ButtonProps } from './components/Button/types';
 export { Chip, ChipBar } from './components/Chip';

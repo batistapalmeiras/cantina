@@ -1,9 +1,7 @@
-// React
 // Libs
-import styled from 'styled-components';
-// Components
-import { Button } from 'bp-ui';
 import { TicketItem } from 'bp-core';
+import { Button, Card } from 'bp-ui';
+import styled from 'styled-components';
 
 interface Props {
   tickets: TicketItem[];
@@ -11,12 +9,8 @@ interface Props {
   onConfirm: () => void;
 }
 
-const Card = styled.div`
-  background: ${({ theme }) => theme.colors.canvas};
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.md};
+const CardWrapper = styled(Card)`
   padding: ${({ theme }) => theme.spacing.lg};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md};
@@ -90,7 +84,7 @@ const TotalValue = styled.span`
 
 export function OrderSummary({ tickets, total, onConfirm }: Props) {
   return (
-    <Card>
+    <CardWrapper>
       <SectionLabel>Resumo</SectionLabel>
 
       {tickets.length === 0 ? (
@@ -124,6 +118,6 @@ export function OrderSummary({ tickets, total, onConfirm }: Props) {
       <Button variant="primary" size="lg" fullWidth onClick={onConfirm} disabled={tickets.length === 0}>
         Confirmar venda
       </Button>
-    </Card>
+    </CardWrapper>
   );
 }

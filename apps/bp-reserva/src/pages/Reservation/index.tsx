@@ -1,11 +1,15 @@
+// React
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Libs
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
 import { Button, DishSelector, PageHeader, SegmentedControl, SummaryCard, Typography, useModal, useToast } from 'bp-ui';
+// Components
+import { AppRoute } from '../../routes/paths';
+// Local
 import { CancelConfirmDialog } from './components/CancelConfirmDialog';
 import { useReservation } from './hooks/useReservation';
 import {
-  Card,
   CardLabel,
   CancelLink,
   Empty,
@@ -15,7 +19,6 @@ import {
   TotalLine,
   TotalValue,
 } from './styles';
-import { AppRoute } from '../../routes/paths';
 
 export function ReservationPage() {
   const { client } = useClient();
