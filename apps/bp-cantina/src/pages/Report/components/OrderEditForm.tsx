@@ -121,6 +121,7 @@ export function OrderEditForm({ order, close }: Props) {
       </ClientCard>
 
       <DishSelector
+        label="Fichinhas"
         dishes={adjustedDishes}
         quantities={quantities}
         onIncrement={increment}

@@ -43,6 +43,7 @@
     "@types/react-dom": "catalog:",
     "@types/react-router-dom": "catalog:",
     "@types/styled-components": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
     "typescript": "catalog:",
     "web-vitals": "catalog:"
   }

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 // Libs
-import { Brand, Skeleton, Tab, TabBar } from 'bp-ui';
+import { Brand, Card, Skeleton, Tab, TabBar } from 'bp-ui';
 import { ChevronDown, ClipboardList, History as HistoryIcon, LogOut, User, UserCircle } from 'lucide-react';
 // Components
 import icon from '../../assets/icon.png';
@@ -13,7 +13,6 @@ import {
   BottomTab,
   BottomTabBar,
   BottomTabLabel,
-  Card,
   Container,
   DesktopTabBarWrap,
   Dropdown,
@@ -75,7 +74,7 @@ export function Layout({ children }: Props) {
           <UserArea ref={ref}>
             <UserBtn onClick={() => setOpen((v) => !v)}>
               <UserCircle size={18} />
-              <span>Olá, {client.name.split(' ')[0]}!</span>
+              <span>{client.name.split(' ')[0]}</span>
               <ChevronDown size={14} />
             </UserBtn>
 

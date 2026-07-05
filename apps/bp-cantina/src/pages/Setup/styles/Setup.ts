@@ -69,6 +69,16 @@ export const SessionInfo = styled.div`
   }
 `;
 
+export const SessionActions = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.sm};
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
 export const HistoryList = styled.ul`
   display: flex;
   flex-direction: column;

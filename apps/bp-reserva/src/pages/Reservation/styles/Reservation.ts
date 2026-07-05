@@ -2,14 +2,6 @@
 import { OrderStatus } from 'bp-core';
 import styled from 'styled-components';
 
-export const Card = styled.div`
-  background: ${({ theme }) => theme.colors.canvas};
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.md};
-  padding: ${({ theme }) => theme.spacing.base};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
-`;
-
 export const CardLabel = styled.p`
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.caption.fontSize};

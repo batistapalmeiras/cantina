@@ -3,6 +3,7 @@ import { useState } from 'react';
 // Libs
 import { ORDER_STATUS_LABEL, Order, PAYMENT_METHOD_LABEL } from 'bp-core';
 // Components
+import { formatCurrency } from '../../utils/mask';
 import { BottomSheet } from '../BottomSheet';
 import { Pagination } from '../Pagination';
 import { Typography } from '../Typography';
@@ -79,7 +80,7 @@ export function OrdersList({
                   )}
                 </td>
                 <td>{order.tickets.length}</td>
-                <td style={{ fontWeight: 500 }}>R$ {order.total.toFixed(2)}</td>
+                <td style={{ fontWeight: 500 }}>{formatCurrency(order.total)}</td>
                 <td>{PAYMENT_METHOD_LABEL[order.paymentMethod]}</td>
                 <td>
                   <StatusBadge $status={order.status}>{ORDER_STATUS_LABEL[order.status]}</StatusBadge>
@@ -102,7 +103,7 @@ export function OrdersList({
               <CardName>{order.customerName}</CardName>
               <CardMeta>
                 <TicketCount>{order.tickets.length} fichinhas</TicketCount>
-                {' · '}R$ {order.total.toFixed(2)} · {PAYMENT_METHOD_LABEL[order.paymentMethod]}
+                {' · '}{formatCurrency(order.total)} · {PAYMENT_METHOD_LABEL[order.paymentMethod]}
               </CardMeta>
             </CardMain>
             <StatusBadge $status={order.status}>{ORDER_STATUS_LABEL[order.status]}</StatusBadge>
@@ -114,7 +115,7 @@ export function OrdersList({
         <BottomSheet onClose={() => setSelected(null)}>
           <SheetCustomer>{selected.customerName}</SheetCustomer>
           <SheetMeta>
-            {selected.tickets.length} fich. · R$ {selected.total.toFixed(2)} · {PAYMENT_METHOD_LABEL[selected.paymentMethod]} ·{' '}
+            {selected.tickets.length} fich. · {formatCurrency(selected.total)} · {PAYMENT_METHOD_LABEL[selected.paymentMethod]} ·{' '}
             <StatusBadge $status={selected.status}>{ORDER_STATUS_LABEL[selected.status]}</StatusBadge>
           </SheetMeta>
           <SheetActions onClick={() => setSelected(null)}>

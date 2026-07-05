@@ -1,7 +1,12 @@
+// React
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Addon, Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx } from 'bp-core';
+// Libs
+import { Addon, Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+// Components
 import { AppRoute } from '../../../routes/paths';
+
+const CHURCH_PIX_KEY = '16886715000123';
 
 type DishQty = { count: number; addonCounts: Record<string, number> };
 
@@ -17,6 +22,10 @@ export function useEditReservation(orderId: string) {
   const [isSaving, setIsSaving] = useState(false);
 
   const currentOrder: Order | null = session?.orders?.find((o) => o.id === orderId) ?? null;
+  const reservedByDish = (currentOrder?.tickets ?? []).reduce<Record<string, number>>((acc, t) => {
+    acc[t.dishId] = (acc[t.dishId] ?? 0) + 1;
+    return acc;
+  }, {});
 
   useEffect(() => {
     if (initialized || !currentOrder || !session) return;
@@ -31,15 +40,15 @@ export function useEditReservation(orderId: string) {
     });
     setQuantities(next);
     setPaymentMethod(currentOrder.paymentMethod);
-    setStayForMeal(currentOrder.stayForMeal ?? false);
     setInitialized(true);
   }, [currentOrder, session, initialized]);
 
   const getQ = (id: string): DishQty => quantities[id] ?? { count: 0, addonCounts: {} };
 
   const increment = (dish: Dish) => {
-    const available = dish.totalTickets - dish.soldTickets;
     const q = getQ(dish.id);
+    // Disponível = capacidade global + o que o cliente já reservou deste prato (devolvido na edição).
+    const available = dish.totalTickets - dish.soldTickets + (reservedByDish[dish.id] ?? 0);
     if (q.count >= available) return;
     setQuantities((prev) => ({ ...prev, [dish.id]: { ...q, count: q.count + 1 } }));
   };
@@ -83,7 +92,8 @@ export function useEditReservation(orderId: string) {
   };
 
   const tickets = buildTickets();
-  const total = tickets.reduce((s, t) => s + t.totalPrice, 0);
+  const baseTotal = tickets.reduce((s, t) => s + t.totalPrice, 0);
+  const total = calculateTotalWithPixSurcharge(baseTotal, paymentMethod);
 
   const saveReservation = useCallback(
     async (clientName: string, clientPhone: string, onSuccess?: () => void) => {
@@ -99,17 +109,18 @@ export function useEditReservation(orderId: string) {
           paymentMethod,
           status: OrderStatus.Reservation,
           total,
-          stayForMeal,
         });
         onSuccess?.();
-        navigate(AppRoute.Reservation);
+        navigate(AppRoute.ReservationConfirmed, {
+          state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY },
+        });
       } catch (err) {
         setOrderError(err instanceof Error ? err.message : 'Erro ao salvar reserva');
       } finally {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, stayForMeal, total, currentOrder, addOrder, cancelOrder, navigate]
+    [session, tickets, paymentMethod, total, currentOrder, addOrder, cancelOrder, navigate]
   );
 
   const cancelEdit = () => navigate(AppRoute.Reservation);
@@ -118,11 +129,13 @@ export function useEditReservation(orderId: string) {
     session,
     currentOrder,
     quantities,
+    reservedByDish,
     paymentMethod,
     setPaymentMethod,
     stayForMeal,
     setStayForMeal,
     tickets,
+    baseTotal,
     total,
     orderError,
     isSaving,

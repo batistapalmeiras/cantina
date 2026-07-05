@@ -14,3 +14,4 @@ export * from './lib';
 
 // Utils
 export { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL } from './utils/labels';
+export { calculateTotalWithPixSurcharge, PIX_SURCHARGE } from './utils/payment';

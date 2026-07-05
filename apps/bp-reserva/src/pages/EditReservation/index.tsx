@@ -1,22 +1,17 @@
+// React
 import { useParams } from 'react-router-dom';
+// Libs
 import { useClient, PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
-import { Button, DishSelector, PageHeader, SegmentedControl, Typography, useToast } from 'bp-ui';
+import { DishSelector, PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useToast } from 'bp-ui';
+// Local
 import { useEditReservation } from './hooks';
-import { CardLabel } from '../Reservation/styles';
-import {
-  BottomBar,
-  BottomBarInfo,
-  BottomBarItems,
-  BottomBarRow,
-  BottomBarTotal,
-  BottomSpacer,
-  ButtonRow,
-} from './styles';
+import { BottomSpacer } from './styles';
 
 export function EditReservationPage() {
   const { orderId } = useParams<{ orderId: string }>();
   const { client } = useClient();
   const { show: showToast, toast } = useToast();
+  const isWide = useMediaQuery('(min-width: 745px)');
 
   const {
     session,
@@ -26,8 +21,10 @@ export function EditReservationPage() {
     stayForMeal,
     setStayForMeal,
     quantities,
+    reservedByDish,
     tickets,
-    total,
+    baseTotal,
+    total: _total,
     orderError,
     isSaving,
     increment,
@@ -62,18 +59,19 @@ export function EditReservationPage() {
   }
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <PageHeader
         back
         title="Editar reserva"
         subtitle="Escolha o prato e atualize sua fichinha para o culto."
       />
 
-      <div>
-        <CardLabel>Sua reserva</CardLabel>
+      <div style={{ marginBottom: '10px' }}>
         <DishSelector
+          label="Fichinhas"
           dishes={session.dishes}
           quantities={quantities}
+          reserved={reservedByDish}
           onIncrement={increment}
           onDecrement={decrement}
           onSetAddonCount={setAddonCount}
@@ -106,43 +104,36 @@ export function EditReservationPage() {
 
       <BottomSpacer />
 
-      <BottomBar>
-        <CardLabel>Resumo</CardLabel>
-
-        <BottomBarRow>
-          <BottomBarInfo>
-            <BottomBarItems>
-              {Object.values(
-                tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
-                  if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
-                  acc[t.dishName].qty++;
-                  return acc;
-                }, {})
-              ).map((g) => `${g.qty}× ${g.name}`).join(', ')}
-            </BottomBarItems>
-            <BottomBarTotal>R$ {total.toFixed(2)}</BottomBarTotal>
-          </BottomBarInfo>
-        </BottomBarRow>
-        <ButtonRow>
-          <Button fullWidth variant="secondary" size="md" onClick={cancelEdit}>
-            Cancelar edição
-          </Button>
-          <Button
-            fullWidth
-            variant="primary"
-            size="md"
-            onClick={() =>
-              saveReservation(client.name, client.phone, () => {
-                showToast('Pedido atualizado!');
-              })
-            }
-            disabled={tickets.length === 0 || isSaving}
-          >
-            {isSaving ? 'Salvando...' : 'Salvar alterações'}
-          </Button>
-        </ButtonRow>
-      </BottomBar>
+      {(isWide || tickets.length > 0) && (
+        <SummaryCard
+          bottomOffset="0"
+          items={Object.values(
+            tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
+              if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
+              acc[t.dishName].qty++;
+              return acc;
+            }, {})
+          )}
+          total={baseTotal}
+          buttons={[
+            {
+              text: 'Cancelar edição',
+              onClick: cancelEdit,
+              variant: 'secondary',
+            },
+            {
+              text: 'Salvar alterações',
+              onClick: () =>
+                saveReservation(client.name, client.phone, () => {
+                  showToast('Pedido atualizado!');
+                }),
+              loading: isSaving,
+              disabled: tickets.length === 0,
+            },
+          ]}
+        />
+      )}
       {toast}
-    </>
+    </div>
   );
 }

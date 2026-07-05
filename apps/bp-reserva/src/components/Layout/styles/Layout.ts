@@ -147,11 +147,3 @@ export const BottomTabLabel = styled.span<{ $active: boolean }>`
   letter-spacing: 0.2px;
 `;
 
-export const Card = styled.div`
-  background: ${({ theme }) => theme.colors.canvas};
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.md};
-  padding: ${({ theme }) => theme.spacing.base};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
-`;
-

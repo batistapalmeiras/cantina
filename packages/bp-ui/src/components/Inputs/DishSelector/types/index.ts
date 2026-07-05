@@ -9,4 +9,6 @@ export interface DishSelectorProps {
   onIncrement: (dish: Dish) => void;
   onDecrement: (dishId: string) => void;
   onSetAddonCount: (dishId: string, addonId: string, count: number) => void;
+  label: string;
+  reserved?: Record<string, number>;
 }

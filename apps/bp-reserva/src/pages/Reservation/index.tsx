@@ -1,11 +1,15 @@
+// React
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Libs
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
-import { Button, DishSelector, PageHeader, SegmentedControl, Typography, useModal, useToast } from 'bp-ui';
+import { Button, Card, DishSelector, formatCurrency, PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-ui';
+// Components
+import { AppRoute } from '../../routes/paths';
+// Local
 import { CancelConfirmDialog } from './components/CancelConfirmDialog';
 import { useReservation } from './hooks/useReservation';
 import {
-  Card,
   CardLabel,
   CancelLink,
   Empty,
@@ -15,13 +19,13 @@ import {
   TotalLine,
   TotalValue,
 } from './styles';
-import { AppRoute } from '../../routes/paths';
 
 export function ReservationPage() {
   const { client } = useClient();
   const { open, close, modal } = useModal();
   const navigate = useNavigate();
   const { show: showToast, toast } = useToast();
+  const isWide = useMediaQuery('(min-width: 745px)');
 
   const {
     session,
@@ -89,7 +93,7 @@ export function ReservationPage() {
           </Typography>
           <TotalLine>
             <TotalLabel>Total</TotalLabel>
-            <TotalValue>R$ {clientOrder.total.toFixed(2)}</TotalValue>
+            <TotalValue>{formatCurrency(clientOrder.total)}</TotalValue>
           </TotalLine>
         </Card>
 
@@ -130,58 +134,55 @@ export function ReservationPage() {
         subtitle="Escolha o prato e garanta sua fichinha para o culto."
       />
 
-      <Card>
-        <CardLabel>Fichinhas</CardLabel>
-        <DishSelector
-          dishes={session.dishes}
-          quantities={quantities}
-          onIncrement={increment}
-          onDecrement={decrement}
-          onSetAddonCount={setAddonCount}
-        />
-      </Card>
-
-      <Card>
+      <DishSelector
+        label="Fichinhas"
+        dishes={session.dishes}
+        quantities={quantities}
+        onIncrement={increment}
+        onDecrement={decrement}
+        onSetAddonCount={setAddonCount}
+      />
+      <SegmentedControl
+        label="Forma de pagamento"
+        value={paymentMethod}
+        onChange={setPaymentMethod}
+        options={[
+          { value: PaymentMethod.Cash, label: PAYMENT_METHOD_LABEL[PaymentMethod.Cash] },
+          { value: PaymentMethod.Pix, label: PAYMENT_METHOD_LABEL[PaymentMethod.Pix] },
+        ]}
+      />
+      <div style={{ marginTop: 16 }}>
         <SegmentedControl
-          label="Forma de pagamento"
-          value={paymentMethod}
-          onChange={setPaymentMethod}
+          label="Ficará no Espaço de Convivência?"
+          tone="primary"
+          value={stayForMeal}
+          onChange={setStayForMeal}
           options={[
-            { value: PaymentMethod.Cash, label: PAYMENT_METHOD_LABEL[PaymentMethod.Cash] },
-            { value: PaymentMethod.Pix, label: PAYMENT_METHOD_LABEL[PaymentMethod.Pix] },
+            { value: false, label: 'Não, vou levar' },
+            { value: true, label: 'Sim' },
           ]}
         />
-        <div style={{ marginTop: 16 }}>
-          <SegmentedControl
-            label="Vai comer no Espaço de Convivência?"
-            tone="primary"
-            value={stayForMeal}
-            onChange={setStayForMeal}
-            options={[
-              { value: false, label: 'Não, vou levar' },
-              { value: true, label: 'Sim' },
-            ]}
-          />
-        </div>
-        <TotalLine>
-          <TotalLabel>Total</TotalLabel>
-          <TotalValue>R$ {total.toFixed(2)}</TotalValue>
-        </TotalLine>
-      </Card>
+      </div>
 
-      <Button
-        variant="primary"
-        size="lg"
-        fullWidth
-        onClick={() =>
-          submitReservation({ name: client.name, phone: client.phone }, () => {
-            showToast('Confirmado!');
-          })
-        }
-        disabled={tickets.length === 0 || isSaving}
-      >
-        {isSaving ? 'Confirmando...' : 'Confirmar reserva'}
-      </Button>
+      {(isWide || tickets.length > 0) && (
+        <SummaryCard
+          items={Object.values(
+            tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
+              if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
+              acc[t.dishName].qty++;
+              return acc;
+            }, {})
+          )}
+          total={total}
+          onConfirm={() =>
+            submitReservation({ name: client.name, phone: client.phone }, () => {
+              showToast('Confirmado!');
+            })
+          }
+          confirmText="Confirmar reserva"
+          loading={isSaving}
+        />
+      )}
 
       {modal}
       {toast}

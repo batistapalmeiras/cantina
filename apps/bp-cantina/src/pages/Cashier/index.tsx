@@ -2,16 +2,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-// Components
+// Libs
+import { PaymentMethod } from 'bp-core';
 import { Button } from 'bp-ui';
+import { formatCurrency } from 'bp-ui';
 import { PageHeader } from 'bp-ui';
+import { SummaryCard } from 'bp-ui';
 import { Tab, TabBadge,TabBar } from 'bp-ui';
 import { useToast } from 'bp-ui';
 import { Typography } from 'bp-ui';
-import { PaymentMethod } from 'bp-core';
 // Local
 import { CashierDishSelector } from './components/DishSelector';
-import { OrderSummary } from './components/OrderSummary';
 import { PaymentSection } from './components/PaymentSection';
 import { ReservationList } from './components/ReservationList';
 import { useCashier } from './hooks/useCashier';
@@ -100,6 +101,7 @@ export function CashierPage() {
           <Grid>
             <div>
               <CashierDishSelector
+                control={control}
                 setValue={setValue}
                 dishes={session.dishes}
                 quantities={quantities}
@@ -112,10 +114,19 @@ export function CashierPage() {
               </div>
             </div>
             <StickyAside>
-              <OrderSummary
-                tickets={tickets}
+              <SummaryCard
+                items={Object.values(
+                  tickets.reduce<Record<string, { name: string; qty: number; subtotal: number }>>((acc, t) => {
+                    const key = t.dishName;
+                    if (!acc[key]) acc[key] = { name: t.dishName, qty: 0, subtotal: 0 };
+                    acc[key].qty++;
+                    acc[key].subtotal += t.totalPrice;
+                    return acc;
+                  }, {})
+                )}
                 total={total}
                 onConfirm={handleSubmit(onSubmit)}
+                confirmText="Confirmar venda"
               />
             </StickyAside>
           </Grid>
@@ -133,7 +144,7 @@ export function CashierPage() {
                       }, {})
                     ).map((g) => `${g.qty}× ${g.name}`).join(', ')}
                   </BottomSummaryItems>
-                  <BottomSummaryTotal>R$ {total.toFixed(2)}</BottomSummaryTotal>
+                  <BottomSummaryTotal>{formatCurrency(total)}</BottomSummaryTotal>
                 </BottomSummaryInfo>
                 <Button
                   variant="primary"

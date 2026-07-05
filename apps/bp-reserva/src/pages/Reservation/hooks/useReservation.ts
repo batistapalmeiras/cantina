@@ -1,6 +1,9 @@
+// React
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dish, OrderStatus, PaymentMethod, TicketItem, useSessionCtx } from 'bp-core';
+// Libs
+import { Dish, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+// Components
 import { AppRoute } from '../../../routes/paths';
 
 interface ReservationFormValues {
@@ -70,7 +73,8 @@ export function useReservation() {
   };
 
   const tickets = buildTickets();
-  const total = tickets.reduce((s, t) => s + t.totalPrice, 0);
+  const baseTotal = tickets.reduce((s, t) => s + t.totalPrice, 0);
+  const total = calculateTotalWithPixSurcharge(baseTotal, paymentMethod);
 
   const submitReservation = useCallback(
     async (data: ReservationFormValues, onSuccess?: () => void) => {
@@ -85,7 +89,6 @@ export function useReservation() {
           paymentMethod,
           status: OrderStatus.Reservation,
           total,
-          stayForMeal,
         });
         onSuccess?.();
         navigate(AppRoute.ReservationConfirmed, {
@@ -97,7 +100,7 @@ export function useReservation() {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, stayForMeal, total, addOrder, navigate]
+    [session, tickets, paymentMethod, total, addOrder, navigate]
   );
 
   const cancelReservation = async (orderId: string) => {
