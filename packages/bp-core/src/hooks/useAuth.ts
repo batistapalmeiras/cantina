@@ -48,10 +48,10 @@ export function useAuth(): AuthContextValue {
         setUser(null);
         setUserEmail('');
       }
-    }, 50 * 60 * 1000);
+    }, 15 * 60 * 1000);
 
     const handleVisibilityChange = async () => {
-      if (!document.hidden && user) {
+      if (!document.hidden) {
         const { error } = await supabase.auth.refreshSession();
         if (error) {
           setUser(null);
