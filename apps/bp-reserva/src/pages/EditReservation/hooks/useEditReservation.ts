@@ -112,7 +112,7 @@ export function useEditReservation(orderId: string) {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, stayForMeal, total, currentOrder, addOrder, cancelOrder, navigate]
+    [session, tickets, paymentMethod, total, currentOrder, addOrder, cancelOrder, navigate]
   );
 
   const cancelEdit = () => navigate(AppRoute.Reservation);

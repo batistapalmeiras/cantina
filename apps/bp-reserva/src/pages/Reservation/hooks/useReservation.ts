@@ -98,7 +98,7 @@ export function useReservation() {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, stayForMeal, total, addOrder, navigate]
+    [session, tickets, paymentMethod, total, addOrder, navigate]
   );
 
   const cancelReservation = async (orderId: string) => {
