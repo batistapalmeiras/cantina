@@ -1,6 +1,9 @@
+// React
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Libs
 import { Dish, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+// Components
 import { AppRoute } from '../../../routes/paths';
 
 interface ReservationFormValues {
@@ -86,7 +89,6 @@ export function useReservation() {
           paymentMethod,
           status: OrderStatus.Reservation,
           total,
-          stayForMeal,
         });
         onSuccess?.();
         navigate(AppRoute.ReservationConfirmed, {

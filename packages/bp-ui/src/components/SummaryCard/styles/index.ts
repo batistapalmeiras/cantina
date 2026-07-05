@@ -1,7 +1,9 @@
+// Libs
 import styled from 'styled-components';
+// Components
 import { fadeUp } from '../../..';
 
-export const Card = styled.div`
+export const Card = styled.div<{ $bottomOffset?: string }>`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.sm};
@@ -14,7 +16,7 @@ export const Card = styled.div`
 
   @media (max-width: 744px) {
     position: fixed;
-    bottom: 80px;
+    bottom: ${({ $bottomOffset }) => $bottomOffset ?? '80px'};
     left: 0;
     right: 0;
     z-index: 90;
@@ -23,7 +25,7 @@ export const Card = styled.div`
     border-top: 1px solid ${({ theme }) => theme.colors.hairline};
     border-radius: 0;
     box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
-    padding-bottom: ${({ theme }) => theme.spacing.md};
+    padding-bottom: calc(${({ theme }) => theme.spacing.md} + env(safe-area-inset-bottom));
     animation: ${fadeUp} 0.2s ease;
   }
 `;

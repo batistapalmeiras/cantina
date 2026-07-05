@@ -19,10 +19,5 @@ export interface TextFieldProps<T extends FieldValues, N extends FieldPath<T>>
   extends BaseFieldProps<T, N>,
     Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'name'> {
   currency?: false;
-}
-
-export interface RawTextInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  wrapperStyle?: React.CSSProperties;
-  error?: string;
+  mask?: 'phone';
 }

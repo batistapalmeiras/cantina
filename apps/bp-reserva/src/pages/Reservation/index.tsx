@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
-import { Button, DishSelector, PageHeader, SegmentedControl, SummaryCard, Typography, useModal, useToast } from 'bp-ui';
+import { Button, Card, DishSelector, formatCurrency, PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-ui';
 // Components
 import { AppRoute } from '../../routes/paths';
 // Local
@@ -25,6 +25,7 @@ export function ReservationPage() {
   const { open, close, modal } = useModal();
   const navigate = useNavigate();
   const { show: showToast, toast } = useToast();
+  const isWide = useMediaQuery('(min-width: 745px)');
 
   const {
     session,
@@ -92,7 +93,7 @@ export function ReservationPage() {
           </Typography>
           <TotalLine>
             <TotalLabel>Total</TotalLabel>
-            <TotalValue>R$ {clientOrder.total.toFixed(2)}</TotalValue>
+            <TotalValue>{formatCurrency(clientOrder.total)}</TotalValue>
           </TotalLine>
         </Card>
 
@@ -163,7 +164,7 @@ export function ReservationPage() {
         />
       </div>
 
-      {tickets.length > 0 && (
+      {(isWide || tickets.length > 0) && (
         <SummaryCard
           items={Object.values(
             tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {

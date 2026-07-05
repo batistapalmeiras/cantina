@@ -1,7 +1,12 @@
+// React
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Libs
 import { Addon, Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+// Components
 import { AppRoute } from '../../../routes/paths';
+
+const CHURCH_PIX_KEY = '16886715000123';
 
 type DishQty = { count: number; addonCounts: Record<string, number> };
 
@@ -31,7 +36,6 @@ export function useEditReservation(orderId: string) {
     });
     setQuantities(next);
     setPaymentMethod(currentOrder.paymentMethod);
-    setStayForMeal(currentOrder.stayForMeal ?? false);
     setInitialized(true);
   }, [currentOrder, session, initialized]);
 
@@ -102,10 +106,11 @@ export function useEditReservation(orderId: string) {
           paymentMethod,
           status: OrderStatus.Reservation,
           total,
-          stayForMeal,
         });
         onSuccess?.();
-        navigate(AppRoute.Reservation);
+        navigate(AppRoute.ReservationConfirmed, {
+          state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY },
+        });
       } catch (err) {
         setOrderError(err instanceof Error ? err.message : 'Erro ao salvar reserva');
       } finally {

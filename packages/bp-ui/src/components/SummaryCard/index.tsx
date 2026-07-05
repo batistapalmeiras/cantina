@@ -1,4 +1,7 @@
+// Components
+import { formatCurrency } from '../../utils/mask';
 import { Button } from '../Button';
+// Local
 import { Card, Label, Row, Info, Items, Total, ItemDetail, ItemDetailName, ItemDetailPrice, Divider, ButtonRow } from './styles';
 import type { SummaryCardProps } from './types';
 
@@ -12,13 +15,14 @@ export function SummaryCard({
   disabled = false,
   buttons,
   emptyMessage = 'Nenhum item selecionado',
+  bottomOffset,
 }: SummaryCardProps) {
   const hasSubtotals = items.some((item) => item.subtotal !== undefined);
   const itemsText = items.map((item) => `${item.qty}× ${item.name}`).join(', ');
   const isEmpty = items.length === 0;
 
   return (
-    <Card>
+    <Card $bottomOffset={bottomOffset}>
       <Label style={{ marginBottom: 0 }}>{label}</Label>
 
       {isEmpty ? (
@@ -31,7 +35,7 @@ export function SummaryCard({
             <ItemDetail key={item.name}>
               <ItemDetailName>{item.qty}× {item.name}</ItemDetailName>
               {item.subtotal !== undefined && (
-                <ItemDetailPrice>R$ {item.subtotal.toFixed(2)}</ItemDetailPrice>
+                <ItemDetailPrice>{formatCurrency(item.subtotal)}</ItemDetailPrice>
               )}
             </ItemDetail>
           ))}
@@ -39,7 +43,7 @@ export function SummaryCard({
       ) : (
         <Row>
           <Items>{itemsText}</Items>
-          <Total>R$ {total.toFixed(2)}</Total>
+          <Total>{formatCurrency(total)}</Total>
         </Row>
       )}
 
@@ -48,7 +52,7 @@ export function SummaryCard({
           <Divider />
           <Row>
             <Info>
-              <Total>R$ {total.toFixed(2)}</Total>
+              <Total>{formatCurrency(total)}</Total>
             </Info>
           </Row>
         </>

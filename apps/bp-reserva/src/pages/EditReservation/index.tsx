@@ -1,16 +1,17 @@
+// React
 import { useParams } from 'react-router-dom';
+// Libs
 import { useClient, PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
-import { DishSelector, PageHeader, SegmentedControl, SummaryCard, Typography, useToast } from 'bp-ui';
+import { DishSelector, PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useToast } from 'bp-ui';
+// Local
 import { useEditReservation } from './hooks';
-import {
-  BottomSpacer,
-  BottomWrapper,
-} from './styles';
+import { BottomSpacer } from './styles';
 
 export function EditReservationPage() {
   const { orderId } = useParams<{ orderId: string }>();
   const { client } = useClient();
   const { show: showToast, toast } = useToast();
+  const isWide = useMediaQuery('(min-width: 745px)');
 
   const {
     session,
@@ -72,7 +73,6 @@ export function EditReservationPage() {
           onIncrement={increment}
           onDecrement={decrement}
           onSetAddonCount={setAddonCount}
-          isEditMode={true}
         />
       </div>
 
@@ -102,9 +102,9 @@ export function EditReservationPage() {
 
       <BottomSpacer />
 
-      <BottomWrapper>
-        {tickets.length > 0 && (
-          <SummaryCard
+      {(isWide || tickets.length > 0) && (
+        <SummaryCard
+          bottomOffset="0"
           items={Object.values(
             tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
               if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
@@ -126,11 +126,11 @@ export function EditReservationPage() {
                   showToast('Pedido atualizado!');
                 }),
               loading: isSaving,
+              disabled: tickets.length === 0,
             },
           ]}
-          />
-        )}
-      </BottomWrapper>
+        />
+      )}
       {toast}
     </div>
   );

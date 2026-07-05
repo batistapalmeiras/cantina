@@ -1,13 +1,13 @@
 // React
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { AlertTriangle } from 'lucide-react';
-// Components
 import { Button } from 'bp-ui';
 import { PageHeader } from 'bp-ui';
 import { Pagination } from 'bp-ui';
 import { Typography } from 'bp-ui';
 import { useModal } from 'bp-ui';
+import { AlertTriangle } from 'lucide-react';
+// Components
 import { AppRoute } from '../../routes/paths';
 // Local
 import { CloseSessionDialog } from './components/CloseSessionDialog';
@@ -16,7 +16,7 @@ import {
 ActionsRow, HistoryBadge,
 HistoryItem, HistoryItemMeta, HistoryItemSub, HistoryItemTitle,   HistoryList, PendingAlert, PendingAlertBody,
   Section,
-  SessionBanner, SessionInfo, } from './styles';
+  SessionActions, SessionBanner, SessionInfo, } from './styles';
 
 export function SetupPage() {
   const { session, sessions, currentPage, totalPages, loadSessions, handleClose, viewSession } = useSetup();
@@ -60,7 +60,7 @@ export function SetupPage() {
               <strong>Sessão aberta</strong>
               <p>{session.ministry} · {new Date(session.date).toLocaleDateString('pt-BR')}</p>
             </SessionInfo>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap'}}>
+            <SessionActions>
               <Button
                 variant="secondary"
                 style={{ flex: 1 }}
@@ -81,7 +81,7 @@ export function SetupPage() {
               >
                 Encerrar sessão
               </Button>
-            </div>
+            </SessionActions>
           </SessionBanner>
         </>
       ) : (

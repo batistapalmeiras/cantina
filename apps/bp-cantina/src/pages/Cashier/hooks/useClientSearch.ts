@@ -1,8 +1,7 @@
 // React
-import { useCallback, useRef,useState } from 'react';
-// Components
+import { useEffect, useState } from 'react';
+// Libs
 import { supabase } from 'bp-core';
-import { SelectedClient } from '../domain';
 
 interface ClientResult {
   id: string;
@@ -10,80 +9,40 @@ interface ClientResult {
   phone: string;
 }
 
-type SearchState =
+type LookupState =
   | { type: 'idle' }
   | { type: 'searching' }
-  | { type: 'results'; items: ClientResult[] }
-  | { type: 'registering' }
-  | { type: 'phone_conflict'; existing: ClientResult }
-  | { type: 'selected'; client: ClientResult };
+  | { type: 'found'; client: ClientResult }
+  | { type: 'not_found' };
 
-export function useClientSearch(onSelect: (client: SelectedClient) => void) {
-  const [query, setQuery] = useState('');
-  const [phone, setPhone] = useState('');
-  const [state, setState] = useState<SearchState>({ type: 'idle' });
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+export function useClientSearch(phone: string) {
+  const [state, setState] = useState<LookupState>({ type: 'idle' });
 
-  const search = useCallback((value: string) => {
-    setQuery(value);
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    if (!value.trim()) {
+  useEffect(() => {
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length < 10) {
       setState({ type: 'idle' });
       return;
     }
 
     setState({ type: 'searching' });
 
-    debounceRef.current = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       const { data } = await supabase
         .from('clients')
         .select('id, name, phone')
-        .or(`name.ilike.%${value}%,phone.ilike.%${value}%`)
-        .limit(6);
+        .eq('phone', phone)
+        .maybeSingle();
 
-      const items = data ?? [];
-      if (items.length > 0) {
-        setState({ type: 'results', items });
-      } else {
-        setState({ type: 'registering' });
-      }
+      setState(data ? { type: 'found', client: data } : { type: 'not_found' });
     }, 300);
-  }, []);
 
-  const selectClient = useCallback((client: ClientResult) => {
-    setQuery(client.name);
-    setState({ type: 'selected', client });
-    onSelect(client);
-  }, [onSelect]);
+    return () => clearTimeout(timer);
+  }, [phone]);
 
-  const checkPhone = useCallback(async (value: string) => {
-    setPhone(value);
+  const markNewClient = (name: string) => {
+    setState({ type: 'found', client: { id: '__new__', name, phone } });
+  };
 
-    if (value.replace(/\D/g, '').length < 10) return;
-
-    const { data } = await supabase
-      .from('clients')
-      .select('id, name, phone')
-      .eq('phone', value)
-      .maybeSingle();
-
-    if (data) {
-      setState({ type: 'phone_conflict', existing: data });
-      return;
-    }
-
-    const newClient = { id: '__new__', name: query.trim(), phone: value };
-    setState({ type: 'selected', client: newClient });
-    onSelect(newClient);
-  }, [query, onSelect]);
-
-  const clear = useCallback(() => {
-    setQuery('');
-    setPhone('');
-    setState({ type: 'idle' });
-  }, []);
-
-  return { query, phone, state, search, selectClient, checkPhone, clear };
+  return { state, markNewClient };
 }

@@ -1,15 +1,26 @@
+// React
+import { useForm } from 'react-hook-form';
 // Libs
-import { Brand, Button, Typography } from 'bp-ui';
-import { maskPhone } from 'bp-ui';
+import { Brand, Button, PageHeader, TextInput } from 'bp-ui';
 // Components
 import icon from '../../assets/icon.png';
 // Local
 import { useIdentify } from './hooks';
-import { BackLink, Container, FieldWrap, Header, Input, Label, Page } from './styles';
+import { BackLink, Container, Header, Page } from './styles';
+
+interface IdentifyFormValues {
+  phone: string;
+  name: string;
+}
 
 export function IdentifyPage() {
-  const { phase, phone, setPhone, name, setName, checking, registering, handleCheckPhone, handleRegister, handleBack } =
-    useIdentify();
+  const { phase, checking, registering, handleCheckPhone, handleRegister, handleBack } = useIdentify();
+  const { control, handleSubmit, watch } = useForm<IdentifyFormValues>({
+    defaultValues: { phone: '', name: '' },
+  });
+
+  const phone = watch('phone');
+  const name = watch('name');
 
   return (
     <Page>
@@ -23,20 +34,17 @@ export function IdentifyPage() {
         </Header>
 
         {phase === 'phone' ? (
-          <form onSubmit={handleCheckPhone}>
-            <Typography type="p" style={{ marginBottom: 20 }}>
-              Digite seu telefone para continuar.
-            </Typography>
-            <FieldWrap>
-              <Label>Telefone (WhatsApp)</Label>
-              <Input
-                value={phone}
-                onChange={(e) => setPhone(maskPhone(e.target.value))}
-                placeholder="(31) 99999-0000"
-                inputMode="numeric"
-                autoFocus
-              />
-            </FieldWrap>
+          <form onSubmit={handleSubmit((values) => handleCheckPhone(values.phone))}>
+            <PageHeader title="Identificação" subtitle="Digite seu telefone para continuar." />
+            <TextInput
+              control={control}
+              name="phone"
+              mask="phone"
+              label="Telefone (WhatsApp)"
+              placeholder="(31) 99999-0000"
+              inputMode="numeric"
+              autoFocus
+            />
             <Button
               type="submit"
               variant="primary"
@@ -49,14 +57,15 @@ export function IdentifyPage() {
             </Button>
           </form>
         ) : (
-          <form onSubmit={handleRegister}>
-            <Typography type="p" style={{ marginBottom: 20 }}>
-              Não encontramos o telefone <strong>{phone}</strong>. Como podemos te chamar?
-            </Typography>
-            <FieldWrap>
-              <Label>Nome completo</Label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome" autoFocus />
-            </FieldWrap>
+          <form onSubmit={handleSubmit((values) => handleRegister(values.name, values.phone))}>
+            <PageHeader title="Novo cadastro" subtitle="Como podemos te chamar?" />
+            <TextInput
+              control={control}
+              name="name"
+              label="Nome completo"
+              placeholder="Seu nome"
+              autoFocus
+            />
             <Button
               type="submit"
               variant="primary"

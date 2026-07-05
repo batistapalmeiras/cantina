@@ -1,6 +1,6 @@
 // Libs
 import { Order, PaymentMethod } from 'bp-core';
-import { Button, Card } from 'bp-ui';
+import { Button, Card, formatCurrency } from 'bp-ui';
 import styled from 'styled-components';
 
 interface Props {
@@ -106,7 +106,7 @@ export function ReservationList({ reservations, onConfirm, onCancel }: Props) {
             <Badge>Reserva</Badge>
           </CardTop>
           <Meta>
-            {order.tickets.length} fichinha{order.tickets.length !== 1 ? 's' : ''} · R$ {order.total.toFixed(2)} ·{' '}
+            {order.tickets.length} fichinha{order.tickets.length !== 1 ? 's' : ''} · {formatCurrency(order.total)} ·{' '}
             {order.paymentMethod === PaymentMethod.Pix ? 'Pix' : 'Dinheiro'}
           </Meta>
           <Actions>
