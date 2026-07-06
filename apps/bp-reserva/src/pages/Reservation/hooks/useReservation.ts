@@ -89,6 +89,7 @@ export function useReservation() {
           paymentMethod,
           status: OrderStatus.Reservation,
           total,
+          stayForMeal,
         });
         onSuccess?.();
         navigate(AppRoute.ReservationConfirmed, {
@@ -100,7 +101,7 @@ export function useReservation() {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, total, addOrder, navigate]
+    [session, tickets, paymentMethod, total, stayForMeal, addOrder, navigate]
   );
 
   const cancelReservation = async (orderId: string) => {

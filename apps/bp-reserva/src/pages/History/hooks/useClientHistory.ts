@@ -14,6 +14,7 @@ export function useClientHistory(clientPhone?: string, currentSessionId?: string
     if (!clientPhone) return;
 
     setLoading(true);
+    let ignore = false;
 
     let query = supabase
       .from('orders')
@@ -27,18 +28,24 @@ export function useClientHistory(clientPhone?: string, currentSessionId?: string
     }
 
     query.then(({ data }) => {
-      const mapped: HistoryOrder[] = (data ?? []).map((o: any) => ({
+      // Guard against an out-of-order response for a previous phone/session.
+      if (ignore) return;
+      const mapped: HistoryOrder[] = (data ?? []).map((o) => ({
         id: o.id,
         status: o.status as OrderStatus,
         total: o.total,
         paymentMethod: o.payment_method as PaymentMethod,
         createdAt: o.created_at,
-        dishes: (o.ticket_items ?? []).map((t: any) => t.dish_name as string),
+        dishes: (o.ticket_items ?? []).map((t) => t.dish_name),
         sessionDate: o.sessions?.date ?? '',
       }));
       setHistory(mapped);
       setLoading(false);
     });
+
+    return () => {
+      ignore = true;
+    };
   }, [clientPhone, currentSessionId]);
 
   return { history, loading };

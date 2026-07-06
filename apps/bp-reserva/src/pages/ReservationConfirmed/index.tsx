@@ -1,6 +1,6 @@
 // React
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 // Libs
 import { PAYMENT_METHOD_LABEL, PIX_SURCHARGE, PaymentMethod } from 'bp-core';
 import { Button } from 'bp-ui';
@@ -41,8 +41,7 @@ export function ReservationConfirmedPage() {
   const [copied, setCopied] = useState(false);
 
   if (!state) {
-    navigate(AppRoute.Reservation, { replace: true });
-    return null;
+    return <Navigate to={AppRoute.Reservation} replace />;
   }
 
   const { paymentMethod, total, pixKey } = state;
