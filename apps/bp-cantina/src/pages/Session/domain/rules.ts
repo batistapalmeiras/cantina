@@ -1,8 +1,8 @@
-// Components
+// Libs
 import { Dish } from 'bp-core';
 
 export function newId(): string {
-  return Math.random().toString(36).slice(2);
+  return crypto.randomUUID();
 }
 
 export function createDefaultDishes(): Dish[] {
