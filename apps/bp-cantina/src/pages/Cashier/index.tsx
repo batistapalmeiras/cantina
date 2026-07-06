@@ -1,6 +1,6 @@
 // React
-import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 // Libs
 import { PaymentMethod } from 'bp-core';
@@ -19,6 +19,7 @@ import {
 import { CashierDishSelector } from './components/DishSelector';
 import { PaymentSection } from './components/PaymentSection';
 import { ReservationList } from './components/ReservationList';
+import { groupTicketsForSummary, summarizeTicketsText } from './domain';
 import { useCashier } from './hooks';
 import {
   BottomSummary,
@@ -119,15 +120,7 @@ export function CashierPage() {
             </div>
             <StickyAside>
               <SummaryCard
-                items={Object.values(
-                  tickets.reduce<Record<string, { name: string; qty: number; subtotal: number }>>((acc, t) => {
-                    const key = t.dishName;
-                    if (!acc[key]) acc[key] = { name: t.dishName, qty: 0, subtotal: 0 };
-                    acc[key].qty++;
-                    acc[key].subtotal += t.totalPrice;
-                    return acc;
-                  }, {})
-                )}
+                items={groupTicketsForSummary(tickets)}
                 total={total}
                 onConfirm={handleSubmit(onSubmit)}
                 confirmText="Confirmar venda"
@@ -139,15 +132,7 @@ export function CashierPage() {
             <BottomSummary>
               <BottomSummaryRow>
                 <BottomSummaryInfo>
-                  <BottomSummaryItems>
-                    {Object.values(
-                      tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
-                        if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
-                        acc[t.dishName].qty++;
-                        return acc;
-                      }, {})
-                    ).map((g) => `${g.qty}× ${g.name}`).join(', ')}
-                  </BottomSummaryItems>
+                  <BottomSummaryItems>{summarizeTicketsText(tickets)}</BottomSummaryItems>
                   <BottomSummaryTotal>{formatCurrency(total)}</BottomSummaryTotal>
                 </BottomSummaryInfo>
                 <Button
