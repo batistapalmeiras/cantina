@@ -6,15 +6,25 @@ import { supabase } from '../lib/supabase';
 import { User, UserRole } from '../types';
 
 export async function fetchProfile(userId: string): Promise<User | null> {
-  const { data } = await supabase
-    .from('profiles')
-    .select('id, name, role')
-    .eq('id', userId);
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id, name, role')
+      .eq('id', userId);
 
-  if (!data || data.length === 0) return null;
-  // role is typed as the DB string union; User.role is the UserRole enum
-  // (identical values), so a direct cast is safe.
-  return { id: data[0].id, name: data[0].name, role: data[0].role as UserRole };
+    if (error) {
+      console.error('Erro ao buscar perfil:', error);
+      return null;
+    }
+
+    if (!data || data.length === 0) return null;
+    // role is typed as the DB string union; User.role is the UserRole enum
+    // (identical values), so a direct cast is safe.
+    return { id: data[0].id, name: data[0].name, role: data[0].role as UserRole };
+  } catch (err) {
+    console.error('Exceção ao buscar perfil:', err);
+    return null;
+  }
 }
 
 export function useAuth(): AuthContextValue {
@@ -27,8 +37,13 @@ export function useAuth(): AuthContextValue {
     supabase.auth.getSession().then(async ({ data }) => {
       if (data.session?.user) {
         const profile = await fetchProfile(data.session.user.id);
-        setUser(profile);
-        setUserEmail(data.session.user.email ?? '');
+        if (profile) {
+          setUser(profile);
+          setUserEmail(data.session.user.email ?? '');
+        } else {
+          setUser(null);
+          setUserEmail('');
+        }
       }
       setLoading(false);
     });
@@ -36,9 +51,15 @@ export function useAuth(): AuthContextValue {
     const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         const profile = await fetchProfile(session.user.id);
-        setUser(profile);
-        setUserEmail(session.user.email ?? '');
-        setError(null);
+        if (profile) {
+          setUser(profile);
+          setUserEmail(session.user.email ?? '');
+          setError(null);
+        } else {
+          setUser(null);
+          setUserEmail('');
+          setError('Perfil do usuário não encontrado.');
+        }
       } else {
         setUser(null);
         setUserEmail('');
@@ -75,9 +96,13 @@ export function useAuth(): AuthContextValue {
   }, []);
 
   const login = useCallback(async (email: string, password: string): Promise<string | null> => {
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-    if (signInError) return 'E-mail ou senha incorretos.';
     setError(null);
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    if (signInError) {
+      const errorMsg = 'E-mail ou senha incorretos.';
+      setError(errorMsg);
+      return errorMsg;
+    }
     return null;
   }, []);
 
