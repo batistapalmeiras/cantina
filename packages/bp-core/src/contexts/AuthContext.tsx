@@ -8,6 +8,7 @@ export interface AuthContextValue {
   user: User | null;
   userEmail: string;
   loading: boolean;
+  error: string | null;
   login: (email: string, password: string) => Promise<string | null>;
   logout: () => Promise<void>;
   updateProfile: (name: string, email: string) => Promise<string | null>;

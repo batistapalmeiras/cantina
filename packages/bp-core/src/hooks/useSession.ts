@@ -136,7 +136,8 @@ export async function fetchPendingSession(): Promise<Session | null> {
     .limit(1)
     .maybeSingle();
 
-  if (error || !sessionRow) return null;
+  if (error) throw error;
+  if (!sessionRow) return null;
 
   const { data: dishRows } = await supabase
     .from('dishes')
@@ -200,7 +201,8 @@ export async function fetchOpenSession(): Promise<Session | null> {
     .limit(1)
     .maybeSingle();
 
-  if (error || !sessionRow) return null;
+  if (error) throw error;
+  if (!sessionRow) return null;
 
   const { data: dishRows } = await supabase
     .from('dishes')
@@ -228,12 +230,19 @@ export function useSession(): SessionContextValue {
   const [session, setSession] = useState<Session | null>(null);
   const [pendingSession, setPendingSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const reload = useCallback(async () => {
-    const [s, p] = await Promise.all([fetchOpenSession(), fetchPendingSession()]);
-    setSession(s);
-    setPendingSession(p);
-    setLoading(false);
+    try {
+      const [s, p] = await Promise.all([fetchOpenSession(), fetchPendingSession()]);
+      setSession(s);
+      setPendingSession(p);
+      setError(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro ao carregar a sessão');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -463,7 +472,7 @@ export function useSession(): SessionContextValue {
     await reload();
   }, [reload]);
 
-  return { session, pendingSession, loading, openSession, closeSession, addOrder, confirmReservation, cancelOrder, updateSession, updateOrder, toggleDelivered };
+  return { session, pendingSession, loading, error, openSession, closeSession, addOrder, confirmReservation, cancelOrder, updateSession, updateOrder, toggleDelivered };
 }
 
 export function useSessionCtx() {
