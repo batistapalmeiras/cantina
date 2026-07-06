@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 // Libs
 import { supabase } from 'bp-core';
 
+/** Sentinel client id meaning "register a new client on sale confirmation". */
+export const NEW_CLIENT_ID = '__new__';
+
 interface ClientResult {
   id: string;
   name: string;
@@ -41,7 +44,7 @@ export function useClientSearch(phone: string) {
   }, [phone]);
 
   const markNewClient = (name: string) => {
-    setState({ type: 'found', client: { id: '__new__', name, phone } });
+    setState({ type: 'found', client: { id: NEW_CLIENT_ID, name, phone } });
   };
 
   return { state, markNewClient };
