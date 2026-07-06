@@ -4,9 +4,15 @@ import { useCallback, useContext, useEffect,useState } from 'react';
 import { SessionContext, SessionContextValue } from '../contexts/SessionContext';
 import type { Database } from '../lib/database.types';
 import { supabase } from '../lib/supabase';
-import { Addon, Dish, Order, OrderStatus,Session, TicketItem } from '../types';
+import { Addon, Dish, Order, OrderStatus, PaymentMethod, Session, TicketItem } from '../types';
 
-function mapSession(raw: any, dishes: Dish[], orders: Order[]): Session {
+type Tables = Database['public']['Tables'];
+type SessionRow = Tables['sessions']['Row'];
+type DishRow = Tables['dishes']['Row'];
+type OrderRow = Tables['orders']['Row'];
+type TicketItemRow = Tables['ticket_items']['Row'];
+
+function mapSession(raw: SessionRow, dishes: Dish[], orders: Order[]): Session {
   return {
     id: raw.id,
     date: raw.date,
@@ -18,7 +24,7 @@ function mapSession(raw: any, dishes: Dish[], orders: Order[]): Session {
   };
 }
 
-function mapDish(raw: any, addons: Addon[]): Dish {
+function mapDish(raw: DishRow, addons: Addon[]): Dish {
   return {
     id: raw.id,
     name: raw.name,
@@ -29,13 +35,13 @@ function mapDish(raw: any, addons: Addon[]): Dish {
   };
 }
 
-function mapOrder(raw: any, tickets: TicketItem[]): Order {
+function mapOrder(raw: OrderRow, tickets: TicketItem[]): Order {
   return {
     id: raw.id,
     customerName: raw.customer_name,
     customerPhone: raw.customer_phone ?? undefined,
-    paymentMethod: raw.payment_method,
-    status: raw.status,
+    paymentMethod: raw.payment_method as PaymentMethod,
+    status: raw.status as OrderStatus,
     total: raw.total,
     createdAt: raw.created_at,
     delivered: raw.delivered ?? false,
@@ -44,7 +50,7 @@ function mapOrder(raw: any, tickets: TicketItem[]): Order {
   };
 }
 
-function mapTicketItem(raw: any): TicketItem {
+function mapTicketItem(raw: TicketItemRow): TicketItem {
   return {
     dishId: raw.dish_id,
     dishName: raw.dish_name,
@@ -59,7 +65,7 @@ export async function fetchAllSessions(): Promise<Array<{ id: string; date: stri
     .from('sessions')
     .select('id, date, ministry, is_open')
     .order('date', { ascending: false });
-  return (data ?? []).map((s: any) => ({ id: s.id, date: s.date, ministry: s.ministry, isOpen: s.is_open }));
+  return (data ?? []).map((s) => ({ id: s.id, date: s.date, ministry: s.ministry, isOpen: s.is_open }));
 }
 
 export interface SessionsPageResult {
@@ -82,7 +88,7 @@ export async function fetchSessionsPage(page: number = 1, pageSize: number = 10)
 
   const total = count || 0;
   return {
-    data: (data ?? []).map((s: any) => ({ id: s.id, date: s.date, ministry: s.ministry, isOpen: s.is_open, status: s.status ?? (s.is_open ? 'open' : 'closed') })),
+    data: (data ?? []).map((s) => ({ id: s.id, date: s.date, ministry: s.ministry, isOpen: s.is_open, status: s.status ?? (s.is_open ? 'open' : 'closed') })),
     total,
     page,
     pageSize,
@@ -104,8 +110,8 @@ export async function fetchSessionById(id: string): Promise<Session | null> {
     .select('*, addons(*)')
     .eq('session_id', sessionRow.id);
 
-  const dishes: Dish[] = (dishRows ?? []).map((d: any) =>
-    mapDish(d, (d.addons ?? []).map((a: any): Addon => ({ id: a.id, name: a.name, price: a.price })))
+  const dishes: Dish[] = (dishRows ?? []).map((d) =>
+    mapDish(d, (d.addons ?? []).map((a): Addon => ({ id: a.id, name: a.name, price: a.price })))
   );
 
   const { data: orderRows } = await supabase
@@ -114,7 +120,7 @@ export async function fetchSessionById(id: string): Promise<Session | null> {
     .eq('session_id', sessionRow.id)
     .order('created_at', { ascending: false });
 
-  const orders: Order[] = (orderRows ?? []).map((o: any) =>
+  const orders: Order[] = (orderRows ?? []).map((o) =>
     mapOrder(o, (o.ticket_items ?? []).map(mapTicketItem))
   );
 
@@ -137,8 +143,8 @@ export async function fetchPendingSession(): Promise<Session | null> {
     .select('*, addons(*)')
     .eq('session_id', sessionRow.id);
 
-  const dishes: Dish[] = (dishRows ?? []).map((d: any) =>
-    mapDish(d, (d.addons ?? []).map((a: any): Addon => ({ id: a.id, name: a.name, price: a.price })))
+  const dishes: Dish[] = (dishRows ?? []).map((d) =>
+    mapDish(d, (d.addons ?? []).map((a): Addon => ({ id: a.id, name: a.name, price: a.price })))
   );
 
   const { data: orderRows } = await supabase
@@ -147,7 +153,7 @@ export async function fetchPendingSession(): Promise<Session | null> {
     .eq('session_id', sessionRow.id)
     .order('created_at', { ascending: false });
 
-  const orders: Order[] = (orderRows ?? []).map((o: any) =>
+  const orders: Order[] = (orderRows ?? []).map((o) =>
     mapOrder(o, (o.ticket_items ?? []).map(mapTicketItem))
   );
 
@@ -179,7 +185,7 @@ export async function fetchOrdersPage(
 
   const { data, count } = await query;
   const total = count ?? 0;
-  const orders: Order[] = (data ?? []).map((o: any) =>
+  const orders: Order[] = (data ?? []).map((o) =>
     mapOrder(o, (o.ticket_items ?? []).map(mapTicketItem))
   );
   return { orders, total, totalPages: Math.ceil(total / pageSize) };
@@ -201,8 +207,8 @@ export async function fetchOpenSession(): Promise<Session | null> {
     .select('*, addons(*)')
     .eq('session_id', sessionRow.id);
 
-  const dishes: Dish[] = (dishRows ?? []).map((d: any) =>
-    mapDish(d, (d.addons ?? []).map((a: any): Addon => ({ id: a.id, name: a.name, price: a.price })))
+  const dishes: Dish[] = (dishRows ?? []).map((d) =>
+    mapDish(d, (d.addons ?? []).map((a): Addon => ({ id: a.id, name: a.name, price: a.price })))
   );
 
   const { data: orderRows } = await supabase
@@ -211,7 +217,7 @@ export async function fetchOpenSession(): Promise<Session | null> {
     .eq('session_id', sessionRow.id)
     .order('created_at', { ascending: false });
 
-  const orders: Order[] = (orderRows ?? []).map((o: any) =>
+  const orders: Order[] = (orderRows ?? []).map((o) =>
     mapOrder(o, (o.ticket_items ?? []).map(mapTicketItem))
   );
 
