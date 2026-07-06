@@ -22,8 +22,6 @@ import {
 } from './styles';
 import { DishSelectorProps } from './types';
 
-export type { DishQuantity } from './types';
-
 export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onSetAddonCount, label, reserved }: DishSelectorProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
