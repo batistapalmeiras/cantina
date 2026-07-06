@@ -3,7 +3,7 @@ import { Control, Controller, useFieldArray } from 'react-hook-form';
 // Libs
 import { Button, Select, TextInput } from 'bp-ui';
 // Local
-import { MINISTRIES } from '../../../data/mock';
+import { MINISTRIES } from '../../../data';
 import {
   AddonRow,
   AddonSectionLabel,

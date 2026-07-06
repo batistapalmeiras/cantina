@@ -19,7 +19,7 @@ import {
 import { CashierDishSelector } from './components/DishSelector';
 import { PaymentSection } from './components/PaymentSection';
 import { ReservationList } from './components/ReservationList';
-import { useCashier } from './hooks/useCashier';
+import { useCashier } from './hooks';
 import {
   BottomSummary,
   BottomSummaryInfo,

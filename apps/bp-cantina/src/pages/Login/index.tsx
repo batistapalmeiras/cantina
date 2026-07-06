@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Button, TextInput } from 'bp-ui';
 // Local
 import icon from '../../assets/icon.png';
-import { useLogin } from './hooks/useLogin';
+import { useLogin } from './hooks';
 import {
   Brand,
   BrandMark,
