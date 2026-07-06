@@ -1,17 +1,6 @@
 // Local
-import { Btn, Label, SegmentedControlTone, Toggle, Wrap } from './styles';
-import { SegmentedControlOption } from './types';
-
-export type { SegmentedControlTone } from './styles';
-export type { SegmentedControlOption } from './types';
-
-interface ISegmentedControlProps<T extends string | number | boolean> {
-  value: T;
-  onChange: (value: T) => void;
-  options: SegmentedControlOption<T>[];
-  label?: string;
-  tone?: SegmentedControlTone;
-}
+import { Btn, Label, Toggle, Wrap } from './styles';
+import { SegmentedControlProps } from './types';
 
 export function SegmentedControl<T extends string | number | boolean>({
   value,
@@ -19,7 +8,7 @@ export function SegmentedControl<T extends string | number | boolean>({
   options,
   label,
   tone = 'ink'
-}: ISegmentedControlProps<T>) {
+}: SegmentedControlProps<T>) {
   return (
     <Wrap>
       {label && <Label>{label}</Label>}

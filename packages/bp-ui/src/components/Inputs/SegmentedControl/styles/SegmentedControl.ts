@@ -1,5 +1,7 @@
 // Libs
 import styled from 'styled-components';
+// Components
+import type { SegmentedControlTone } from '../types';
 
 export const Wrap = styled.div`
   display: flex;
@@ -24,8 +26,6 @@ export const Toggle = styled.div`
   border-radius: ${({ theme }) => theme.rounded.sm};
   overflow: hidden;
 `;
-
-export type SegmentedControlTone = 'ink' | 'primary';
 
 export const Btn = styled.button<{ $selected: boolean; $tone: SegmentedControlTone }>`
   display: flex;
