@@ -2,12 +2,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { Addon, Dish, Order, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+import { Addon, Dish, Order, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge, CHURCH_PIX_KEY } from 'bp-core';
 import { DishQuantity } from 'bp-ui';
 // Components
 import { AppRoute } from '../../../routes/paths';
-
-const CHURCH_PIX_KEY = '16886715000123';
 
 export function useEditReservation(orderId: string) {
   const { session, updateOrder } = useSessionCtx();

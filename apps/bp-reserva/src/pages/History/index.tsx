@@ -1,6 +1,6 @@
 // Libs
 import { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL, useClient, useSessionCtx } from 'bp-core';
-import { formatCurrency, PageHeader, Skeleton } from 'bp-ui';
+import { formatCurrency, PageHeader, Skeleton, StatusBadge } from 'bp-ui';
 // Local
 import { useClientHistory } from './hooks';
 import { uniqueDishesText } from './domain';
@@ -11,7 +11,6 @@ import {
   HistoryItemMeta,
   HistoryItemSession,
   HistoryList,
-  StatusBadge,
 } from './styles';
 
 export function HistoryPage() {
@@ -56,7 +55,7 @@ export function HistoryPage() {
                     {' · '}{formatCurrency(o.total)} · {PAYMENT_METHOD_LABEL[o.paymentMethod]}
                   </HistoryItemMeta>
                 </div>
-                <StatusBadge $status={o.status}>{ORDER_STATUS_LABEL[o.status]}</StatusBadge>
+                <StatusBadge status={o.status}>{ORDER_STATUS_LABEL[o.status]}</StatusBadge>
               </HistoryItemHeader>
             </HistoryItem>
           ))}

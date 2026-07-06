@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
-import { Button, Card, DishSelector, formatCurrency, PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-ui';
+import { Button, Card, DishSelector, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-ui';
 // Components
 import { AppRoute } from '../../routes/paths';
 // Local
@@ -14,7 +14,6 @@ import {
   CardLabel,
   CancelLink,
   Empty,
-  StatusBadge,
   SummaryHeader,
   TotalLabel,
   TotalLine,
@@ -76,7 +75,7 @@ export function ReservationPage() {
         <Card>
           <SummaryHeader>
             <CardLabel style={{ marginBottom: 0 }}>Resumo</CardLabel>
-            <StatusBadge $status={OrderStatus.Reservation}>
+            <StatusBadge status={OrderStatus.Reservation}>
               {ORDER_STATUS_LABEL[OrderStatus.Reservation]}
             </StatusBadge>
           </SummaryHeader>

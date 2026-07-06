@@ -1,3 +1,6 @@
+// Config
+export { CHURCH_PIX_KEY } from './config';
+
 // Types
 export * from './types';
 

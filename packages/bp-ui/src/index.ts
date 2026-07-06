@@ -21,6 +21,8 @@ export { PageHeader } from './components/PageHeader';
 export { SegmentedControl } from './components/Inputs/SegmentedControl';
 export type { SegmentedControlOption, SegmentedControlTone } from './components/Inputs/SegmentedControl/types';
 export { Skeleton } from './components/Skeleton';
+export { StatusBadge } from './components/StatusBadge';
+export type { StatusBadgeProps } from './components/StatusBadge';
 export { SummaryCard } from './components/SummaryCard';
 export type { SummaryCardProps, SummaryItem, SummaryCardButton } from './components/SummaryCard/types';
 export { Tab, TabBadge, TabBar } from './components/Tabs';

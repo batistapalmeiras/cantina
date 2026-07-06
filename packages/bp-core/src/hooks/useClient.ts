@@ -16,6 +16,7 @@ const CLIENT_STORAGE_KEY = 'cantina_client_session';
 export function useClient() {
   const [client, setClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem(CLIENT_STORAGE_KEY);
@@ -72,38 +73,45 @@ export function useClient() {
   };
 
   const loginClient = async (name: string, phone: string): Promise<Client> => {
-    const { data: existing } = await supabase
-      .from('clients')
-      .select('*')
-      .eq('phone', phone)
-      .single();
-
-    let clientData: Client;
-
-    if (existing) {
-      // Atualiza nome se mudou
-      if (existing.name !== name) {
-        await supabase
-          .from('clients')
-          .update({ name, updated_at: new Date().toISOString() })
-          .eq('id', existing.id);
-      }
-      clientData = { id: existing.id, name, phone };
-    } else {
-      // Cria novo cliente
-      const { data: newClient, error } = await supabase
+    try {
+      setError(null);
+      const { data: existing } = await supabase
         .from('clients')
-        .insert({ name, phone })
-        .select()
+        .select('*')
+        .eq('phone', phone)
         .single();
 
-      if (error) throw error;
-      clientData = mapClient(newClient);
-    }
+      let clientData: Client;
 
-    localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(clientData));
-    setClient(clientData);
-    return clientData;
+      if (existing) {
+        // Atualiza nome se mudou
+        if (existing.name !== name) {
+          await supabase
+            .from('clients')
+            .update({ name, updated_at: new Date().toISOString() })
+            .eq('id', existing.id);
+        }
+        clientData = { id: existing.id, name, phone };
+      } else {
+        // Cria novo cliente
+        const { data: newClient, error } = await supabase
+          .from('clients')
+          .insert({ name, phone })
+          .select()
+          .single();
+
+        if (error) throw error;
+        clientData = mapClient(newClient);
+      }
+
+      localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(clientData));
+      setClient(clientData);
+      return clientData;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro ao fazer login';
+      setError(message);
+      throw err;
+    }
   };
 
   const logoutClient = () => {
@@ -112,32 +120,47 @@ export function useClient() {
   };
 
   const updateClientName = async (name: string): Promise<void> => {
-    if (!client) return;
+    try {
+      setError(null);
+      if (!client) return;
 
-    await supabase
-      .from('clients')
-      .update({ name, updated_at: new Date().toISOString() })
-      .eq('id', client.id);
+      await supabase
+        .from('clients')
+        .update({ name, updated_at: new Date().toISOString() })
+        .eq('id', client.id);
 
-    const updated = { ...client, name };
-    localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(updated));
-    setClient(updated);
+      const updated = { ...client, name };
+      localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(updated));
+      setClient(updated);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro ao atualizar nome';
+      setError(message);
+      throw err;
+    }
   };
 
   const updateClient = async (name: string, phone: string): Promise<void> => {
-    if (!client) return;
-    await supabase
-      .from('clients')
-      .update({ name, phone, updated_at: new Date().toISOString() })
-      .eq('id', client.id);
-    const updated = { ...client, name, phone };
-    localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(updated));
-    setClient(updated);
+    try {
+      setError(null);
+      if (!client) return;
+      await supabase
+        .from('clients')
+        .update({ name, phone, updated_at: new Date().toISOString() })
+        .eq('id', client.id);
+      const updated = { ...client, name, phone };
+      localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(updated));
+      setClient(updated);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro ao atualizar dados';
+      setError(message);
+      throw err;
+    }
   };
 
   return {
     client,
     loading,
+    error,
     findClientByPhone,
     loginWithClient,
     loginClient,

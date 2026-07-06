@@ -2,7 +2,7 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { Dish, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+import { Dish, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge, CHURCH_PIX_KEY } from 'bp-core';
 import { DishQuantity } from 'bp-ui';
 // Components
 import { AppRoute } from '../../../routes/paths';
@@ -11,8 +11,6 @@ interface ReservationFormValues {
   name: string;
   phone: string;
 }
-
-const CHURCH_PIX_KEY = '16886715000123';
 
 export function useReservation() {
   const { session, addOrder, cancelOrder } = useSessionCtx();
