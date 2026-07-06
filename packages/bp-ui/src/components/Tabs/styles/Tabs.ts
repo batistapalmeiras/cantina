@@ -1,14 +1,18 @@
 // Libs
 import styled from 'styled-components';
 
-export const TabBar = styled.div`
+export const TabBar = styled.div.attrs({ role: 'tablist' })`
   display: flex;
   border-bottom: 1px solid ${({ theme }) => theme.colors.hairline};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
   gap: ${({ theme }) => theme.spacing.xs};
 `;
 
-export const Tab = styled.button<{ $active: boolean }>`
+export const Tab = styled.button.attrs<{ $active: boolean }>(({ $active }) => ({
+  type: 'button',
+  role: 'tab',
+  'aria-selected': $active,
+}))<{ $active: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs};
