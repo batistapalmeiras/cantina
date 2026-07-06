@@ -96,15 +96,9 @@ export async function fetchSessionsPage(page: number = 1, pageSize: number = 10)
   };
 }
 
-export async function fetchSessionById(id: string): Promise<Session | null> {
-  const { data: sessionRow, error } = await supabase
-    .from('sessions')
-    .select('*')
-    .eq('id', id)
-    .maybeSingle();
-
-  if (error || !sessionRow) return null;
-
+// Loads a session's dishes (with addons) and orders (with ticket items) and
+// maps the whole aggregate. Shared by every "fetch one session" path.
+async function hydrateSession(sessionRow: SessionRow): Promise<Session> {
   const { data: dishRows } = await supabase
     .from('dishes')
     .select('*, addons(*)')
@@ -127,38 +121,42 @@ export async function fetchSessionById(id: string): Promise<Session | null> {
   return mapSession(sessionRow, dishes, orders);
 }
 
-export async function fetchPendingSession(): Promise<Session | null> {
+export async function fetchSessionById(id: string): Promise<Session | null> {
   const { data: sessionRow, error } = await supabase
     .from('sessions')
     .select('*')
-    .eq('status', 'pending')
-    .order('created_at', { ascending: false })
-    .limit(1)
+    .eq('id', id)
     .maybeSingle();
 
-  if (error) throw error;
-  if (!sessionRow) return null;
+  if (error || !sessionRow) return null;
+  return hydrateSession(sessionRow);
+}
 
-  const { data: dishRows } = await supabase
-    .from('dishes')
-    .select('*, addons(*)')
-    .eq('session_id', sessionRow.id);
-
-  const dishes: Dish[] = (dishRows ?? []).map((d) =>
-    mapDish(d, (d.addons ?? []).map((a): Addon => ({ id: a.id, name: a.name, price: a.price })))
-  );
-
-  const { data: orderRows } = await supabase
-    .from('orders')
-    .select('*, ticket_items(*)')
-    .eq('session_id', sessionRow.id)
+/**
+ * Loads the active (open) and pending sessions in a SINGLE `sessions` query,
+ * then hydrates each. "Open" is matched by `is_open` (not `status`) so it stays
+ * robust even for rows whose `status` was never set; "pending" is matched by
+ * status. Replaces the former two separate fetchOpenSession/fetchPendingSession
+ * round-trips.
+ */
+export async function fetchActiveSessions(): Promise<{ open: Session | null; pending: Session | null }> {
+  const { data: rows, error } = await supabase
+    .from('sessions')
+    .select('*')
+    .or('is_open.eq.true,status.eq.pending')
     .order('created_at', { ascending: false });
 
-  const orders: Order[] = (orderRows ?? []).map((o) =>
-    mapOrder(o, (o.ticket_items ?? []).map(mapTicketItem))
-  );
+  if (error) throw error;
 
-  return mapSession(sessionRow, dishes, orders);
+  const openRow = (rows ?? []).find((r) => r.is_open) ?? null;
+  const pendingRow = (rows ?? []).find((r) => r.status === 'pending') ?? null;
+
+  const [open, pending] = await Promise.all([
+    openRow ? hydrateSession(openRow) : Promise.resolve(null),
+    pendingRow ? hydrateSession(pendingRow) : Promise.resolve(null),
+  ]);
+
+  return { open, pending };
 }
 
 export interface OrdersPageResult {
@@ -192,40 +190,6 @@ export async function fetchOrdersPage(
   return { orders, total, totalPages: Math.ceil(total / pageSize) };
 }
 
-export async function fetchOpenSession(): Promise<Session | null> {
-  const { data: sessionRow, error } = await supabase
-    .from('sessions')
-    .select('*')
-    .eq('status', 'open')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (error) throw error;
-  if (!sessionRow) return null;
-
-  const { data: dishRows } = await supabase
-    .from('dishes')
-    .select('*, addons(*)')
-    .eq('session_id', sessionRow.id);
-
-  const dishes: Dish[] = (dishRows ?? []).map((d) =>
-    mapDish(d, (d.addons ?? []).map((a): Addon => ({ id: a.id, name: a.name, price: a.price })))
-  );
-
-  const { data: orderRows } = await supabase
-    .from('orders')
-    .select('*, ticket_items(*)')
-    .eq('session_id', sessionRow.id)
-    .order('created_at', { ascending: false });
-
-  const orders: Order[] = (orderRows ?? []).map((o) =>
-    mapOrder(o, (o.ticket_items ?? []).map(mapTicketItem))
-  );
-
-  return mapSession(sessionRow, dishes, orders);
-}
-
 export function useSession(): SessionContextValue {
   const [session, setSession] = useState<Session | null>(null);
   const [pendingSession, setPendingSession] = useState<Session | null>(null);
@@ -234,9 +198,9 @@ export function useSession(): SessionContextValue {
 
   const reload = useCallback(async () => {
     try {
-      const [s, p] = await Promise.all([fetchOpenSession(), fetchPendingSession()]);
-      setSession(s);
-      setPendingSession(p);
+      const { open, pending } = await fetchActiveSessions();
+      setSession(open);
+      setPendingSession(pending);
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erro ao carregar a sessão');
@@ -264,7 +228,7 @@ export function useSession(): SessionContextValue {
   const openSession = useCallback(async (data: Omit<Session, 'id' | 'orders'>) => {
     const { data: sessionRow, error } = await supabase
       .from('sessions')
-      .insert({ date: data.date, ministry: data.ministry, is_open: true })
+      .insert({ date: data.date, ministry: data.ministry, is_open: true, status: 'open' })
       .select()
       .single();
 
