@@ -25,7 +25,7 @@ export function Select<T extends FieldValues, N extends FieldPath<T>>({
 
   return (
     <BaseInput label={label} wrapperStyle={wrapperStyle} error={fieldState.error?.message}>
-      <SelectField value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value)} onBlur={field.onBlur} ref={field.ref as any}>
+      <SelectField value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value)} onBlur={field.onBlur} ref={field.ref}>
         {children}
       </SelectField>
     </BaseInput>
