@@ -5,6 +5,8 @@ import { Dish, Order, OrderStatus, supabase, TicketItem, useSessionCtx, calculat
 // Components
 import { CashierTab } from '../types';
 import { CashierFormValues } from '../validators';
+// Local
+import { NEW_CLIENT_ID } from './useClientSearch';
 
 type DishQty = { count: number; addonCounts: Record<string, number> };
 
@@ -68,16 +70,17 @@ export function useCashier() {
   const handleConfirm = async (data: CashierFormValues) => {
     if (tickets.length === 0) return;
 
-    if (data.clientId === '__new__') {
-      await supabase.from('clients').insert({
-        name: data.customerName.trim(),
-        phone: data.customerPhone,
-        created_at: new Date().toISOString(),
-      });
-    }
-
     setOrderError(null);
     try {
+      if (data.clientId === NEW_CLIENT_ID) {
+        const { error: clientError } = await supabase.from('clients').insert({
+          name: data.customerName.trim(),
+          phone: data.customerPhone,
+          created_at: new Date().toISOString(),
+        });
+        if (clientError) throw clientError;
+      }
+
       const finalTotal = calculateTotalWithPixSurcharge(total, data.paymentMethod);
       await addOrder({
         customerName: data.customerName.trim(),
