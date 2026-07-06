@@ -1,22 +1,18 @@
+// React
+import { forwardRef } from 'react';
 // Local
 import { IconWrap, StyledButton } from './styles';
 import { IconButtonProps } from './types';
 
-export function IconButton({
-  icon,
-  iconPosition = 'left',
-  variant = 'primary',
-  size = 'md',
-  fullWidth = false,
-  type = 'button',
-  children,
-  ...rest
-}: IconButtonProps) {
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
+  { icon, iconPosition = 'left', variant = 'primary', size = 'md', fullWidth = false, type = 'button', children, ...rest },
+  ref,
+) {
   const iconEl = <IconWrap $size={size}>{icon}</IconWrap>;
   const iconOnly = iconPosition === 'center';
 
   return (
-    <StyledButton type={type} $variant={variant} $size={size} $fullWidth={fullWidth} $iconOnly={iconOnly} {...rest}>
+    <StyledButton ref={ref} type={type} $variant={variant} $size={size} $fullWidth={fullWidth} $iconOnly={iconOnly} {...rest}>
       {iconOnly ? (
         iconEl
       ) : (
@@ -28,4 +24,4 @@ export function IconButton({
       )}
     </StyledButton>
   );
-}
+});
