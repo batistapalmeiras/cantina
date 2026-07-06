@@ -50,9 +50,9 @@ export const StatusBadge = styled.span<{ $status: OrderStatus }>`
   border-radius: ${({ theme }) => theme.rounded.full};
   font-size: ${({ theme }) => theme.typography.badge.fontSize};
   font-weight: ${({ theme }) => theme.typography.badge.fontWeight};
-  background: ${({ $status }) => ($status === OrderStatus.Sale ? '#f0faf5' : '#fffbeb')};
-  color: ${({ $status }) => ($status === OrderStatus.Sale ? '#1a7a4a' : '#b45309')};
-  border: 1px solid ${({ $status }) => ($status === OrderStatus.Sale ? '#b6e8cf' : '#fde68a')};
+  background: ${({ theme, $status }) => ($status === OrderStatus.Sale ? theme.colors.successSurface : theme.colors.warningSurface)};
+  color: ${({ theme, $status }) => ($status === OrderStatus.Sale ? theme.colors.success : theme.colors.warning)};
+  border: 1px solid ${({ theme, $status }) => ($status === OrderStatus.Sale ? theme.colors.successBorder : theme.colors.warningBorder)};
 `;
 
 export const CardList = styled.div`
@@ -136,4 +136,10 @@ export const SheetActions = styled.div`
 export const Empty = styled.div`
   padding: ${({ theme }) => theme.spacing.xxl} ${({ theme }) => theme.spacing.base};
   text-align: center;
+`;
+
+export const Phone = styled.div`
+  font-size: 11px;
+  color: ${({ theme }) => theme.colors.mutedSoft};
+  margin-top: 1px;
 `;

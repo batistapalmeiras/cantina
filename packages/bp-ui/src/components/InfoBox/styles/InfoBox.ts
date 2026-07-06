@@ -12,12 +12,12 @@ export const Box = styled.div<{ $variant: Variant }>`
   font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
   line-height: ${({ theme }) => theme.typography.bodyMd.lineHeight};
   color: ${({ theme }) => theme.colors.ink};
-  background: ${({ $variant }) => ($variant === 'warning' ? '#fffbeb' : '#eff6ff')};
-  border: 1px solid ${({ $variant }) => ($variant === 'warning' ? '#fde68a' : '#bfdbfe')};
+  background: ${({ theme, $variant }) => ($variant === 'warning' ? theme.colors.warningSurface : theme.colors.infoSurface)};
+  border: 1px solid ${({ theme, $variant }) => ($variant === 'warning' ? theme.colors.warningBorder : theme.colors.infoBorder)};
 
   svg {
     flex-shrink: 0;
     margin-top: 1px;
-    color: ${({ $variant }) => ($variant === 'warning' ? '#d97706' : '#3b82f6')};
+    color: ${({ theme, $variant }) => ($variant === 'warning' ? theme.colors.warning : theme.colors.info)};
   }
 `;

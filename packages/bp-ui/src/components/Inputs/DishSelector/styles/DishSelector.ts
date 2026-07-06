@@ -104,8 +104,8 @@ export const SoldOut = styled.span`
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.badge.fontSize};
   font-weight: ${({ theme }) => theme.typography.badge.fontWeight};
-  color: #fff;
-  background: #ef4444;
+  color: ${({ theme }) => theme.colors.onPrimary};
+  background: ${({ theme }) => theme.colors.danger};
   padding: 2px 8px;
   border-radius: ${({ theme }) => theme.rounded.full};
 `;

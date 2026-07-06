@@ -23,6 +23,18 @@ export const theme = {
     legalLink: '#428bff',
     starRating: '#222222',
     scrim: '#000000',
+
+    // Semantic status / feedback (surface = background, border, and foreground/text)
+    success: '#1a7a4a',
+    successSurface: '#f0faf5',
+    successBorder: '#b6e8cf',
+    warning: '#b45309',
+    warningSurface: '#fffbeb',
+    warningBorder: '#fde68a',
+    info: '#3b82f6',
+    infoSurface: '#eff6ff',
+    infoBorder: '#bfdbfe',
+    danger: '#ef4444',
   },
 
   typography: {
