@@ -8,6 +8,7 @@ export function IconButton({
   variant = 'primary',
   size = 'md',
   fullWidth = false,
+  type = 'button',
   children,
   ...rest
 }: IconButtonProps) {
@@ -15,7 +16,7 @@ export function IconButton({
   const iconOnly = iconPosition === 'center';
 
   return (
-    <StyledButton $variant={variant} $size={size} $fullWidth={fullWidth} $iconOnly={iconOnly} {...rest}>
+    <StyledButton type={type} $variant={variant} $size={size} $fullWidth={fullWidth} $iconOnly={iconOnly} {...rest}>
       {iconOnly ? (
         iconEl
       ) : (
