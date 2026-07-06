@@ -2,7 +2,7 @@
 import { formatCurrency } from '../../utils/mask';
 import { Button } from '../Button';
 // Local
-import { Card, Label, Row, Info, Items, Total, ItemDetail, ItemDetailName, ItemDetailPrice, Divider, ButtonRow } from './styles';
+import { Card, Label, Row, Info, Items, Total, ItemDetail, ItemDetailName, ItemDetailPrice, Divider, ButtonRow, EmptyMessage } from './styles';
 import type { SummaryCardProps } from './types';
 
 export function SummaryCard({
@@ -26,9 +26,7 @@ export function SummaryCard({
       <Label style={{ marginBottom: 0 }}>{label}</Label>
 
       {isEmpty ? (
-        <Items style={{ textAlign: 'center', color: 'var(--color-muted)' }}>
-          {emptyMessage}
-        </Items>
+        <EmptyMessage>{emptyMessage}</EmptyMessage>
       ) : hasSubtotals ? (
         <div>
           {items.map((item) => (

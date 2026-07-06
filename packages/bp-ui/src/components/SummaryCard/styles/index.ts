@@ -64,6 +64,10 @@ export const Items = styled.span`
   flex: 1;
 `;
 
+export const EmptyMessage = styled(Items)`
+  text-align: center;
+`;
+
 export const Total = styled.span`
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.displaySm.fontSize};
