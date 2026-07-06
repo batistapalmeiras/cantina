@@ -1,5 +1,5 @@
 // React
-import { useCallback, useContext, useEffect,useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 // Components
 import { SessionContext, SessionContextValue } from '../contexts/SessionContext';
 import type { Database } from '../lib/database.types';
@@ -472,7 +472,10 @@ export function useSession(): SessionContextValue {
     await reload();
   }, [reload]);
 
-  return { session, pendingSession, loading, error, openSession, closeSession, addOrder, confirmReservation, cancelOrder, updateSession, updateOrder, toggleDelivered };
+  return useMemo(
+    () => ({ session, pendingSession, loading, error, openSession, closeSession, addOrder, confirmReservation, cancelOrder, updateSession, updateOrder, toggleDelivered }),
+    [session, pendingSession, loading, error, openSession, closeSession, addOrder, confirmReservation, cancelOrder, updateSession, updateOrder, toggleDelivered],
+  );
 }
 
 export function useSessionCtx() {
