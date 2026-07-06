@@ -12,11 +12,13 @@ export function SegmentedControl<T extends string | number | boolean>({
   return (
     <Wrap>
       {label && <Label>{label}</Label>}
-      <Toggle>
+      <Toggle role="radiogroup" aria-label={label}>
         {options.map((option) => (
           <Btn
             key={String(option.value)}
             type="button"
+            role="radio"
+            aria-checked={option.value === value}
             $selected={option.value === value}
             $tone={tone}
             onClick={() => onChange(option.value)}
