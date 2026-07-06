@@ -8,6 +8,7 @@ export interface SessionContextValue {
   session: Session | null;
   pendingSession: Session | null;
   loading: boolean;
+  error: string | null;
   openSession: (session: Omit<Session, 'id' | 'orders'>) => Promise<void>;
   closeSession: () => Promise<void>;
   addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'delivered' | 'stayForMeal'> & { stayForMeal?: boolean }) => Promise<void>;

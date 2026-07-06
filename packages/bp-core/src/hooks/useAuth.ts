@@ -21,6 +21,7 @@ export function useAuth(): AuthContextValue {
   const [user, setUser] = useState<User | null>(null);
   const [userEmail, setUserEmail] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data }) => {
@@ -37,6 +38,7 @@ export function useAuth(): AuthContextValue {
         const profile = await fetchProfile(session.user.id);
         setUser(profile);
         setUserEmail(session.user.email ?? '');
+        setError(null);
       } else {
         setUser(null);
         setUserEmail('');
@@ -44,9 +46,9 @@ export function useAuth(): AuthContextValue {
     });
 
     const refreshInterval = setInterval(async () => {
-      const { error } = await supabase.auth.refreshSession();
-      if (error) {
-        console.error('Erro ao renovar token:', error);
+      const { error: refreshError } = await supabase.auth.refreshSession();
+      if (refreshError) {
+        setError('Sua sessão expirou. Entre novamente.');
         setUser(null);
         setUserEmail('');
       }
@@ -54,8 +56,9 @@ export function useAuth(): AuthContextValue {
 
     const handleVisibilityChange = async () => {
       if (!document.hidden) {
-        const { error } = await supabase.auth.refreshSession();
-        if (error) {
+        const { error: refreshError } = await supabase.auth.refreshSession();
+        if (refreshError) {
+          setError('Sua sessão expirou. Entre novamente.');
           setUser(null);
           setUserEmail('');
         }
@@ -72,8 +75,9 @@ export function useAuth(): AuthContextValue {
   }, []);
 
   const login = useCallback(async (email: string, password: string): Promise<string | null> => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return 'E-mail ou senha incorretos.';
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    if (signInError) return 'E-mail ou senha incorretos.';
+    setError(null);
     return null;
   }, []);
 
@@ -102,7 +106,7 @@ export function useAuth(): AuthContextValue {
     return null;
   }, [userEmail]);
 
-  return { user, userEmail, loading, login, logout, updateProfile };
+  return { user, userEmail, loading, error, login, logout, updateProfile };
 }
 
 export function useAuthCtx() {
