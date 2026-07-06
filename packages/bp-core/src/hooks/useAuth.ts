@@ -1,5 +1,5 @@
 // React
-import { useCallback, useContext, useEffect,useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 // Components
 import { AuthContext, AuthContextValue } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -106,7 +106,10 @@ export function useAuth(): AuthContextValue {
     return null;
   }, [userEmail]);
 
-  return { user, userEmail, loading, error, login, logout, updateProfile };
+  return useMemo(
+    () => ({ user, userEmail, loading, error, login, logout, updateProfile }),
+    [user, userEmail, loading, error, login, logout, updateProfile],
+  );
 }
 
 export function useAuthCtx() {
