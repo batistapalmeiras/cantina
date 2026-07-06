@@ -63,11 +63,11 @@ export const SuccessIcon = styled.div`
   width: 64px;
   height: 64px;
   border-radius: ${({ theme }) => theme.rounded.full};
-  background: #f0faf5;
+  background: ${({ theme }) => theme.colors.successSurface};
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1a7a4a;
+  color: ${({ theme }) => theme.colors.success};
   margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 

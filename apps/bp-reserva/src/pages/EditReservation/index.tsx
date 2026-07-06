@@ -6,7 +6,8 @@ import { useClient, PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
 import { DishSelector, PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useToast } from 'bp-ui';
 // Local
 import { useEditReservation } from './hooks';
-import { BottomSpacer } from './styles';
+import { BottomSpacer, DishSelectorWrapper, PageWrapper, PaymentControlsWrapper } from './styles';
+import { summarizeTickets } from './domain';
 
 export function EditReservationPage() {
   const { orderId } = useParams<{ orderId: string }>();
@@ -60,14 +61,14 @@ export function EditReservationPage() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <PageWrapper>
       <PageHeader
         back
         title="Editar reserva"
         subtitle="Escolha o prato e atualize sua fichinha para o culto."
       />
 
-      <div style={{ marginBottom: '10px' }}>
+      <DishSelectorWrapper>
         <DishSelector
           label="Fichinhas"
           dishes={session.dishes}
@@ -77,7 +78,7 @@ export function EditReservationPage() {
           onDecrement={decrement}
           onSetAddonCount={setAddonCount}
         />
-      </div>
+      </DishSelectorWrapper>
 
       <div>
         <SegmentedControl
@@ -89,7 +90,7 @@ export function EditReservationPage() {
             { value: PaymentMethod.Pix, label: PAYMENT_METHOD_LABEL[PaymentMethod.Pix] },
           ]}
         />
-        <div style={{ marginTop: 16 }}>
+        <PaymentControlsWrapper>
           <SegmentedControl
             label="Ficará no Espaço de Convivência?"
             tone="primary"
@@ -100,7 +101,7 @@ export function EditReservationPage() {
               { value: true, label: 'Sim' },
             ]}
           />
-        </div>
+        </PaymentControlsWrapper>
       </div>
 
       <BottomSpacer />
@@ -108,13 +109,7 @@ export function EditReservationPage() {
       {(isWide || tickets.length > 0) && (
         <SummaryCard
           bottomOffset="0"
-          items={Object.values(
-            tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
-              if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
-              acc[t.dishName].qty++;
-              return acc;
-            }, {})
-          )}
+          items={summarizeTickets(tickets)}
           total={baseTotal}
           buttons={[
             {
@@ -135,6 +130,6 @@ export function EditReservationPage() {
         />
       )}
       {toast}
-    </div>
+    </PageWrapper>
   );
 }

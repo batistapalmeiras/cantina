@@ -129,7 +129,7 @@ export const BottomTab = styled(Link)<{ $active: boolean }>`
   gap: 5px;
   padding: 12px 0 10px;
   text-decoration: none;
-  color: ${({ theme, $active }) => ($active ? theme.colors.primary : '#b0b0b0')};
+  color: ${({ theme, $active }) => ($active ? theme.colors.primary : theme.colors.mutedSoft)};
   transition: color 0.2s;
 
   svg {

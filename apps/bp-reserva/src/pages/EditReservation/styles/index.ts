@@ -1,4 +1,5 @@
-// Libs
+export * from './EditReservation';
+
 import styled from 'styled-components';
 
 export const BottomSpacer = styled.div`

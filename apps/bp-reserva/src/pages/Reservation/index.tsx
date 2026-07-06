@@ -7,8 +7,9 @@ import { Button, Card, DishSelector, formatCurrency, PageHeader, SegmentedContro
 // Components
 import { AppRoute } from '../../routes/paths';
 // Local
-import { CancelConfirmDialog } from './components/CancelConfirmDialog';
+import { CancelConfirmDialog } from './components';
 import { useReservation } from './hooks/useReservation';
+import { summarizeTickets, summarizeTicketsText } from './domain';
 import {
   CardLabel,
   CancelLink,
@@ -63,15 +64,7 @@ export function ReservationPage() {
   ) ?? null;
 
   if (clientOrder) {
-    const dishSummary = Object.values(
-      clientOrder.tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
-        if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
-        acc[t.dishName].qty++;
-        return acc;
-      }, {})
-    )
-      .map((g) => `${g.qty}× ${g.name}`)
-      .join(', ');
+    const dishSummary = summarizeTicketsText(clientOrder.tickets);
 
     return (
       <>
@@ -166,13 +159,7 @@ export function ReservationPage() {
 
       {(isWide || tickets.length > 0) && (
         <SummaryCard
-          items={Object.values(
-            tickets.reduce<Record<string, { name: string; qty: number }>>((acc, t) => {
-              if (!acc[t.dishName]) acc[t.dishName] = { name: t.dishName, qty: 0 };
-              acc[t.dishName].qty++;
-              return acc;
-            }, {})
-          )}
+          items={summarizeTickets(tickets)}
           total={total}
           onConfirm={() =>
             submitReservation({ name: client.name, phone: client.phone }, () => {
