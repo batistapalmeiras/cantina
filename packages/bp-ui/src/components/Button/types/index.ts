@@ -1,7 +1,9 @@
 // React
 import { ButtonHTMLAttributes } from 'react';
+// Components
+import { ButtonVariant } from '../../_shared/buttonBase';
 
-export type Variant = 'primary' | 'secondary' | 'danger';
+export type Variant = ButtonVariant;
 export type Size = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

@@ -1,8 +1,10 @@
 // React
 import { ButtonHTMLAttributes, ReactNode } from 'react';
+// Components
+import { ButtonSize, ButtonVariant } from '../../_shared/buttonBase';
 
-export type Variant = 'primary' | 'secondary' | 'danger';
-export type Size = 'xs' | 'sm' | 'md' | 'lg';
+export type Variant = ButtonVariant;
+export type Size = ButtonSize;
 export type IconPosition = 'left' | 'center' | 'right';
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
