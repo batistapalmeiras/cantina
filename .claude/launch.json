@@ -12,13 +12,10 @@
     {
       "name": "bp-reserva",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "start"],
+      "runtimeArgs": ["run", "dev"],
       "port": 3001,
       "autoPort": true,
-      "cwd": "apps/bp-reserva",
-      "env": {
-        "PORT": "3001"
-      }
+      "cwd": "apps/bp-reserva"
     }
   ]
 }
