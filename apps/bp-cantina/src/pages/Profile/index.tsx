@@ -2,11 +2,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-// Components
-import { Button } from 'bp-ui';
-import { TextInput } from 'bp-ui';
-import { PageHeader } from 'bp-ui';
-import { useToast } from 'bp-ui';
+// Libs
+import { Button, PageHeader, TextInput, useToast } from 'bp-ui';
 import { useAuthCtx, UserRole } from 'bp-core';
 // Local
 import { Actions,Identity, Name, RoleLabel, Section, SectionTitle, Wrap } from './styles';

@@ -1,12 +1,6 @@
 // Libs
-import { Search } from 'lucide-react';
-import { Check, Pencil, X } from 'lucide-react';
-// Components
-import { Button } from 'bp-ui';
-import { OrdersList } from 'bp-ui';
-import { PageHeader } from 'bp-ui';
-import { Typography } from 'bp-ui';
-import { useModal } from 'bp-ui';
+import { Check, Pencil, Search, X } from 'lucide-react';
+import { Button, OrdersList, PageHeader, Typography, useModal } from 'bp-ui';
 import { Order, OrderStatus } from 'bp-core';
 import { OrderEditForm } from '../Report/components/OrderEditForm';
 // Local

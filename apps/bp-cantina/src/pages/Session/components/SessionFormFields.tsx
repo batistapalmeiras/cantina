@@ -1,8 +1,8 @@
 // React
 import { Control, Controller, useFieldArray } from 'react-hook-form';
-// Components
-import { Button } from 'bp-ui';
-import { Select, TextInput } from 'bp-ui';
+// Libs
+import { Button, Select, TextInput } from 'bp-ui';
+// Local
 import { MINISTRIES } from '../../../data/mock';
 import {
   AddonRow,

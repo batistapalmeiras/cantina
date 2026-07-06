@@ -2,13 +2,16 @@
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { OrderStatus, PaymentMethod } from 'bp-core';
-import { Button } from 'bp-ui';
-import { Chip, ChipBar } from 'bp-ui';
-import { formatCurrency } from 'bp-ui';
-import { OrdersList } from 'bp-ui';
-import { PageHeader } from 'bp-ui';
-import { Skeleton } from 'bp-ui';
-import { Typography } from 'bp-ui';
+import {
+  Button,
+  Chip,
+  ChipBar,
+  formatCurrency,
+  OrdersList,
+  PageHeader,
+  Skeleton,
+  Typography,
+} from 'bp-ui';
 // Components
 import { AppRoute } from '../../routes/paths';
 // Local

@@ -1,11 +1,10 @@
 // React
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-// Components
-import icon from '../../assets/icon.png';
-import { Button } from 'bp-ui';
-import { TextInput } from 'bp-ui';
+// Libs
+import { Button, TextInput } from 'bp-ui';
 // Local
+import icon from '../../assets/icon.png';
 import { useLogin } from './hooks/useLogin';
 import {
   Brand,

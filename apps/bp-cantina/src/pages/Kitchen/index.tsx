@@ -2,11 +2,7 @@
 import { useState } from 'react';
 // Libs
 import { Check, Undo2 } from 'lucide-react';
-// Components
-import { IconButton } from 'bp-ui';
-import { PageHeader } from 'bp-ui';
-import { Tab, TabBadge,TabBar } from 'bp-ui';
-import { Typography } from 'bp-ui';
+import { IconButton, PageHeader, Tab, TabBadge, TabBar, Typography } from 'bp-ui';
 // Local
 import { groupTicketsByDish } from './domain';
 import { useKitchen } from './hooks/useKitchen';
