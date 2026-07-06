@@ -20,6 +20,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "^react-router/dom$": "react-router/dist/development/dom-export.js"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
