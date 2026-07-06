@@ -2,6 +2,7 @@
 import { useCallback, useContext, useEffect,useState } from 'react';
 // Components
 import { SessionContext, SessionContextValue } from '../contexts/SessionContext';
+import type { Database } from '../lib/database.types';
 import { supabase } from '../lib/supabase';
 import { Addon, Dish, Order, OrderStatus,Session, TicketItem } from '../types';
 
@@ -173,8 +174,8 @@ export async function fetchOrdersPage(
     .order('created_at', { ascending: false })
     .range((page - 1) * pageSize, page * pageSize - 1);
 
-  if (filterStatus) query = query.eq('status', filterStatus);
-  if (filterPayment) query = query.eq('payment_method', filterPayment);
+  if (filterStatus) query = query.eq('status', filterStatus as 'reservation' | 'sale');
+  if (filterPayment) query = query.eq('payment_method', filterPayment as 'cash' | 'pix');
 
   const { data, count } = await query;
   const total = count ?? 0;
@@ -420,7 +421,7 @@ export function useSession(): SessionContextValue {
   const updateOrder = useCallback(async (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total' | 'stayForMeal'>>) => {
     if (!session) return;
 
-    const updates: Record<string, unknown> = {};
+    const updates: Database['public']['Tables']['orders']['Update'] = {};
     if (data.customerName !== undefined) updates.customer_name = data.customerName;
     if (data.customerPhone !== undefined) updates.customer_phone = data.customerPhone ?? null;
     if (data.paymentMethod !== undefined) updates.payment_method = data.paymentMethod;
