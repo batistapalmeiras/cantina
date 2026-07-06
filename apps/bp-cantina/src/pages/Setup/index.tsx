@@ -1,13 +1,9 @@
 // React
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { Button } from 'bp-ui';
-import { PageHeader } from 'bp-ui';
-import { Pagination } from 'bp-ui';
-import { Typography } from 'bp-ui';
-import { useModal } from 'bp-ui';
 import { AlertTriangle } from 'lucide-react';
-// Components
+import { Button, PageHeader, Pagination, Typography, useModal } from 'bp-ui';
+// Local
 import { AppRoute } from '../../routes/paths';
 // Local
 import { CloseSessionDialog } from './components/CloseSessionDialog';

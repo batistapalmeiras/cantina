@@ -2,12 +2,8 @@
 import { useState } from 'react';
 // Libs
 import styled from 'styled-components';
-// Components
-import { Button } from 'bp-ui';
-import { DishQuantity,DishSelector } from 'bp-ui';
-import { ModalActions,ModalTitle } from 'bp-ui';
-import { useSessionCtx } from 'bp-core';
-import { Dish,Order, OrderStatus, TicketItem } from 'bp-core';
+import { Button, DishQuantity, DishSelector, ModalActions, ModalTitle } from 'bp-ui';
+import { Dish, Order, OrderStatus, TicketItem, useSessionCtx } from 'bp-core';
 
 interface Props {
   order: Order;

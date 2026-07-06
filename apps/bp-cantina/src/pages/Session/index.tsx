@@ -1,8 +1,8 @@
 // React
 import { Navigate } from 'react-router-dom';
-// Components
-import { Button } from 'bp-ui';
-import { PageHeader } from 'bp-ui';
+// Libs
+import { Button, PageHeader } from 'bp-ui';
+// Local
 import { AppRoute } from '../../routes/paths';
 // Local
 import { SessionFormFields } from './components';

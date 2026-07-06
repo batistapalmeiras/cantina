@@ -1,16 +1,20 @@
 // React
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 // Libs
 import { PaymentMethod } from 'bp-core';
-import { Button } from 'bp-ui';
-import { formatCurrency } from 'bp-ui';
-import { PageHeader } from 'bp-ui';
-import { SummaryCard } from 'bp-ui';
-import { Tab, TabBadge,TabBar } from 'bp-ui';
-import { useToast } from 'bp-ui';
-import { Typography } from 'bp-ui';
+import {
+  Button,
+  formatCurrency,
+  PageHeader,
+  SummaryCard,
+  Tab,
+  TabBadge,
+  TabBar,
+  Typography,
+  useToast,
+} from 'bp-ui';
 // Local
 import { CashierDishSelector } from './components/DishSelector';
 import { PaymentSection } from './components/PaymentSection';
