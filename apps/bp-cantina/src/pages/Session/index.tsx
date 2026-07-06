@@ -6,7 +6,7 @@ import { Button, PageHeader } from 'bp-ui';
 import { AppRoute } from '../../routes/paths';
 // Local
 import { SessionFormFields } from './components';
-import { useSessionForm } from './hooks/useSessionForm';
+import { useSessionForm } from './hooks';
 import { ActionsRow } from './styles';
 import { SessionMode } from './types';
 

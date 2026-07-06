@@ -5,7 +5,7 @@ import { Check, Undo2 } from 'lucide-react';
 import { IconButton, PageHeader, Tab, TabBadge, TabBar, Typography } from 'bp-ui';
 // Local
 import { groupTicketsByDish } from './domain';
-import { useKitchen } from './hooks/useKitchen';
+import { useKitchen } from './hooks';
 import {
   Card,
   CardTop,

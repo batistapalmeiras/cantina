@@ -4,7 +4,7 @@ import { Control, useWatch, UseFormSetValue } from 'react-hook-form';
 // Libs
 import { TextInput, Typography, useModal } from 'bp-ui';
 // Components
-import { useClientSearch } from '../hooks/useClientSearch';
+import { useClientSearch } from '../hooks';
 import { CashierFormValues } from '../validators';
 // Local
 import { ClientRegisterDialog } from './ClientRegisterDialog';

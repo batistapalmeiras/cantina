@@ -15,7 +15,7 @@ import {
 // Components
 import { AppRoute } from '../../routes/paths';
 // Local
-import { useReport } from './hooks/useReport';
+import { useReport } from './hooks';
 import {
   Empty,
   Section, SectionLabel,

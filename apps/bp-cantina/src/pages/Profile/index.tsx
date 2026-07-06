@@ -7,7 +7,7 @@ import { Button, PageHeader, TextInput, useToast } from 'bp-ui';
 import { useAuthCtx, UserRole } from 'bp-core';
 // Local
 import { Actions,Identity, Name, RoleLabel, Section, SectionTitle, Wrap } from './styles';
-import { ProfileFormValues,profileSchema } from './validators/schema';
+import { ProfileFormValues,profileSchema } from './validators';
 
 export function ProfilePage() {
   const { user, userEmail, updateProfile } = useAuthCtx();

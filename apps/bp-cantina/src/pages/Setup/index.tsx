@@ -6,8 +6,8 @@ import { Button, PageHeader, Pagination, Typography, useModal } from 'bp-ui';
 // Local
 import { AppRoute } from '../../routes/paths';
 // Local
-import { CloseSessionDialog } from './components/CloseSessionDialog';
-import { useSetup } from './hooks/useSetup';
+import { CloseSessionDialog } from './components';
+import { useSetup } from './hooks';
 import {
 ActionsRow, HistoryBadge,
 HistoryItem, HistoryItemMeta, HistoryItemSub, HistoryItemTitle,   HistoryList, PendingAlert, PendingAlertBody,

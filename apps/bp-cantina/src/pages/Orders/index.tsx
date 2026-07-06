@@ -2,10 +2,10 @@
 import { Check, Pencil, Search, X } from 'lucide-react';
 import { Button, OrdersList, PageHeader, Typography, useModal } from 'bp-ui';
 import { Order, OrderStatus } from 'bp-core';
-import { OrderEditForm } from '../Report/components/OrderEditForm';
+import { OrderEditForm } from '../Report/components';
 // Local
 import { computeRemainingTickets } from './domain';
-import { useOrders } from './hooks/useOrders';
+import { useOrders } from './hooks';
 import {
   Empty,
   OrderActions,
