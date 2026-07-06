@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { Addon, Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+import { Addon, Dish, Order, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
 // Components
 import { AppRoute } from '../../../routes/paths';
 
@@ -11,7 +11,7 @@ const CHURCH_PIX_KEY = '16886715000123';
 type DishQty = { count: number; addonCounts: Record<string, number> };
 
 export function useEditReservation(orderId: string) {
-  const { session, cancelOrder, addOrder } = useSessionCtx();
+  const { session, updateOrder } = useSessionCtx();
   const navigate = useNavigate();
 
   const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
@@ -40,6 +40,7 @@ export function useEditReservation(orderId: string) {
     });
     setQuantities(next);
     setPaymentMethod(currentOrder.paymentMethod);
+    setStayForMeal(currentOrder.stayForMeal);
     setInitialized(true);
   }, [currentOrder, session, initialized]);
 
@@ -101,14 +102,15 @@ export function useEditReservation(orderId: string) {
       setOrderError(null);
       setIsSaving(true);
       try {
-        await cancelOrder(currentOrder.id);
-        await addOrder({
+        // Atomic update in place (keeps the order id/created_at and adjusts the
+        // ticket counters server-side) — replaces the old cancel + re-create.
+        await updateOrder(currentOrder.id, {
           customerName: clientName,
           customerPhone: clientPhone || undefined,
           tickets,
           paymentMethod,
-          status: OrderStatus.Reservation,
           total,
+          stayForMeal,
         });
         onSuccess?.();
         navigate(AppRoute.ReservationConfirmed, {
@@ -120,7 +122,7 @@ export function useEditReservation(orderId: string) {
         setIsSaving(false);
       }
     },
-    [session, tickets, paymentMethod, total, currentOrder, addOrder, cancelOrder, navigate]
+    [session, tickets, paymentMethod, total, stayForMeal, currentOrder, updateOrder, navigate]
   );
 
   const cancelEdit = () => navigate(AppRoute.Reservation);

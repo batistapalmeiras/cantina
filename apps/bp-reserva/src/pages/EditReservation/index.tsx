@@ -1,4 +1,5 @@
 // React
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // Libs
 import { useClient, PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
@@ -34,6 +35,10 @@ export function EditReservationPage() {
     cancelEdit,
   } = useEditReservation(orderId || '');
 
+  useEffect(() => {
+    if (orderError) showToast(orderError);
+  }, [orderError, showToast]);
+
   if (!orderId || !client) return null;
 
   if (!session || !session.isOpen) {
@@ -52,10 +57,6 @@ export function EditReservationPage() {
         <Typography type="p">Não conseguimos carregar este pedido.</Typography>
       </div>
     );
-  }
-
-  if (orderError) {
-    showToast(orderError);
   }
 
   return (
