@@ -1,7 +1,8 @@
 // React
-import { Link } from 'react-router-dom';
+import { type ComponentType } from 'react';
+import { Link, type LinkProps } from 'react-router-dom';
 // Libs
-import styled, { css, type DefaultTheme, type StyledComponent } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const brandLayout = css`
   display: flex;
@@ -10,7 +11,9 @@ const brandLayout = css`
   flex-shrink: 0;
 `;
 
-export const BrandLink: StyledComponent<typeof Link, DefaultTheme> = styled(Link)`
+// Explicit annotation keeps the emitted .d.ts portable — the inferred
+// styled(Link) type otherwise references a non-nameable react-router internal.
+export const BrandLink: ComponentType<LinkProps> = styled(Link)`
   ${brandLayout}
   text-decoration: none;
 `;

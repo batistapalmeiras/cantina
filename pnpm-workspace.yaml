@@ -15,7 +15,11 @@ catalog:
   lucide-react: ^1.21.0
   zod: ^4.4.3
   # Build tooling
-  typescript: ^4.9.5
+  # Pinned to 5.1.6: >=5.0 is required to parse zod v4 type defs (TS 4.9 could
+  # not, breaking `tsc` entirely), while <5.2 stays within the range supported
+  # by @typescript-eslint 5.62 (pinned transitively by CRA's eslint-config-react-app).
+  # Bump further once the CRA/ESLint toolchain is upgraded (W5-2).
+  typescript: 5.1.6
   tsup: ^8.3.0
   # Types
   "@types/react": ^19.2.17
