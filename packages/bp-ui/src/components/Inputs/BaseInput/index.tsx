@@ -2,12 +2,11 @@
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 // Local
 import { ErrorText, Label, Wrapper } from './styles';
-import { ControlledBaseProps, IBaseInputProps } from './types';
+import { BaseInputProps, ControlledBaseProps } from './types';
 
 export { InputField } from './styles';
-export type { IBaseInputProps } from './types';
 
-export function BaseInput({ label, wrapperStyle, error, children }: IBaseInputProps) {
+export function BaseInput({ label, wrapperStyle, error, children }: BaseInputProps) {
   return (
     <Wrapper style={wrapperStyle}>
       <Label>{label}</Label>

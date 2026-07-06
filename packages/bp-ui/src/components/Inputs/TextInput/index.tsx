@@ -10,8 +10,6 @@ import { ControlledBase, InputField } from '../BaseInput';
 import { EyeButton, InputWrapper } from './styles';
 import { CurrencyFieldProps, TextFieldProps } from './types';
 
-export type { CurrencyFieldProps, TextFieldProps } from './types';
-
 type Props<T extends FieldValues, N extends FieldPath<T>> = TextFieldProps<T, N> | CurrencyFieldProps<T, N>;
 
 export function TextInput<T extends FieldValues, N extends FieldPath<T>>(props: Props<T, N>) {

@@ -2,7 +2,7 @@
 import { ReactNode } from 'react';
 import { Control, ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
 
-export interface IBaseInputProps {
+export interface BaseInputProps {
   label: string;
   wrapperStyle?: React.CSSProperties;
   error?: string;
