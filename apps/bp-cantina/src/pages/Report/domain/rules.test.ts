@@ -4,7 +4,7 @@ import type { Order, Session } from 'bp-core';
 // Local
 import { computeStats } from './rules';
 
-jest.mock('bp-core', () => ({
+vi.mock('bp-core', () => ({
   OrderStatus: { Sale: 'sale', Reservation: 'reservation' },
 }));
 

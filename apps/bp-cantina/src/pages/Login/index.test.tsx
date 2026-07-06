@@ -9,8 +9,8 @@ import { LoginPage } from './index';
 
 // The auth context talks to Supabase; stub it so the page renders deterministically
 // with no user logged in.
-jest.mock('bp-core', () => ({
-  useAuthCtx: () => ({ user: null, login: jest.fn() }),
+vi.mock('bp-core', () => ({
+  useAuthCtx: () => ({ user: null, login: vi.fn() }),
   UserRole: { Admin: 'admin', Operator: 'operator', Kitchen: 'kitchen' },
 }));
 

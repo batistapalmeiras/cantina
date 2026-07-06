@@ -6,7 +6,7 @@ import { groupTicketsByDish, selectKitchenOrders, splitByDelivery } from './rule
 
 // bp-core is stubbed to just the OrderStatus enum: the rules use it as a value,
 // while Order/Dish are type-only and erased at transpile time.
-jest.mock('bp-core', () => ({
+vi.mock('bp-core', () => ({
   OrderStatus: { Sale: 'sale', Reservation: 'reservation' },
 }));
 
