@@ -1,0 +1,1 @@
+export const CHURCH_PIX_KEY = '16886715000123';
