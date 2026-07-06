@@ -239,17 +239,9 @@ export function useSession(): SessionContextValue {
 
     const channel = supabase
       .channel(`session-${session.id}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
-        console.log('🔔 Realtime: Mudança em orders', payload);
-        reload();
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'dishes' }, (payload) => {
-        console.log('🔔 Realtime: Mudança em dishes', payload);
-        reload();
-      })
-      .subscribe((status) => {
-        console.log('📡 Realtime status:', status);
-      });
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => reload())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'dishes' }, () => reload())
+      .subscribe();
 
     return () => { supabase.removeChannel(channel); };
   }, [session?.id, reload]);
