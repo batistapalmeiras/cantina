@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect,useState } from 'react';
 // Components
 import { AuthContext, AuthContextValue } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { User } from '../types';
+import { User, UserRole } from '../types';
 
 export async function fetchProfile(userId: string): Promise<User | null> {
   const { data } = await supabase
@@ -12,7 +12,9 @@ export async function fetchProfile(userId: string): Promise<User | null> {
     .eq('id', userId);
 
   if (!data || data.length === 0) return null;
-  return { id: data[0].id, name: data[0].name, role: data[0].role };
+  // role is typed as the DB string union; User.role is the UserRole enum
+  // (identical values), so a direct cast is safe.
+  return { id: data[0].id, name: data[0].name, role: data[0].role as UserRole };
 }
 
 export function useAuth(): AuthContextValue {
