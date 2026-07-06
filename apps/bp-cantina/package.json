@@ -2,6 +2,7 @@
   "name": "bp-cantina",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@hookform/resolvers": "catalog:",
     "bp-core": "workspace:*",
@@ -11,46 +12,33 @@
     "react-dom": "catalog:",
     "react-hook-form": "catalog:",
     "react-router-dom": "catalog:",
-    "react-scripts": "catalog:",
     "styled-components": "catalog:",
     "zod": "catalog:"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "^react-router/dom$": "react-router/dist/development/dom-export.js"
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "devDependencies": {
     "@testing-library/dom": "catalog:",
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/react": "catalog:",
     "@testing-library/user-event": "catalog:",
-    "@types/jest": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/react-router-dom": "catalog:",
     "@types/styled-components": "catalog:",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint-plugin-react-hooks": "catalog:",
+    "jsdom": "^25.0.1",
     "typescript": "catalog:",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.9",
     "web-vitals": "catalog:"
   }
 }

@@ -4,7 +4,7 @@ import type { Dish, Order } from 'bp-core';
 // Local
 import { computeRemainingTickets, selectConfirmedOrders, selectPendingOrders } from './rules';
 
-jest.mock('bp-core', () => ({
+vi.mock('bp-core', () => ({
   OrderStatus: { Sale: 'sale', Reservation: 'reservation' },
 }));
 
