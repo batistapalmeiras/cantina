@@ -15,6 +15,7 @@ import {
   CardName,
   Empty,
   OrderCard,
+  Phone,
   SheetActions,
   SheetCustomer,
   SheetMeta,
@@ -75,9 +76,7 @@ export function OrdersList({
               <tr key={order.id}>
                 <td>
                   <div style={{ fontWeight: 500 }}>{order.customerName}</div>
-                  {order.customerPhone && (
-                    <div style={{ fontSize: 11, color: '#929292', marginTop: 1 }}>{order.customerPhone}</div>
-                  )}
+                  {order.customerPhone && <Phone>{order.customerPhone}</Phone>}
                 </td>
                 <td>{order.tickets.length}</td>
                 <td style={{ fontWeight: 500 }}>{formatCurrency(order.total)}</td>
