@@ -1,8 +1,8 @@
 // React
 import { useState } from 'react';
 // Libs
-import { Check, Undo2 } from 'lucide-react';
 import { IconButton, PageHeader, Tab, TabBadge, TabBar, Typography } from 'bp-ui';
+import { Check, Undo2 } from 'lucide-react';
 // Local
 import { groupTicketsByDish } from './domain';
 import { useKitchen } from './hooks';
@@ -66,8 +66,8 @@ export function KitchenPage() {
               </CardTop>
 
               <ItemList>
-                {groupTicketsByDish(order).map((g, i) => (
-                  <ItemRow key={i}>
+                {groupTicketsByDish(order).map((g) => (
+                  <ItemRow key={`${g.name}__${g.addons}`}>
                     <ItemQty>{g.count}×</ItemQty>
                     <span>
                       {g.name}

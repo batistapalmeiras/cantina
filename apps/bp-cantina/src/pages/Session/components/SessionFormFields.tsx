@@ -2,8 +2,9 @@
 import { Control, Controller, useFieldArray } from 'react-hook-form';
 // Libs
 import { Button, Select, TextInput } from 'bp-ui';
-// Local
+// Components
 import { MINISTRIES } from '../../../data';
+import { newId } from '../domain';
 import {
   AddonRow,
   AddonSectionLabel,
@@ -15,10 +16,6 @@ import {
   SmallInput,
 } from '../styles';
 import { SessionFormValues } from '../validators';
-
-function newId() {
-  return Math.random().toString(36).slice(2);
-}
 
 interface SessionFormFieldsProps {
   control: Control<SessionFormValues>;

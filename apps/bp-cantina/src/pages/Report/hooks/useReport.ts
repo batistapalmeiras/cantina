@@ -1,8 +1,9 @@
 // React
 import { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
-// Components
+// Libs
 import { useAuthCtx, fetchSessionById, useSessionCtx, Session, UserRole } from 'bp-core';
+// Components
 import { useOrdersList } from '../../../hooks/useOrdersList';
 import { computeStats } from '../domain';
 
@@ -31,9 +32,9 @@ export function useReport() {
   const canEditSession = !sessionId && !!session && session.isOpen === true && isAdmin;
 
   if (!session) {
-    return { session: null, stats: null, dishMap: null, loading, canEditSession: false, isAdmin, ...list };
+    return { session: null, stats: null, loading, canEditSession: false, isAdmin, ...list };
   }
 
-  const { stats, dishMap } = computeStats(session);
-  return { session, stats, dishMap, loading, canEditSession, isAdmin, ...list };
+  const { stats } = computeStats(session);
+  return { session, stats, loading, canEditSession, isAdmin, ...list };
 }
