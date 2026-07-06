@@ -3,12 +3,7 @@ import { useEffect,useState } from 'react';
 // Components
 import type { Database } from '../lib/database.types';
 import { supabase } from '../lib/supabase';
-
-export interface Client {
-  id: string;
-  name: string;
-  phone: string;
-}
+import { Client } from '../types';
 
 type ClientRow = Database['public']['Tables']['clients']['Row'];
 
