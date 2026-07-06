@@ -1,23 +1,23 @@
 // React
 import { useState } from 'react';
 // Libs
-import { Dish, Order, OrderStatus, supabase, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+import { Dish, Order, OrderStatus, supabase, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+import { DishQuantity } from 'bp-ui';
 // Components
+import { buildTickets, computeTotal } from '../domain';
 import { CashierTab } from '../types';
 import { CashierFormValues } from '../validators';
 // Local
 import { NEW_CLIENT_ID } from './useClientSearch';
 
-type DishQty = { count: number; addonCounts: Record<string, number> };
-
 export function useCashier() {
   const { session, addOrder, confirmReservation, cancelOrder } = useSessionCtx();
   const [tab, setTab] = useState<CashierTab>(CashierTab.Sale);
-  const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
+  const [quantities, setQuantities] = useState<Record<string, DishQuantity>>({});
   const [onSale, setOnSale] = useState(false);
   const [orderError, setOrderError] = useState<string | null>(null);
 
-  const getQ = (id: string): DishQty => quantities[id] ?? { count: 0, addonCounts: {} };
+  const getQ = (id: string): DishQuantity => quantities[id] ?? { count: 0, addonCounts: {} };
 
   const increment = (dish: Dish) => {
     const available = dish.totalTickets - dish.soldTickets;
@@ -44,28 +44,8 @@ export function useCashier() {
     }));
   };
 
-  const buildTickets = (): TicketItem[] => {
-    const tickets: TicketItem[] = [];
-    if (!session) return tickets;
-    session.dishes.forEach((dish: Dish) => {
-      const q = getQ(dish.id);
-      for (let i = 0; i < q.count; i++) {
-        const addons = dish.availableAddons.filter((a) => (q.addonCounts[a.id] ?? 0) > i);
-        const addonTotal = addons.reduce((s, a) => s + (a.price ?? 0), 0);
-        tickets.push({
-          dishId: dish.id,
-          dishName: dish.name,
-          dishBasePrice: dish.price,
-          addons,
-          totalPrice: dish.price + addonTotal,
-        });
-      }
-    });
-    return tickets;
-  };
-
-  const tickets = buildTickets();
-  const total = tickets.reduce((s, t) => s + t.totalPrice, 0);
+  const tickets = session ? buildTickets(session.dishes, quantities) : [];
+  const total = computeTotal(tickets);
 
   const handleConfirm = async (data: CashierFormValues) => {
     if (tickets.length === 0) return;
