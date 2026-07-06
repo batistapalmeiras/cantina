@@ -15,7 +15,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json } | 
 export interface TicketItemAddon {
   id: string;
   name: string;
-  price?: number;
+  price: number;
 }
 
 export interface Database {
@@ -73,7 +73,15 @@ export interface Database {
           total_tickets?: number;
           sold_tickets?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'dishes_session_id_fkey';
+            columns: ['session_id'];
+            isOneToOne: false;
+            referencedRelation: 'sessions';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       addons: {
         Row: {
@@ -94,7 +102,15 @@ export interface Database {
           name?: string;
           price?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'addons_dish_id_fkey';
+            columns: ['dish_id'];
+            isOneToOne: false;
+            referencedRelation: 'dishes';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       orders: {
         Row: {
@@ -136,7 +152,15 @@ export interface Database {
           stay_for_meal?: boolean;
           confirmed_at?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'orders_session_id_fkey';
+            columns: ['session_id'];
+            isOneToOne: false;
+            referencedRelation: 'sessions';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       ticket_items: {
         Row: {
@@ -166,7 +190,15 @@ export interface Database {
           total_price?: number;
           addons?: TicketItemAddon[];
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'ticket_items_order_id_fkey';
+            columns: ['order_id'];
+            isOneToOne: false;
+            referencedRelation: 'orders';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       clients: {
         Row: {

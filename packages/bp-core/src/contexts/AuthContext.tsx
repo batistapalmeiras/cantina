@@ -2,9 +2,10 @@
 import { createContext, ReactNode } from 'react';
 // Components
 import { useAuth } from '../hooks/useAuth';
+import { User } from '../types';
 
 export interface AuthContextValue {
-  user: any;
+  user: User | null;
   userEmail: string;
   loading: boolean;
   login: (email: string, password: string) => Promise<string | null>;

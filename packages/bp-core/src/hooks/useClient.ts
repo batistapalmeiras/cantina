@@ -1,12 +1,19 @@
 // React
 import { useEffect,useState } from 'react';
 // Components
+import type { Database } from '../lib/database.types';
 import { supabase } from '../lib/supabase';
 
 export interface Client {
   id: string;
   name: string;
   phone: string;
+}
+
+type ClientRow = Database['public']['Tables']['clients']['Row'];
+
+function mapClient(raw: ClientRow): Client {
+  return { id: raw.id, name: raw.name, phone: raw.phone };
 }
 
 const CLIENT_STORAGE_KEY = 'cantina_client_session';
@@ -61,7 +68,7 @@ export function useClient() {
       .eq('phone', phone)
       .single();
 
-    return data ?? null;
+    return data ? mapClient(data) : null;
   };
 
   const loginWithClient = (clientData: Client) => {
@@ -96,7 +103,7 @@ export function useClient() {
         .single();
 
       if (error) throw error;
-      clientData = newClient;
+      clientData = mapClient(newClient);
     }
 
     localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(clientData));
