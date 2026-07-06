@@ -1,18 +1,12 @@
 // Libs
-import styled from 'styled-components';
-// Components
-import { Button } from 'bp-ui';
-import { ModalActions,ModalTitle } from 'bp-ui';
-import { Typography } from 'bp-ui';
+import { Button, ModalActions, ModalTitle, Typography } from 'bp-ui';
+// Local
+import { Message } from './CancelConfirmDialog.styles';
 
 interface Props {
   close: () => void;
   onConfirm: () => void;
 }
-
-const Message = styled.div`
-  margin-bottom: 4px;
-`;
 
 export function CancelConfirmDialog({ close, onConfirm }: Props) {
   const handleConfirm = () => {

@@ -1,9 +1,9 @@
 // Libs
-import { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL, useClient } from 'bp-core';
-import { useSessionCtx } from 'bp-core';
+import { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL, useClient, useSessionCtx } from 'bp-core';
 import { formatCurrency, PageHeader, Skeleton } from 'bp-ui';
 // Local
-import { useClientHistory } from './hooks/useClientHistory';
+import { useClientHistory } from './hooks';
+import { uniqueDishesText } from './domain';
 import {
   HistoryEmpty,
   HistoryItem,
@@ -52,7 +52,7 @@ export function HistoryPage() {
                     {new Date(o.sessionDate).toLocaleDateString('pt-BR')}
                   </HistoryItemSession>
                   <HistoryItemMeta>
-                    {o.dishes.filter((d, i, arr) => arr.indexOf(d) === i).join(', ')}
+                    {uniqueDishesText(o.dishes)}
                     {' · '}{formatCurrency(o.total)} · {PAYMENT_METHOD_LABEL[o.paymentMethod]}
                   </HistoryItemMeta>
                 </div>

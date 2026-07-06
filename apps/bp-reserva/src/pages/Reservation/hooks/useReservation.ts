@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { Dish, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+import { DishQuantity } from 'bp-ui';
 // Components
 import { AppRoute } from '../../../routes/paths';
 
@@ -13,19 +14,17 @@ interface ReservationFormValues {
 
 const CHURCH_PIX_KEY = '16886715000123';
 
-type DishQty = { count: number; addonCounts: Record<string, number> };
-
 export function useReservation() {
   const { session, addOrder, cancelOrder } = useSessionCtx();
   const navigate = useNavigate();
 
-  const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
+  const [quantities, setQuantities] = useState<Record<string, DishQuantity>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Pix);
   const [stayForMeal, setStayForMeal] = useState(false);
   const [orderError, setOrderError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const getQ = (id: string): DishQty => quantities[id] ?? { count: 0, addonCounts: {} };
+  const getQ = (id: string): DishQuantity => quantities[id] ?? { count: 0, addonCounts: {} };
 
   const increment = (dish: Dish) => {
     const available = dish.totalTickets - dish.soldTickets;

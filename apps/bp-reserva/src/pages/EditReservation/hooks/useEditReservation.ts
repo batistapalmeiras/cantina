@@ -3,18 +3,17 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { Addon, Dish, Order, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+import { DishQuantity } from 'bp-ui';
 // Components
 import { AppRoute } from '../../../routes/paths';
 
 const CHURCH_PIX_KEY = '16886715000123';
 
-type DishQty = { count: number; addonCounts: Record<string, number> };
-
 export function useEditReservation(orderId: string) {
   const { session, updateOrder } = useSessionCtx();
   const navigate = useNavigate();
 
-  const [quantities, setQuantities] = useState<Record<string, DishQty>>({});
+  const [quantities, setQuantities] = useState<Record<string, DishQuantity>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Pix);
   const [stayForMeal, setStayForMeal] = useState(false);
   const [initialized, setInitialized] = useState(false);
@@ -29,7 +28,7 @@ export function useEditReservation(orderId: string) {
 
   useEffect(() => {
     if (initialized || !currentOrder || !session) return;
-    const next: Record<string, DishQty> = {};
+    const next: Record<string, DishQuantity> = {};
     currentOrder.tickets.forEach((t: TicketItem) => {
       const cur = next[t.dishId] ?? { count: 0, addonCounts: {} };
       const addonCounts = { ...cur.addonCounts };
@@ -44,7 +43,7 @@ export function useEditReservation(orderId: string) {
     setInitialized(true);
   }, [currentOrder, session, initialized]);
 
-  const getQ = (id: string): DishQty => quantities[id] ?? { count: 0, addonCounts: {} };
+  const getQ = (id: string): DishQuantity => quantities[id] ?? { count: 0, addonCounts: {} };
 
   const increment = (dish: Dish) => {
     const q = getQ(dish.id);

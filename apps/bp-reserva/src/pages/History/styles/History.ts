@@ -46,10 +46,10 @@ export const StatusBadge = styled.span<{ $status: OrderStatus }>`
   font-size: ${({ theme }) => theme.typography.badge.fontSize};
   font-weight: 600;
 
-  ${({ $status }) =>
+  ${({ $status, theme }) =>
     $status === OrderStatus.Sale
-      ? `background: #f0faf5; color: #1a7a4a; border: 1px solid #b6e8cf;`
-      : `background: #fffbeb; color: #b45309; border: 1px solid #fde68a;`}
+      ? `background: ${theme.colors.successSurface}; color: ${theme.colors.success}; border: 1px solid ${theme.colors.successBorder};`
+      : `background: ${theme.colors.warningSurface}; color: ${theme.colors.warning}; border: 1px solid ${theme.colors.warningBorder};`}
 `;
 
 export const HistoryEmpty = styled.p`
