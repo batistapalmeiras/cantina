@@ -360,10 +360,8 @@ export function useSession(): SessionContextValue {
       for (const dish of session.dishes) {
         const count = order.tickets.filter((t) => t.dishId === dish.id).length;
         if (count > 0) {
-          await supabase
-            .from('dishes')
-            .update({ sold_tickets: Math.max(0, dish.soldTickets - count) })
-            .eq('id', dish.id);
+          const { error } = await supabase.rpc('adjust_tickets', { p_dish_id: dish.id, p_delta: -count });
+          if (error) throw error;
         }
       }
     }
@@ -431,9 +429,8 @@ export function useSession(): SessionContextValue {
           const newCount = data.tickets.filter((t) => t.dishId === dish.id).length;
           const diff = newCount - oldCount;
           if (diff !== 0) {
-            await supabase.from('dishes')
-              .update({ sold_tickets: Math.max(0, dish.soldTickets + diff) })
-              .eq('id', dish.id);
+            const { error } = await supabase.rpc('adjust_tickets', { p_dish_id: dish.id, p_delta: diff });
+            if (error) throw error;
           }
         }
       }
