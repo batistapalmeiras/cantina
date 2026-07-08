@@ -19,7 +19,7 @@ export const Table = styled.table`
   thead tr { border-bottom: 1px solid ${({ theme }) => theme.colors.hairline}; }
 
   th {
-    padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.base}`};
+    padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.lg}`};
     text-align: left;
     font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
     font-weight: 600;
@@ -37,7 +37,7 @@ export const Table = styled.table`
   }
 
   td {
-    padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.base}`};
+    padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.lg}`};
     color: ${({ theme }) => theme.colors.ink};
     vertical-align: middle;
   }
@@ -133,7 +133,7 @@ export const SheetActions = styled.div`
   }
 `;
 
-export const Empty = styled.div`
+export const ListEmpty = styled.div`
   padding: ${({ theme }) => theme.spacing.xxl} ${({ theme }) => theme.spacing.base};
   text-align: center;
 `;

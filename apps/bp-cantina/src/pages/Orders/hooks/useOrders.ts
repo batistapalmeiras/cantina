@@ -5,10 +5,9 @@ import { selectConfirmedOrders, selectPendingOrders } from '../domain';
 import { useOrdersList } from '../../../hooks/useOrdersList';
 
 export function useOrders() {
-  const { session, pendingSession, confirmReservation, cancelOrder, updateOrder } = useSessionCtx();
+  const { session, confirmReservation, cancelOrder, updateOrder } = useSessionCtx();
 
-  const activeSession = session ?? pendingSession;
-  const allOrders = activeSession?.orders ?? [];
+  const allOrders = session?.orders ?? [];
 
   const confirmed = selectConfirmedOrders(allOrders);
   const pending = selectPendingOrders(allOrders);
@@ -16,7 +15,7 @@ export function useOrders() {
   const list = useOrdersList(allOrders, { nameFilter: true });
 
   return {
-    session: activeSession,
+    session,
     confirmed,
     pending,
     ...list,

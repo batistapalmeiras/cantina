@@ -1,6 +1,6 @@
 // Libs
 import { Order, PaymentMethod } from 'bp-core';
-import { Button, Card, formatCurrency } from 'bp-ui';
+import { Button, Card, Empty, formatCurrency } from 'bp-ui';
 import styled from 'styled-components';
 
 interface Props {
@@ -62,35 +62,13 @@ const Actions = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const Empty = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${({ theme }) => theme.spacing.xxl} ${({ theme }) => theme.spacing.base};
-  text-align: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-const EmptyTitle = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.titleMd.fontSize};
-  font-weight: ${({ theme }) => theme.typography.titleMd.fontWeight};
-  color: ${({ theme }) => theme.colors.ink};
-`;
-
-const EmptySub = styled.p`
-  font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-`;
-
 export function ReservationList({ reservations, onConfirm, onCancel }: Props) {
   if (reservations.length === 0) {
     return (
-      <Empty>
-        <EmptyTitle>Sem reservas pendentes</EmptyTitle>
-        <EmptySub>Nenhuma reserva aguardando confirmação.</EmptySub>
-      </Empty>
+      <Empty
+        title="Sem reservas pendentes"
+        description="Nenhuma reserva aguardando confirmação."
+      />
     );
   }
 

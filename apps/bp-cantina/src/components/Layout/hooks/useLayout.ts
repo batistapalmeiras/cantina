@@ -7,7 +7,7 @@ import { AppRoute } from '../../../routes/paths';
 
 export function useLayout() {
   const { user, logout } = useAuthCtx();
-  const { session, pendingSession } = useSessionCtx();
+  const { session } = useSessionCtx();
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -16,7 +16,6 @@ export function useLayout() {
   const isAdmin = user?.role === UserRole.Admin;
   const isKitchen = user?.role === UserRole.Kitchen;
   const hasOpenSession = session?.isOpen === true;
-  const hasActiveSession = hasOpenSession || !!pendingSession;
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -47,12 +46,11 @@ export function useLayout() {
     ref,
     isAdmin,
     hasOpenSession,
-    hasActiveSession,
     handleLogout,
     isActive,
     showSetup: isTabRoute && isAdmin,
     showCashier: isTabRoute && hasOpenSession && !isKitchen,
-    showOrders: isTabRoute && hasActiveSession && !isKitchen,
-    showKitchen: isTabRoute && hasActiveSession,
+    showOrders: isTabRoute && hasOpenSession && !isKitchen,
+    showKitchen: isTabRoute && hasOpenSession,
   };
 }

@@ -13,7 +13,7 @@ import {
   CardMain,
   CardMeta,
   CardName,
-  Empty,
+  ListEmpty,
   OrderCard,
   Phone,
   SheetActions,
@@ -49,11 +49,11 @@ export function OrdersList({
 
   if (orders.length === 0) {
     return (
-      <Empty>
+      <ListEmpty>
         <Typography type="p">
           {hasFilter ? 'Nenhum pedido encontrado para os filtros aplicados.' : 'Nenhum pedido registrado ainda.'}
         </Typography>
-      </Empty>
+      </ListEmpty>
     );
   }
 

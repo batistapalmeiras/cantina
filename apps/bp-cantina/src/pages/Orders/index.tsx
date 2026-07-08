@@ -1,13 +1,12 @@
 // Libs
 import { Check, Pencil, Search, X } from 'lucide-react';
-import { Button, OrdersList, PageHeader, Typography, useModal } from 'bp-ui';
+import { Button, Empty, OrdersList, PageHeader, useModal } from 'bp-ui';
 import { Order, OrderStatus } from 'bp-core';
 import { OrderEditForm } from '../Report/components';
 // Local
 import { computeRemainingTickets } from './domain';
 import { useOrders } from './hooks';
 import {
-  Empty,
   OrderActions,
   SearchInput,
   SearchWrap,
@@ -28,10 +27,10 @@ export function OrdersPage() {
 
   if (!session) {
     return (
-      <Empty>
-        <Typography type="h3">Nenhuma sessão aberta</Typography>
-        <Typography type="p">Aguarde o administrador abrir uma sessão.</Typography>
-      </Empty>
+      <Empty
+        title="Nenhuma sessão aberta"
+        description="Aguarde o administrador abrir uma sessão."
+      />
     );
   }
 

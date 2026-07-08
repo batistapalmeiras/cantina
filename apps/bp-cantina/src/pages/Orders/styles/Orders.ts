@@ -66,11 +66,6 @@ export const SearchInput = styled.input`
   &:focus { border-color: ${({ theme }) => theme.colors.primary}; }
 `;
 
-export const Empty = styled.div`
-  padding: ${({ theme }) => theme.spacing.xxl} ${({ theme }) => theme.spacing.base};
-  text-align: center;
-`;
-
 export const OrderActions = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xs};

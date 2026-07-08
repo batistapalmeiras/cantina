@@ -27,43 +27,32 @@ export async function fetchProfile(userId: string): Promise<User | null> {
   }
 }
 
+interface SessionUser {
+  id: string;
+  email: string;
+}
+
 export function useAuth(): AuthContextValue {
   const [user, setUser] = useState<User | null>(null);
   const [userEmail, setUserEmail] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // undefined = sessão ainda não resolvida; null = sem sessão
+  const [sessionUser, setSessionUser] = useState<SessionUser | null | undefined>(undefined);
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data }) => {
-      if (data.session?.user) {
-        const profile = await fetchProfile(data.session.user.id);
-        if (profile) {
-          setUser(profile);
-          setUserEmail(data.session.user.email ?? '');
-        } else {
-          setUser(null);
-          setUserEmail('');
-        }
-      }
-      setLoading(false);
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        const profile = await fetchProfile(session.user.id);
-        if (profile) {
-          setUser(profile);
-          setUserEmail(session.user.email ?? '');
-          setError(null);
-        } else {
-          setUser(null);
-          setUserEmail('');
-          setError('Perfil do usuário não encontrado.');
-        }
-      } else {
-        setUser(null);
-        setUserEmail('');
-      }
+    // O callback de onAuthStateChange roda segurando o lock interno de auth do
+    // supabase-js: qualquer `await` em outra chamada da lib aqui dentro (ex.
+    // fetchProfile → getSession) causa deadlock. Só registra a sessão em estado;
+    // o perfil é buscado no efeito abaixo, fora do lock.
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSessionUser((prev) => {
+        const next = session?.user
+          ? { id: session.user.id, email: session.user.email ?? '' }
+          : null;
+        if (prev && next && prev.id === next.id && prev.email === next.email) return prev;
+        return next;
+      });
     });
 
     const refreshInterval = setInterval(async () => {
@@ -94,6 +83,36 @@ export function useAuth(): AuthContextValue {
       listener?.subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    if (sessionUser === undefined) return;
+
+    if (!sessionUser) {
+      setUser(null);
+      setUserEmail('');
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    fetchProfile(sessionUser.id).then((profile) => {
+      if (cancelled) return;
+      if (profile) {
+        setUser(profile);
+        setUserEmail(sessionUser.email);
+        setError(null);
+      } else {
+        setUser(null);
+        setUserEmail('');
+        setError('Perfil do usuário não encontrado.');
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionUser]);
 
   const login = useCallback(async (email: string, password: string): Promise<string | null> => {
     setError(null);

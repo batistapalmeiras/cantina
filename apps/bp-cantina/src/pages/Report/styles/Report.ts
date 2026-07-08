@@ -77,12 +77,3 @@ export const IconBtn = styled.button<{ $variant?: 'success' | 'danger' }>`
   }
 `;
 
-export const Empty = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 40vh;
-  text-align: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;

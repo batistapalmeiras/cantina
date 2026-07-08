@@ -73,13 +73,3 @@ export const BottomSummaryTotal = styled.span`
   font-weight: 700;
   color: ${({ theme }) => theme.colors.ink};
 `;
-
-export const EmptyState = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 40vh;
-  text-align: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;

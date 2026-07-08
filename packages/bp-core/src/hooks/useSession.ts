@@ -319,8 +319,28 @@ export function useSession(): SessionContextValue {
     }
   }, [pendingSession]);
 
+  // Sessão encerrada é imutável. As mutações só alcançam pedidos da sessão
+  // aberta (qualquer pedido) ou da sessão pendente (apenas reservas em aberto,
+  // a única alteração permitida após o encerramento).
+  const findMutableOrder = useCallback((orderId: string) => {
+    if (session) {
+      const inOpen = session.orders.find((o) => o.id === orderId);
+      if (inOpen) return { order: inOpen, owner: session };
+    }
+
+    if (pendingSession) {
+      const inPending = pendingSession.orders.find((o) => o.id === orderId);
+      if (inPending && inPending.status === OrderStatus.Reservation) {
+        return { order: inPending, owner: pendingSession };
+      }
+    }
+
+    return null;
+  }, [session, pendingSession]);
+
   const confirmReservation = useCallback(async (orderId: string) => {
-    if (!session) return;
+    const found = findMutableOrder(orderId);
+    if (!found || found.order.status !== OrderStatus.Reservation) return;
 
     await supabase
       .from('orders')
@@ -329,19 +349,18 @@ export function useSession(): SessionContextValue {
 
     await autoFinalizePending(orderId);
     await reload();
-  }, [session, reload, autoFinalizePending]);
+  }, [findMutableOrder, reload, autoFinalizePending]);
 
   const cancelOrder = useCallback(async (orderId: string) => {
-    if (!session) return;
+    const found = findMutableOrder(orderId);
+    if (!found) return;
 
-    const order = session.orders.find((o) => o.id === orderId);
-    if (order) {
-      for (const dish of session.dishes) {
-        const count = order.tickets.filter((t) => t.dishId === dish.id).length;
-        if (count > 0) {
-          const { error } = await supabase.rpc('adjust_tickets', { p_dish_id: dish.id, p_delta: -count });
-          if (error) throw error;
-        }
+    const { order, owner } = found;
+    for (const dish of owner.dishes) {
+      const count = order.tickets.filter((t) => t.dishId === dish.id).length;
+      if (count > 0) {
+        const { error } = await supabase.rpc('adjust_tickets', { p_dish_id: dish.id, p_delta: -count });
+        if (error) throw error;
       }
     }
 
@@ -350,7 +369,7 @@ export function useSession(): SessionContextValue {
 
     await autoFinalizePending(orderId);
     await reload();
-  }, [session, reload, autoFinalizePending]);
+  }, [findMutableOrder, reload, autoFinalizePending]);
 
   const updateSession = useCallback(async (data: { ministry?: string; dishes?: Dish[] }) => {
     if (!session) return;
@@ -388,7 +407,8 @@ export function useSession(): SessionContextValue {
   }, [session, reload]);
 
   const updateOrder = useCallback(async (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total' | 'stayForMeal'>>) => {
-    if (!session) return;
+    // Editar dados do pedido só é permitido na sessão aberta.
+    if (!session || !session.orders.some((o) => o.id === orderId)) return;
 
     const updates: Database['public']['Tables']['orders']['Update'] = {};
     if (data.customerName !== undefined) updates.customer_name = data.customerName;
@@ -432,9 +452,12 @@ export function useSession(): SessionContextValue {
   }, [session, reload]);
 
   const toggleDelivered = useCallback(async (orderId: string, delivered: boolean) => {
+    // Marcar/desmarcar entrega só é permitido na sessão aberta.
+    if (!session?.orders.some((o) => o.id === orderId)) return;
+
     await supabase.from('orders').update({ delivered }).eq('id', orderId);
     await reload();
-  }, [reload]);
+  }, [session, reload]);
 
   return useMemo(
     () => ({ session, pendingSession, loading, error, openSession, closeSession, addOrder, confirmReservation, cancelOrder, updateSession, updateOrder, toggleDelivered }),

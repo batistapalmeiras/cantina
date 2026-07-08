@@ -5,10 +5,10 @@ import { useParams } from 'react-router-dom';
 import { useAuthCtx, fetchSessionById, useSessionCtx, Session, UserRole } from 'bp-core';
 // Components
 import { useOrdersList } from '../../../hooks/useOrdersList';
-import { computeStats } from '../domain';
+import { computeStats, downloadReportXlsx } from '../domain';
 
 export function useReport() {
-  const { session: activeSession, pendingSession } = useSessionCtx();
+  const { session: activeSession, pendingSession, confirmReservation, cancelOrder } = useSessionCtx();
   const { user } = useAuthCtx();
   const { id } = useParams<{ id: string }>();
 
@@ -29,12 +29,17 @@ export function useReport() {
 
   const list = useOrdersList(session?.orders ?? []);
 
-  const canEditSession = !sessionId && !!session && session.isOpen === true && isAdmin;
+  const canResolveReservations = !sessionId && !!session && isAdmin;
+
+  const downloadReport = () => {
+    if (!session) return;
+    void downloadReportXlsx(session);
+  };
 
   if (!session) {
-    return { session: null, stats: null, loading, canEditSession: false, isAdmin, ...list };
+    return { session: null, stats: null, loading, canResolveReservations: false, isAdmin, confirmReservation, cancelOrder, downloadReport, ...list };
   }
 
   const { stats } = computeStats(session);
-  return { session, stats, loading, canEditSession, isAdmin, ...list };
+  return { session, stats, loading, canResolveReservations, isAdmin, confirmReservation, cancelOrder, downloadReport, ...list };
 }

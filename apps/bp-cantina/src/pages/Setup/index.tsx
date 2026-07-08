@@ -9,7 +9,7 @@ import { AppRoute } from '../../routes/paths';
 import { CloseSessionDialog } from './components';
 import { useSetup } from './hooks';
 import {
-ActionsRow, HistoryBadge,
+HistoryBadge,
 HistoryItem, HistoryItemMeta, HistoryItemSub, HistoryItemTitle,   HistoryList, PendingAlert, PendingAlertBody,
   Section,
   SessionActions, SessionBanner, SessionInfo, } from './styles';
@@ -47,6 +47,15 @@ export function SetupPage() {
       <PageHeader
         title="Configurar"
         subtitle="Gerencie as sessões da cantina"
+        action={!session && (
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => navigate(AppRoute.NewSession)}
+          >
+            Abrir sessão
+          </Button>
+        )}
       />
 
       {session ? (
@@ -90,22 +99,15 @@ export function SetupPage() {
                   {pendingSessionsCount} sessão{pendingSessionsCount !== 1 ? 'ões' : ''} com pendências
                 </strong>
                 <p>
-                  Confirme ou cancele as reservas na tela de Relatório ou Pedidos.
+                  Confirme ou cancele as reservas na tela de Relatório.
                   Quando todas forem resolvidas, a sessão será encerrada automaticamente.
                 </p>
               </PendingAlertBody>
+              <Button variant="secondary" size="sm" onClick={() => navigate(AppRoute.Report)}>
+                Ver relatório
+              </Button>
             </PendingAlert>
           )}
-
-          <ActionsRow style={{ marginBottom: 32 }}>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={() => navigate(AppRoute.NewSession)}
-            >
-              Abrir sessão
-            </Button>
-          </ActionsRow>
         </>
       )}
 
