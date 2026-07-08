@@ -18,7 +18,7 @@ export function useReservation() {
 
   const [quantities, setQuantities] = useState<Record<string, DishQuantity>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Pix);
-  const [stayForMeal, setStayForMeal] = useState(false);
+  const [stayForMeal, setStayForMeal] = useState(true);
   const [orderError, setOrderError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 

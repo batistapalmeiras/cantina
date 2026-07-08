@@ -27,6 +27,7 @@ export function useLogin() {
       setError(err);
       setSubmitting(false);
     }
+    // if successful, the onAuthStateChange listener will update user and navigate away
   };
 
   return { error, submitting, handleLogin };

@@ -20,7 +20,7 @@ export function useSessionForm(mode: SessionMode) {
     resolver: zodResolver(sessionFormSchema),
     defaultValues: isEdit && session
       ? { ministry: session.ministry, dishes: session.dishes }
-      : { ministry: 'Jovens', dishes: createDefaultDishes() },
+      : { ministry: '', dishes: createDefaultDishes() },
   });
 
   const submit = form.handleSubmit(async (data) => {

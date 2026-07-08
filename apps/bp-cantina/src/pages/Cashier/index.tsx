@@ -6,13 +6,13 @@ import { useForm } from 'react-hook-form';
 import { PaymentMethod } from 'bp-core';
 import {
   Button,
+  Empty,
   formatCurrency,
   PageHeader,
   SummaryCard,
   Tab,
   TabBadge,
   TabBar,
-  Typography,
   useToast,
 } from 'bp-ui';
 // Local
@@ -27,7 +27,6 @@ import {
   BottomSummaryItems,
   BottomSummaryRow,
   BottomSummaryTotal,
-  EmptyState,
   Grid,
   StickyAside,
 } from './styles';
@@ -65,8 +64,8 @@ export function CashierPage() {
       customerName: '',
       customerPhone: '',
       clientId: '',
-      paymentMethod: PaymentMethod.Cash,
-      stayForMeal: false,
+      paymentMethod: PaymentMethod.Pix,
+      stayForMeal: true,
     },
   });
 
@@ -77,10 +76,10 @@ export function CashierPage() {
 
   if (!session || !session.isOpen) {
     return (
-      <EmptyState>
-        <Typography type="h3">Nenhuma sessão ativa</Typography>
-        <Typography type="p">Peça ao administrador para abrir a sessão pelo Configurar.</Typography>
-      </EmptyState>
+      <Empty
+        title="Nenhuma sessão ativa"
+        description="Peça ao administrador para abrir a sessão pelo Configurar."
+      />
     );
   }
 

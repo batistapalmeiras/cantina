@@ -11,8 +11,9 @@ interface Props {
 }
 
 export function ProtectedRoute({ children, roles }: Props) {
-  const { user } = useAuthCtx();
+  const { user, loading } = useAuthCtx();
 
+  if (loading) return null;
   if (!user) return <Navigate to={AppRoute.Login} replace />;
   if (roles && !roles.includes(user.role)) return <Navigate to={AppRoute.Cashier} replace />;
 

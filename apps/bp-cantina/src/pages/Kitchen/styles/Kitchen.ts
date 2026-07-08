@@ -56,16 +56,6 @@ export const ItemAddons = styled.span`
   color: ${({ theme }) => theme.colors.muted};
 `;
 
-export const Empty = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 40vh;
-  text-align: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
 export const EmptyHint = styled.p`
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
@@ -73,3 +63,4 @@ export const EmptyHint = styled.p`
   text-align: center;
   padding: ${({ theme }) => theme.spacing.lg} 0;
 `;
+

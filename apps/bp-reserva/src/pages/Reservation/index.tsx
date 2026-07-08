@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
-import { Button, Card, DishSelector, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-ui';
+import { Button, Card, DishSelector, Empty, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-ui';
 // Components
 import { AppRoute } from '../../routes/paths';
 // Local
@@ -13,7 +13,6 @@ import { summarizeTickets, summarizeTicketsText } from './domain';
 import {
   CardLabel,
   CancelLink,
-  Empty,
   SummaryHeader,
   TotalLabel,
   TotalLine,
@@ -49,10 +48,10 @@ export function ReservationPage() {
 
   if (!session || !session.isOpen) {
     return (
-      <Empty>
-        <Typography type="h3">Reservas indisponíveis</Typography>
-        <Typography type="p">Nenhuma sessão está aberta no momento.</Typography>
-      </Empty>
+      <Empty
+        title="Reservas indisponíveis"
+        description="Nenhuma sessão está aberta no momento."
+      />
     );
   }
 

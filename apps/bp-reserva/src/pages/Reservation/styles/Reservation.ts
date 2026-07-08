@@ -54,14 +54,3 @@ export const CancelLink = styled.button`
   text-align: center;
   &:hover { text-decoration: underline; }
 `;
-
-export const Empty = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  text-align: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  padding: ${({ theme }) => theme.spacing.base};
-`;

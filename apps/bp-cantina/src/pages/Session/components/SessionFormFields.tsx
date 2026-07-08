@@ -28,6 +28,7 @@ export function SessionFormFields({ control }: SessionFormFieldsProps) {
   return (
     <FormContainer>
       <Select label="Ministério" control={control} name="ministry">
+        <option value="" disabled>Selecione o Ministério</option>
         {MINISTRIES.map((m) => <option key={m}>{m}</option>)}
       </Select>
 

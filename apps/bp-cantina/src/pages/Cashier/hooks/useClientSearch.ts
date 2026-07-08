@@ -23,7 +23,8 @@ export function useClientSearch(phone: string) {
 
   useEffect(() => {
     const digits = phone.replace(/\D/g, '');
-    if (digits.length < 10) {
+    // Só busca com o telefone 100% preenchido: (31) 99669-6719 = 11 dígitos.
+    if (digits.length !== 11) {
       setState({ type: 'idle' });
       return;
     }

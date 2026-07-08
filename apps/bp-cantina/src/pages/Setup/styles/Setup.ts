@@ -5,15 +5,6 @@ export const Section = styled.section`
   margin-top: ${({ theme }) => theme.spacing.lg};
 `;
 
-export const ActionsRow = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: ${({ theme }) => theme.spacing.sm};
-  margin-top: ${({ theme }) => theme.spacing.xl};
-  padding-top: ${({ theme }) => theme.spacing.lg};
-  border-top: 1px solid ${({ theme }) => theme.colors.hairlineSoft};
-`;
-
 export const BackBtn = styled.button`
   display: inline-flex;
   align-items: center;

@@ -5,16 +5,15 @@ import { useSessionCtx } from 'bp-core';
 import { selectKitchenOrders, splitByDelivery } from '../domain';
 
 export function useKitchen() {
-  const { session, pendingSession, toggleDelivered } = useSessionCtx();
-  const activeSession = session ?? pendingSession;
+  const { session, toggleDelivered } = useSessionCtx();
 
   const { pending, delivered } = useMemo(() => {
-    const confirmedOrders = selectKitchenOrders(activeSession?.orders ?? []);
+    const confirmedOrders = selectKitchenOrders(session?.orders ?? []);
     return splitByDelivery(confirmedOrders);
-  }, [activeSession]);
+  }, [session]);
 
   return {
-    session: activeSession,
+    session,
     pending,
     delivered,
     toggleDelivered,

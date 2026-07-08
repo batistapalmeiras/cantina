@@ -45,7 +45,7 @@ export function ProfilePage() {
         <EditInput
           value={phone}
           onChange={(e) => setPhone(maskPhone(e.target.value))}
-          placeholder="(31) 99999-0000"
+          placeholder="(00) 90000-0000"
           inputMode="numeric"
         />
       </EditFieldWrap>

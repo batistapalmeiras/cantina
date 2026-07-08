@@ -1,34 +1,43 @@
-// React
-import { useNavigate } from 'react-router-dom';
 // Libs
-import { OrderStatus, PaymentMethod } from 'bp-core';
+import { Check, Download, X } from 'lucide-react';
+import { Order, OrderStatus, PaymentMethod } from 'bp-core';
 import {
   Button,
   Chip,
   ChipBar,
+  Empty,
   formatCurrency,
   OrdersList,
   PageHeader,
   Skeleton,
-  Typography,
 } from 'bp-ui';
-// Components
-import { AppRoute } from '../../routes/paths';
 // Local
 import { useReport } from './hooks';
 import {
-  Empty,
   Section, SectionLabel,
   StatCard, StatsGrid, StatValue,
 } from './styles';
 
 export function ReportPage() {
   const {
-    session, orders, stats, loading, canEditSession,
+    session, orders, stats, loading, canResolveReservations,
     page, totalPages, filterStatus, filterPayment, hasFilter,
     setPage, handleFilterStatus, handleFilterPayment,
+    confirmReservation, cancelOrder, downloadReport,
   } = useReport();
-  const navigate = useNavigate();
+
+  const renderActions = canResolveReservations
+    ? (order: Order) => order.status === OrderStatus.Reservation ? (
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Button variant="primary" size="sm" onClick={() => confirmReservation(order.id)}>
+            <Check size={16} />
+          </Button>
+          <Button variant="danger" size="sm" onClick={() => cancelOrder(order.id)}>
+            <X size={16} />
+          </Button>
+        </div>
+      ) : null
+    : undefined;
 
   if (loading) {
     return (
@@ -53,10 +62,10 @@ export function ReportPage() {
 
   if (!session) {
     return (
-      <Empty>
-        <Typography type="h3">Nenhuma sessão disponível</Typography>
-        <Typography type="p">Aguarde o administrador abrir uma sessão</Typography>
-      </Empty>
+      <Empty
+        title="Nenhuma sessão disponível"
+        description="Aguarde o administrador abrir uma sessão"
+      />
     );
   }
 
@@ -66,13 +75,10 @@ export function ReportPage() {
         title="Relatório"
         subtitle={`${session.ministry} · ${new Date(session.date).toLocaleDateString('pt-BR')}`}
         back
-        action={canEditSession && (
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => navigate(AppRoute.EditSession)}
-          >
-            Editar sessão
+        action={(
+          <Button variant="secondary" size="sm" onClick={downloadReport}>
+            <Download size={16} />
+            Baixar Relatório
           </Button>
         )}
       />
@@ -112,6 +118,7 @@ export function ReportPage() {
           totalPages={totalPages}
           hasFilter={hasFilter}
           onPageChange={setPage}
+          renderActions={renderActions}
         />
       </Section>
     </>

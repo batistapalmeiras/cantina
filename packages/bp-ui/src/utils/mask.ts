@@ -31,7 +31,10 @@ export function maskPhone(value: string): string {
 
   if (onlyNumbers.length === 0) return '';
   if (onlyNumbers.length <= 2) return `(${onlyNumbers}`;
-  if (onlyNumbers.length <= 6) return `(${onlyNumbers.slice(0, 2)}) ${onlyNumbers.slice(2)}`;
+  // O traço só entra a partir do 8º dígito: com exatamente 7, um traço
+  // pendurado no fim seria recriado pela própria máscara a cada backspace,
+  // impedindo o usuário de apagá-lo.
+  if (onlyNumbers.length <= 7) return `(${onlyNumbers.slice(0, 2)}) ${onlyNumbers.slice(2)}`;
   if (onlyNumbers.length <= 10) return `(${onlyNumbers.slice(0, 2)}) ${onlyNumbers.slice(2, 7)}-${onlyNumbers.slice(7)}`;
   return `(${onlyNumbers.slice(0, 2)}) ${onlyNumbers.slice(2, 7)}-${onlyNumbers.slice(7, 11)}`;
 }

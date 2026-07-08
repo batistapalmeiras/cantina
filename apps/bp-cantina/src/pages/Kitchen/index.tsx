@@ -1,7 +1,7 @@
 // React
 import { useState } from 'react';
 // Libs
-import { IconButton, PageHeader, Tab, TabBadge, TabBar, Typography } from 'bp-ui';
+import { Empty, IconButton, PageHeader, Tab, TabBadge, TabBar } from 'bp-ui';
 import { Check, Undo2 } from 'lucide-react';
 // Local
 import { groupTicketsByDish } from './domain';
@@ -10,7 +10,6 @@ import {
   Card,
   CardTop,
   CustomerName,
-  Empty,
   EmptyHint,
   Grid,
   ItemAddons,
@@ -26,10 +25,10 @@ export function KitchenPage() {
 
   if (!session) {
     return (
-      <Empty>
-        <Typography type="h3">Nenhuma sessão disponível</Typography>
-        <Typography type="p">Aguarde o administrador abrir uma sessão</Typography>
-      </Empty>
+      <Empty
+        title="Nenhuma sessão disponível"
+        description="Aguarde o administrador abrir uma sessão"
+      />
     );
   }
 

@@ -10,7 +10,7 @@ const addonSchema = z.object({
 const dishSchema = z.object({
   id: z.string(),
   name: z.string().min(1, 'Nome obrigatório'),
-  price: z.number().min(0, 'Preço inválido'),
+  price: z.number().gt(0, 'Preço deve ser maior que zero'),
   totalTickets: z.number().int().min(1, 'Mínimo 1'),
   soldTickets: z.number().int(),
   availableAddons: z.array(addonSchema),

@@ -41,7 +41,7 @@ export function IdentifyPage() {
               name="phone"
               mask="phone"
               label="Telefone (WhatsApp)"
-              placeholder="(31) 99999-0000"
+              placeholder="(00) 90000-0000"
               inputMode="numeric"
               autoFocus
             />
