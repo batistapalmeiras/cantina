@@ -87,7 +87,7 @@ export function KitchenPage() {
                   variant="primary"
                   icon={<Check />}
                   iconPosition="left"
-                  style={{ alignSelf: 'flex-end' }}
+                  style={{ alignSelf: 'flex-end', marginTop: 'auto' }}
                   onClick={() => toggleDelivered(order.id, true)}
                 >
                   Pronto
@@ -98,7 +98,7 @@ export function KitchenPage() {
                   variant="secondary"
                   icon={<Undo2 />}
                   iconPosition="left"
-                  style={{ alignSelf: 'flex-end' }}
+                  style={{ alignSelf: 'flex-end', marginTop: 'auto' }}
                   onClick={() => toggleDelivered(order.id, false)}
                 >
                   Desfazer
