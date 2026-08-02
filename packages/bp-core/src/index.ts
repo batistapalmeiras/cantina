@@ -16,5 +16,5 @@ export * from './hooks/useSession';
 export * from './lib';
 
 // Utils
-export { ORDER_STATUS_LABEL, PAYMENT_METHOD_LABEL } from './utils/labels';
+export { ORDER_STATUS_LABEL, ORDER_STATUS_TONE, PAYMENT_METHOD_LABEL } from './utils/labels';
 export { calculateTotalWithPixSurcharge, PIX_SURCHARGE } from './utils/payment';

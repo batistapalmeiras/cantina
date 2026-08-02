@@ -1,12 +1,13 @@
-import { OrderStatus } from 'bp-core';
 import styled from 'styled-components';
 
+export type StatusTone = 'success' | 'warning';
+
 export interface StatusBadgeProps {
-  status: OrderStatus;
+  tone: StatusTone;
   children: React.ReactNode;
 }
 
-const StyledBadge = styled.span<{ $status: OrderStatus }>`
+const StyledBadge = styled.span<{ $tone: StatusTone }>`
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -16,12 +17,12 @@ const StyledBadge = styled.span<{ $status: OrderStatus }>`
   font-size: ${({ theme }) => theme.typography.badge.fontSize};
   font-weight: 600;
 
-  ${({ $status, theme }) =>
-    $status === OrderStatus.Sale
+  ${({ $tone, theme }) =>
+    $tone === 'success'
       ? `background: ${theme.colors.successSurface}; color: ${theme.colors.success}; border: 1px solid ${theme.colors.successBorder};`
       : `background: ${theme.colors.warningSurface}; color: ${theme.colors.warning}; border: 1px solid ${theme.colors.warningBorder};`}
 `;
 
-export function StatusBadge({ status, children }: StatusBadgeProps) {
-  return <StyledBadge $status={status}>{children}</StyledBadge>;
+export function StatusBadge({ tone, children }: StatusBadgeProps) {
+  return <StyledBadge $tone={tone}>{children}</StyledBadge>;
 }

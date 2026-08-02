@@ -10,3 +10,8 @@ export const PAYMENT_METHOD_LABEL: Record<PaymentMethod, string> = {
   [PaymentMethod.Pix]: 'Pix',
   [PaymentMethod.Cash]: 'Dinheiro',
 };
+
+export const ORDER_STATUS_TONE: Record<OrderStatus, 'success' | 'warning'> = {
+  [OrderStatus.Sale]: 'success',
+  [OrderStatus.Reservation]: 'warning',
+};
