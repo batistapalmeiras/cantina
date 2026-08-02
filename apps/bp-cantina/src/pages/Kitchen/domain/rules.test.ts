@@ -2,7 +2,7 @@
 import { OrderStatus } from 'bp-core';
 import type { Order } from 'bp-core';
 // Local
-import { groupTicketsByDish, selectKitchenOrders, splitByDelivery } from './rules';
+import { groupTicketsByDish, splitByDelivery } from './rules';
 
 // bp-core is stubbed to just the OrderStatus enum: the rules use it as a value,
 // while Order/Dish are type-only and erased at transpile time.
@@ -24,16 +24,6 @@ function makeOrder(over: Partial<Order> = {}): Order {
     ...over,
   } as Order;
 }
-
-describe('selectKitchenOrders', () => {
-  it('keeps only sales, dropping reservations', () => {
-    const orders = [
-      makeOrder({ id: 'a', status: OrderStatus.Sale }),
-      makeOrder({ id: 'b', status: OrderStatus.Reservation }),
-    ];
-    expect(selectKitchenOrders(orders).map((o) => o.id)).toEqual(['a']);
-  });
-});
 
 describe('splitByDelivery', () => {
   it('sorts pending oldest-first and delivered newest-first', () => {

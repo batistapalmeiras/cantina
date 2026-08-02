@@ -32,6 +32,26 @@ export const CustomerName = styled.p`
   color: ${({ theme }) => theme.colors.ink};
 `;
 
+export const MealTag = styled.span<{ $stay: boolean }>`
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: ${({ theme }) => theme.rounded.full};
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.badge.fontSize};
+  font-weight: 600;
+  white-space: nowrap;
+
+  ${({ $stay, theme }) =>
+    $stay
+      ? `background: ${theme.colors.successSurface}; color: ${theme.colors.success}; border: 1px solid ${theme.colors.successBorder};`
+      : `background: ${theme.colors.warningSurface}; color: ${theme.colors.warning}; border: 1px solid ${theme.colors.warningBorder};`}
+
+  svg { flex-shrink: 0; }
+`;
+
 export const ItemList = styled.ul`
   display: flex;
   flex-direction: column;
