@@ -22,6 +22,7 @@ import {
   SummaryLabel,
   SummaryRow,
   SummaryValue,
+  SurchargeNote,
 } from './styles';
 
 interface SuccessState {
@@ -74,10 +75,10 @@ export function ReservationConfirmedPage() {
           </SummaryRow>
 
           {paymentMethod === PaymentMethod.Pix && (
-            <InfoBox variant="info">
-              Os {formatCurrency(PIX_SURCHARGE)} extras identificam o pagamento como da cantina na contabilidade
-              da igreja.
-            </InfoBox>
+            <SurchargeNote>
+              Os {formatCurrency(PIX_SURCHARGE)} extras identificam o pagamento da cantina na contabilidade da
+              igreja.
+            </SurchargeNote>
           )}
 
           {paymentMethod === PaymentMethod.Pix && (
@@ -101,11 +102,7 @@ export function ReservationConfirmedPage() {
             />
           )}
 
-          {paymentMethod === PaymentMethod.Pix ? (
-            <InfoBox variant="warning">
-              Envie o comprovante do Pix por aqui ou apresente no caixa após o culto.
-            </InfoBox>
-          ) : (
+          {paymentMethod === PaymentMethod.Cash && (
             <InfoBox variant="warning">Acerte o pagamento em dinheiro no caixa após o culto.</InfoBox>
           )}
         </SuccessWrap>

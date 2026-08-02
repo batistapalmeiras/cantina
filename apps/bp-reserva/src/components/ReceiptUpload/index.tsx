@@ -5,7 +5,7 @@ import { uploadPixReceipt } from 'bp-core';
 import { Button } from 'bp-kit';
 import { CheckCircle, Paperclip } from 'lucide-react';
 // Local
-import { HiddenInput, ResendLink, SentBadge, Wrapper } from './styles';
+import { HiddenInput, Hint, ResendLink, SentBadge, Wrapper } from './styles';
 
 interface IReceiptUploadProps {
   orderId: string;
@@ -55,16 +55,19 @@ export function ReceiptUpload({ orderId, alreadySent = false, onSent, onError }:
           </ResendLink>
         </>
       ) : (
-        <Button
-          variant="secondary"
-          size="md"
-          fullWidth
-          disabled={sending}
-          onClick={() => inputRef.current?.click()}
-        >
-          <Paperclip size={16} />
-          {sending ? 'Enviando...' : 'Enviar comprovante do Pix'}
-        </Button>
+        <>
+          <Button
+            variant="secondary"
+            size="md"
+            fullWidth
+            disabled={sending}
+            onClick={() => inputRef.current?.click()}
+          >
+            <Paperclip size={16} />
+            {sending ? 'Enviando...' : 'Enviar comprovante do Pix'}
+          </Button>
+          <Hint>Ou apresente no caixa após o culto.</Hint>
+        </>
       )}
     </Wrapper>
   );

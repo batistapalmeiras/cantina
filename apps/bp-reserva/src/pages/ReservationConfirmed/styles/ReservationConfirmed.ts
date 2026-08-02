@@ -108,6 +108,14 @@ export const SummaryDivider = styled.div`
   background: ${({ theme }) => theme.colors.hairline};
 `;
 
+export const SurchargeNote = styled.p`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
+  color: ${({ theme }) => theme.colors.muted};
+  text-align: center;
+  margin-top: -${({ theme }) => theme.spacing.xs};
+`;
+
 export const PixKeyBox = styled.div`
   width: 100%;
   background: ${({ theme }) => theme.colors.surfaceSoft};
