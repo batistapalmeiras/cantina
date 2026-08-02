@@ -79,7 +79,7 @@ export function useReservation() {
       setOrderError(null);
       setIsSaving(true);
       try {
-        await addOrder({
+        const orderId = await addOrder({
           customerName: data.name.trim(),
           customerPhone: data.phone.trim() || undefined,
           tickets,
@@ -90,7 +90,7 @@ export function useReservation() {
         });
         onSuccess?.();
         navigate(AppRoute.ReservationConfirmed, {
-          state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY },
+          state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY, orderId },
         });
       } catch (err) {
         setOrderError(err instanceof Error ? err.message : 'Erro ao registrar reserva');

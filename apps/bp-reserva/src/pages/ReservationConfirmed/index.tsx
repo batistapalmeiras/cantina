@@ -10,6 +10,7 @@ import { Typography } from 'bp-ui';
 import { useToast } from 'bp-ui';
 import { Check, CheckCircle, Copy } from 'lucide-react';
 // Components
+import { ReceiptUpload } from '../../components/ReceiptUpload';
 import { AppRoute } from '../../routes/paths';
 // Local
 import {
@@ -31,6 +32,7 @@ interface SuccessState {
   paymentMethod: PaymentMethod;
   total: number;
   pixKey: string;
+  orderId?: string | null;
 }
 
 export function ReservationConfirmedPage() {
@@ -44,7 +46,7 @@ export function ReservationConfirmedPage() {
     return <Navigate to={AppRoute.Reservation} replace />;
   }
 
-  const { paymentMethod, total, pixKey } = state;
+  const { paymentMethod, total, pixKey, orderId } = state;
   const formattedPixKey = formatCNPJ(pixKey);
 
   const handleCopy = async () => {
@@ -95,8 +97,18 @@ export function ReservationConfirmedPage() {
             </PixKeyBox>
           )}
 
+          {paymentMethod === PaymentMethod.Pix && orderId && (
+            <ReceiptUpload
+              orderId={orderId}
+              onSent={() => showToast('Comprovante enviado!')}
+              onError={(msg) => showToast(msg)}
+            />
+          )}
+
           {paymentMethod === PaymentMethod.Pix ? (
-            <InfoBox variant="warning">Apresente o comprovante Pix no caixa após o culto.</InfoBox>
+            <InfoBox variant="warning">
+              Envie o comprovante do Pix por aqui ou apresente no caixa após o culto.
+            </InfoBox>
           ) : (
             <InfoBox variant="warning">Acerte o pagamento em dinheiro no caixa após o culto.</InfoBox>
           )}

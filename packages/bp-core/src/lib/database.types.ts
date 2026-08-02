@@ -125,6 +125,7 @@ export interface Database {
           delivered: boolean;
           stay_for_meal: boolean;
           confirmed_at: string | null;
+          receipt_path: string | null;
         };
         Insert: {
           id?: string;
@@ -138,6 +139,7 @@ export interface Database {
           delivered?: boolean;
           stay_for_meal?: boolean;
           confirmed_at?: string | null;
+          receipt_path?: string | null;
         };
         Update: {
           id?: string;
@@ -151,6 +153,7 @@ export interface Database {
           delivered?: boolean;
           stay_for_meal?: boolean;
           confirmed_at?: string | null;
+          receipt_path?: string | null;
         };
         Relationships: [
           {

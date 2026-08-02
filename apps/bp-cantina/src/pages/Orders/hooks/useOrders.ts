@@ -12,7 +12,7 @@ export function useOrders() {
   const confirmed = selectConfirmedOrders(allOrders);
   const pending = selectPendingOrders(allOrders);
 
-  const list = useOrdersList(allOrders, { nameFilter: true });
+  const list = useOrdersList(allOrders);
 
   return {
     session,

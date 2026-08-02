@@ -1,6 +1,7 @@
 // Libs
-import { Order, PaymentMethod } from 'bp-core';
-import { Button, Card, Empty, formatCurrency } from 'bp-ui';
+import { getReceiptUrl, Order, PaymentMethod } from 'bp-core';
+import { Button, Card, Empty, formatCurrency, useToast } from 'bp-ui';
+import { FileSearch } from 'lucide-react';
 import styled from 'styled-components';
 
 interface Props {
@@ -63,6 +64,17 @@ const Actions = styled.div`
 `;
 
 export function ReservationList({ reservations, onConfirm, onCancel }: Props) {
+  const { show: showToast, toast } = useToast();
+
+  const openReceipt = async (path: string) => {
+    try {
+      const url = await getReceiptUrl(path);
+      window.open(url, '_blank', 'noopener');
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'Não foi possível abrir o comprovante.');
+    }
+  };
+
   if (reservations.length === 0) {
     return (
       <Empty
@@ -85,9 +97,17 @@ export function ReservationList({ reservations, onConfirm, onCancel }: Props) {
           </CardTop>
           <Meta>
             {order.tickets.length} fichinha{order.tickets.length !== 1 ? 's' : ''} · {formatCurrency(order.total)} ·{' '}
-            {order.paymentMethod === PaymentMethod.Pix ? 'Pix' : 'Dinheiro'}
+            {order.paymentMethod === PaymentMethod.Pix
+              ? `Pix · ${order.receiptPath ? 'comprovante enviado' : 'sem comprovante'}`
+              : 'Dinheiro'}
           </Meta>
           <Actions>
+            {order.receiptPath && (
+              <Button variant="secondary" size="sm" onClick={() => openReceipt(order.receiptPath!)}>
+                <FileSearch size={16} />
+                Ver comprovante
+              </Button>
+            )}
             <Button variant="primary" size="sm" onClick={() => onConfirm(order.id)}>
               Confirmar
             </Button>
@@ -97,6 +117,7 @@ export function ReservationList({ reservations, onConfirm, onCancel }: Props) {
           </Actions>
         </Card>
       ))}
+      {toast}
     </List>
   );
 }

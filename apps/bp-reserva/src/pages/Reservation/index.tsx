@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { ORDER_STATUS_LABEL, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
 import { Button, Card, DishSelector, Empty, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-ui';
 // Components
+import { ReceiptUpload } from '../../components/ReceiptUpload';
 import { AppRoute } from '../../routes/paths';
 // Local
 import { CancelConfirmDialog } from './components';
@@ -87,6 +88,15 @@ export function ReservationPage() {
             <TotalValue>{formatCurrency(clientOrder.total)}</TotalValue>
           </TotalLine>
         </Card>
+
+        {clientOrder.paymentMethod === PaymentMethod.Pix && (
+          <ReceiptUpload
+            orderId={clientOrder.id}
+            alreadySent={!!clientOrder.receiptPath}
+            onSent={() => showToast('Comprovante enviado!')}
+            onError={(msg) => showToast(msg)}
+          />
+        )}
 
         <Button
           variant="primary"

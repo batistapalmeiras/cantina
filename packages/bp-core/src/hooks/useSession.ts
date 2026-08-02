@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 // Components
 import { SessionContext, SessionContextValue } from '../contexts/SessionContext';
 import type { Database } from '../lib/database.types';
+import { removeReceiptsForOrders } from '../lib/receipts';
 import { supabase } from '../lib/supabase';
 import { Addon, Dish, Order, OrderStatus, PaymentMethod, Session, TicketItem } from '../types';
 
@@ -46,6 +47,7 @@ function mapOrder(raw: OrderRow, tickets: TicketItem[]): Order {
     createdAt: raw.created_at,
     delivered: raw.delivered ?? false,
     stayForMeal: raw.stay_for_meal ?? false,
+    receiptPath: raw.receipt_path ?? undefined,
     tickets,
   };
 }
@@ -251,17 +253,30 @@ export function useSession(): SessionContextValue {
     await reload();
   }, [reload]);
 
+  // Comprovantes de PIX não precisam sobreviver ao fechamento definitivo da
+  // sessão. Melhor esforço: falha no storage não pode travar o fechamento.
+  const cleanupReceipts = useCallback(async (orders: Order[]) => {
+    const withReceipt = orders.filter((o) => o.receiptPath).map((o) => o.id);
+    if (withReceipt.length === 0) return;
+    try {
+      await removeReceiptsForOrders(withReceipt);
+    } catch (err) {
+      console.warn('Falha ao limpar comprovantes da sessão:', err);
+    }
+  }, []);
+
   const closeSession = useCallback(async () => {
     if (!session) return;
     const hasPending = session.orders.some(o => o.status === OrderStatus.Reservation);
     const newStatus = hasPending ? 'pending' : 'closed';
     await supabase.from('sessions').update({ is_open: false, status: newStatus }).eq('id', session.id);
+    if (newStatus === 'closed') await cleanupReceipts(session.orders);
     await reload();
-  }, [session, reload]);
+  }, [session, reload, cleanupReceipts]);
 
 
-  const addOrder = useCallback(async (order: Omit<Order, 'id' | 'createdAt' | 'delivered' | 'stayForMeal'> & { stayForMeal?: boolean }) => {
-    if (!session) return;
+  const addOrder = useCallback(async (order: Omit<Order, 'id' | 'createdAt' | 'delivered' | 'stayForMeal'> & { stayForMeal?: boolean }): Promise<string | null> => {
+    if (!session) return null;
 
     const { data: orderRow, error } = await supabase
       .from('orders')
@@ -307,6 +322,7 @@ export function useSession(): SessionContextValue {
     }
 
     await reload();
+    return orderRow.id;
   }, [session, reload]);
 
   const autoFinalizePending = useCallback(async (resolvedOrderId: string) => {
@@ -316,8 +332,9 @@ export function useSession(): SessionContextValue {
     );
     if (remaining.length === 0) {
       await supabase.from('sessions').update({ status: 'closed' }).eq('id', pendingSession.id);
+      await cleanupReceipts(pendingSession.orders);
     }
-  }, [pendingSession]);
+  }, [pendingSession, cleanupReceipts]);
 
   // Sessão encerrada é imutável. As mutações só alcançam pedidos da sessão
   // aberta (qualquer pedido) ou da sessão pendente (apenas reservas em aberto,

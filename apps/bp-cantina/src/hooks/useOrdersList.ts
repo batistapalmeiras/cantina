@@ -1,36 +1,29 @@
 // React
-import { useMemo,useState } from 'react';
+import { useMemo, useState } from 'react';
 // Components
-import { Order, OrderStatus, PaymentMethod } from 'bp-core';
+import { Order } from 'bp-core';
 
 const PAGE_SIZE = 10;
 
 interface Options {
   pageSize?: number;
-  nameFilter?: boolean;
 }
 
-export function useOrdersList(allOrders: Order[], { pageSize = PAGE_SIZE, nameFilter: enableNameFilter = false }: Options = {}) {
+export function useOrdersList(allOrders: Order[], { pageSize = PAGE_SIZE }: Options = {}) {
   const [page, setPage] = useState(1);
   const [nameFilter, setNameFilter] = useState('');
-  const [filterStatus, setFilterStatus] = useState<OrderStatus | null>(null);
-  const [filterPayment, setFilterPayment] = useState<PaymentMethod | null>(null);
 
   const filtered = useMemo(() => {
     const name = nameFilter.trim().toLowerCase();
-    return allOrders
-      .filter((o) => !enableNameFilter || !name || o.customerName.toLowerCase().includes(name))
-      .filter((o) => !filterStatus || o.status === filterStatus)
-      .filter((o) => !filterPayment || o.paymentMethod === filterPayment);
-  }, [allOrders, nameFilter, filterStatus, filterPayment, enableNameFilter]);
+    if (!name) return allOrders;
+    return allOrders.filter((o) => o.customerName.toLowerCase().includes(name));
+  }, [allOrders, nameFilter]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, totalPages);
   const orders = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   const handleNameFilter = (v: string) => { setNameFilter(v); setPage(1); };
-  const handleFilterStatus = (s: OrderStatus | null) => { setFilterStatus(s); setPage(1); };
-  const handleFilterPayment = (p: PaymentMethod | null) => { setFilterPayment(p); setPage(1); };
 
   return {
     orders,
@@ -39,10 +32,6 @@ export function useOrdersList(allOrders: Order[], { pageSize = PAGE_SIZE, nameFi
     totalPages,
     nameFilter,
     handleNameFilter,
-    filterStatus,
-    filterPayment,
-    handleFilterStatus,
-    handleFilterPayment,
-    hasFilter: !!(nameFilter.trim() || filterStatus || filterPayment),
+    hasFilter: !!nameFilter.trim(),
   };
 }
