@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react';
 // Libs
 import { uploadPixReceipt } from 'bp-core';
-import { Button } from 'bp-ui';
+import { Button } from 'bp-kit';
 import { CheckCircle, Paperclip } from 'lucide-react';
 // Local
 import { HiddenInput, ResendLink, SentBadge, Wrapper } from './styles';

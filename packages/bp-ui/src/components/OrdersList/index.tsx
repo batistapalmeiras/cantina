@@ -2,11 +2,7 @@
 import { useState } from 'react';
 // Libs
 import { ORDER_STATUS_LABEL, Order, PAYMENT_METHOD_LABEL } from 'bp-core';
-// Components
-import { formatCurrency } from '../../utils/mask';
-import { BottomSheet } from '../BottomSheet';
-import { Pagination } from '../Pagination';
-import { Typography } from '../Typography';
+import { BottomSheet, formatCurrency, Pagination, Typography } from 'bp-kit';
 // Local
 import {
   CardList,

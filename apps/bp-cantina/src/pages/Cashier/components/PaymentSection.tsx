@@ -3,7 +3,7 @@ import { Control, Controller } from 'react-hook-form';
 // Libs
 import styled from 'styled-components';
 // Components
-import { SegmentedControl } from 'bp-ui';
+import { SegmentedControl } from 'bp-kit';
 import { PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
 import { CashierFormValues } from '../validators';
 

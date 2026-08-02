@@ -2,7 +2,8 @@
 import { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 // Libs
-import { useAuthCtx, fetchSessionById, useSessionCtx, Session, UserRole } from 'bp-core';
+import { fetchSessionById, useSessionCtx, Session, UserRole } from 'bp-core';
+import { useAuthCtx } from 'bp-kit';
 // Components
 import { useOrdersList } from '../../../hooks/useOrdersList';
 import { computeStats, downloadReportXlsx } from '../domain';

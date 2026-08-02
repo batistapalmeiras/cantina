@@ -1,7 +1,7 @@
 // React
 import ReactDOM from 'react-dom/client';
 // Libs
-import { GlobalStyles, theme } from 'bp-ui';
+import { GlobalStyles, theme } from 'bp-kit';
 import { ThemeProvider } from 'styled-components';
 // Local
 import App from './App';

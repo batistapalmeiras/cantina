@@ -1,7 +1,7 @@
 // React
 import { useForm } from 'react-hook-form';
 // Libs
-import { Button, ModalActions, ModalTitle, TextInput, Typography } from 'bp-ui';
+import { Button, ModalActions, ModalTitle, TextInput, Typography } from 'bp-kit';
 
 interface IClientRegisterDialogProps {
   close: () => void;

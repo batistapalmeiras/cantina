@@ -1,6 +1,6 @@
 // Libs
 import { getReceiptUrl, Order, PaymentMethod } from 'bp-core';
-import { Button, Card, Empty, formatCurrency, useToast } from 'bp-ui';
+import { Button, Card, Empty, formatCurrency, useToast } from 'bp-kit';
 import { FileSearch } from 'lucide-react';
 import styled from 'styled-components';
 

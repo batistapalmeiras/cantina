@@ -14,7 +14,7 @@ import {
   TabBadge,
   TabBar,
   useToast,
-} from 'bp-ui';
+} from 'bp-kit';
 // Local
 import { CashierDishSelector } from './components/DishSelector';
 import { PaymentSection } from './components/PaymentSection';

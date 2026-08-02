@@ -1,7 +1,7 @@
 // Libs
 import { AlertTriangle } from 'lucide-react';
 import styled from 'styled-components';
-import { Button, ModalTitle } from 'bp-ui';
+import { Button, ModalTitle } from 'bp-kit';
 
 interface Props {
   pendingCount: number;

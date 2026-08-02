@@ -1,6 +1,7 @@
 // Libs
 import { Check, Pencil, X } from 'lucide-react';
-import { Button, Empty, OrdersList, PageHeader, useModal } from 'bp-ui';
+import { Button, Empty, PageHeader, useModal } from 'bp-kit';
+import { OrdersList } from 'bp-ui';
 import { Order, OrderStatus } from 'bp-core';
 // Components
 import { OrdersSearch } from '../../components/OrdersSearch';

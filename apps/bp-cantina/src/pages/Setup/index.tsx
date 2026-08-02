@@ -2,7 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { AlertTriangle } from 'lucide-react';
-import { Button, PageHeader, Pagination, Typography, useModal } from 'bp-ui';
+import { Button, PageHeader, Pagination, Typography, useModal } from 'bp-kit';
 // Local
 import { AppRoute } from '../../routes/paths';
 // Local

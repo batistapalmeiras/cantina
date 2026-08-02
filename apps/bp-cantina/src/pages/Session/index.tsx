@@ -1,7 +1,7 @@
 // React
 import { Navigate } from 'react-router-dom';
 // Libs
-import { Button, PageHeader } from 'bp-ui';
+import { Button, PageHeader } from 'bp-kit';
 // Local
 import { AppRoute } from '../../routes/paths';
 // Local

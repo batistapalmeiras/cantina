@@ -1,11 +1,5 @@
 // Local
-import { OrderStatus, PaymentMethod, UserRole } from './enums';
-
-export interface User {
-  id: string;
-  name: string;
-  role: UserRole;
-}
+import { OrderStatus, PaymentMethod } from './enums';
 
 export interface Client {
   id: string;

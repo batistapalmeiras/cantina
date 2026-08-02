@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // Libs
 import { useClient, PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
-import { DishSelector, PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useToast } from 'bp-ui';
+import { PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useToast } from 'bp-kit';
+import { DishSelector } from 'bp-ui';
 // Local
 import { useEditReservation } from './hooks';
 import { BottomSpacer, DishSelectorWrapper, PageWrapper, PaymentControlsWrapper } from './styles';

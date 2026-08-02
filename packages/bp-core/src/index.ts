@@ -8,7 +8,6 @@ export * from './types';
 export * from './contexts';
 
 // Hooks
-export * from './hooks/useAuth';
 export * from './hooks/useClient';
 export * from './hooks/useSession';
 

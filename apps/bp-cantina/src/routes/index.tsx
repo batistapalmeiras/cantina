@@ -1,7 +1,8 @@
 // React
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // Libs
-import { AuthProvider, SessionProvider, UserRole } from 'bp-core';
+import { SessionProvider, supabase, UserRole } from 'bp-core';
+import { AuthProvider } from 'bp-kit';
 // Components
 import { Layout } from '../components/Layout';
 import { CashierPage } from '../pages/Cashier';
@@ -19,7 +20,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 export function AppRouter() {
   return (
     <BrowserRouter>
-      <AuthProvider>
+      <AuthProvider client={supabase}>
         <SessionProvider>
           <Routes>
             <Route path={AppRoute.Login} element={<LoginPage />} />

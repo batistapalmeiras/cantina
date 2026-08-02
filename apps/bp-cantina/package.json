@@ -6,6 +6,7 @@
   "dependencies": {
     "@hookform/resolvers": "catalog:",
     "bp-core": "workspace:*",
+    "bp-kit": "github:batistapalmeiras/bp-kit",
     "bp-ui": "workspace:*",
     "lucide-react": "catalog:",
     "react": "catalog:",

@@ -1,7 +1,7 @@
 // Libs
 import styled from 'styled-components';
 // Components
-import { fadeUp } from 'bp-ui';
+import { fadeUp } from 'bp-kit';
 
 export const Grid = styled.div`
   display: grid;

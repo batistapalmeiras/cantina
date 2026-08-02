@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { Button, PageHeader, TextInput, useToast } from 'bp-ui';
-import { useAuthCtx, UserRole } from 'bp-core';
+import { UserRole } from 'bp-core';
+import { Button, PageHeader, TextInput, useAuthCtx, useToast } from 'bp-kit';
 // Local
 import { Actions,Identity, Name, RoleLabel, Section, SectionTitle, Wrap } from './styles';
 import { ProfileFormValues,profileSchema } from './validators';

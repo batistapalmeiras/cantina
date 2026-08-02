@@ -1,7 +1,7 @@
 // React
 import { useState } from 'react';
 // Libs
-import { Empty, IconButton, PageHeader, Tab, TabBadge, TabBar } from 'bp-ui';
+import { Empty, IconButton, PageHeader, Tab, TabBadge, TabBar } from 'bp-kit';
 import { Check, Undo2 } from 'lucide-react';
 // Local
 import { groupTicketsByDish } from './domain';

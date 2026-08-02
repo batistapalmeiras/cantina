@@ -1,7 +1,6 @@
 // Libs
 import 'styled-components';
-// Local
-import { Theme } from './theme';
+import { Theme } from 'bp-kit';
 
 declare module 'styled-components' {
   export interface DefaultTheme extends Theme {}

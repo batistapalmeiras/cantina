@@ -1,14 +1,8 @@
 // Libs
 import { Check, Download, X } from 'lucide-react';
 import { Order, OrderStatus } from 'bp-core';
-import {
-  Button,
-  Empty,
-  formatCurrency,
-  OrdersList,
-  PageHeader,
-  Skeleton,
-} from 'bp-ui';
+import { Button, Empty, formatCurrency, PageHeader, Skeleton } from 'bp-kit';
+import { OrdersList } from 'bp-ui';
 // Components
 import { OrdersSearch } from '../../components/OrdersSearch';
 // Local
