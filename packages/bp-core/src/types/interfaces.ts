@@ -47,6 +47,7 @@ export interface Order {
   createdAt: string;
   delivered: boolean;
   stayForMeal: boolean;
+  receiptPath?: string;
 }
 
 export interface Session {

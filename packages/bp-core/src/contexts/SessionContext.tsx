@@ -11,7 +11,7 @@ export interface SessionContextValue {
   error: string | null;
   openSession: (session: Omit<Session, 'id' | 'orders'>) => Promise<void>;
   closeSession: () => Promise<void>;
-  addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'delivered' | 'stayForMeal'> & { stayForMeal?: boolean }) => Promise<void>;
+  addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'delivered' | 'stayForMeal'> & { stayForMeal?: boolean }) => Promise<string | null>;
   confirmReservation: (orderId: string) => Promise<void>;
   cancelOrder: (orderId: string) => Promise<void>;
   updateSession: (data: { ministry?: string; dishes?: Dish[] }) => Promise<void>;

@@ -1,15 +1,15 @@
 // Libs
-import { Check, Pencil, Search, X } from 'lucide-react';
+import { Check, Pencil, X } from 'lucide-react';
 import { Button, Empty, OrdersList, PageHeader, useModal } from 'bp-ui';
 import { Order, OrderStatus } from 'bp-core';
+// Components
+import { OrdersSearch } from '../../components/OrdersSearch';
 import { OrderEditForm } from '../Report/components';
 // Local
 import { computeRemainingTickets } from './domain';
 import { useOrders } from './hooks';
 import {
   OrderActions,
-  SearchInput,
-  SearchWrap,
   StatCard,
   StatLabel,
   StatsGrid,
@@ -74,14 +74,7 @@ export function OrdersPage() {
         </StatCard>
       </StatsGrid>
 
-      <SearchWrap>
-        <Search size={16} />
-        <SearchInput
-          placeholder="Buscar por nome do cliente…"
-          value={nameFilter}
-          onChange={(e) => handleNameFilter(e.target.value)}
-        />
-      </SearchWrap>
+      <OrdersSearch value={nameFilter} onChange={handleNameFilter} />
 
       <OrdersList
         orders={orders}

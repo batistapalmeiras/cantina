@@ -1,16 +1,16 @@
 // Libs
 import { Check, Download, X } from 'lucide-react';
-import { Order, OrderStatus, PaymentMethod } from 'bp-core';
+import { Order, OrderStatus } from 'bp-core';
 import {
   Button,
-  Chip,
-  ChipBar,
   Empty,
   formatCurrency,
   OrdersList,
   PageHeader,
   Skeleton,
 } from 'bp-ui';
+// Components
+import { OrdersSearch } from '../../components/OrdersSearch';
 // Local
 import { useReport } from './hooks';
 import {
@@ -21,8 +21,8 @@ import {
 export function ReportPage() {
   const {
     session, orders, stats, loading, canResolveReservations,
-    page, totalPages, filterStatus, filterPayment, hasFilter,
-    setPage, handleFilterStatus, handleFilterPayment,
+    page, totalPages, nameFilter, hasFilter,
+    setPage, handleNameFilter,
     confirmReservation, cancelOrder, downloadReport,
   } = useReport();
 
@@ -106,12 +106,7 @@ export function ReportPage() {
 
       <Section>
         <SectionLabel>Pedidos</SectionLabel>
-        <ChipBar>
-          <Chip $active={filterStatus === OrderStatus.Sale} onClick={() => handleFilterStatus(filterStatus === OrderStatus.Sale ? null : OrderStatus.Sale)}>Confirmado</Chip>
-          <Chip $active={filterStatus === OrderStatus.Reservation} onClick={() => handleFilterStatus(filterStatus === OrderStatus.Reservation ? null : OrderStatus.Reservation)}>Pendente</Chip>
-          <Chip $active={filterPayment === PaymentMethod.Pix} onClick={() => handleFilterPayment(filterPayment === PaymentMethod.Pix ? null : PaymentMethod.Pix)}>Pix</Chip>
-          <Chip $active={filterPayment === PaymentMethod.Cash} onClick={() => handleFilterPayment(filterPayment === PaymentMethod.Cash ? null : PaymentMethod.Cash)}>Dinheiro</Chip>
-        </ChipBar>
+        <OrdersSearch value={nameFilter} onChange={handleNameFilter} />
         <OrdersList
           orders={orders}
           page={page}
