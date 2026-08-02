@@ -1,7 +1,7 @@
 // React
 import React from 'react';
 // Libs
-import { Brand } from 'bp-ui';
+import { Brand } from 'bp-kit';
 import { ChefHat, ChevronDown, ClipboardList, LogOut, Settings, ShoppingBag, User, UserCircle } from 'lucide-react';
 import { UserRole } from 'bp-core';
 // Components

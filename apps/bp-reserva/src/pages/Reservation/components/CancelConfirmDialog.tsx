@@ -1,5 +1,5 @@
 // Libs
-import { Button, ModalActions, ModalTitle, Typography } from 'bp-ui';
+import { Button, ModalActions, ModalTitle, Typography } from 'bp-kit';
 // Local
 import { Message } from './CancelConfirmDialog.styles';
 

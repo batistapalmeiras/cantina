@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { ORDER_STATUS_LABEL, ORDER_STATUS_TONE, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
-import { Button, Card, DishSelector, Empty, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-ui';
+import { Button, Card, Empty, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-kit';
+import { DishSelector } from 'bp-ui';
 // Components
 import { ReceiptUpload } from '../../components/ReceiptUpload';
 import { AppRoute } from '../../routes/paths';

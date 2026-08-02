@@ -1,6 +1,6 @@
 // Libs
 import { ORDER_STATUS_LABEL, ORDER_STATUS_TONE, PAYMENT_METHOD_LABEL, useClient, useSessionCtx } from 'bp-core';
-import { formatCurrency, PageHeader, Skeleton, StatusBadge } from 'bp-ui';
+import { formatCurrency, PageHeader, Skeleton, StatusBadge } from 'bp-kit';
 // Local
 import { useClientHistory } from './hooks';
 import { uniqueDishesText } from './domain';

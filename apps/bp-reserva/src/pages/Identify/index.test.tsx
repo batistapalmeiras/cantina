@@ -2,7 +2,7 @@
 import { MemoryRouter } from 'react-router-dom';
 // Libs
 import { render, screen } from '@testing-library/react';
-import { theme } from 'bp-ui';
+import { theme } from 'bp-kit';
 import { ThemeProvider } from 'styled-components';
 // Local
 import { IdentifyPage } from './index';

@@ -2,23 +2,30 @@
 import { MemoryRouter } from 'react-router-dom';
 // Libs
 import { render, screen } from '@testing-library/react';
-import { theme } from 'bp-ui';
+import { AuthProvider, theme } from 'bp-kit';
 import { ThemeProvider } from 'styled-components';
 // Local
 import { LoginPage } from './index';
 
-// The auth context talks to Supabase; stub it so the page renders deterministically
-// with no user logged in.
 vi.mock('bp-core', () => ({
-  useAuthCtx: () => ({ user: null, login: vi.fn() }),
   UserRole: { Admin: 'admin', Operator: 'operator', Kitchen: 'kitchen' },
 }));
+
+// AuthProvider only needs a client shaped enough to mount without crashing —
+// LoginPage renders with no user logged in, deterministically.
+const stubSupabaseClient = {
+  auth: {
+    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+  },
+} as unknown as Parameters<typeof AuthProvider>[0]['client'];
 
 function renderLogin() {
   return render(
     <MemoryRouter>
       <ThemeProvider theme={theme}>
-        <LoginPage />
+        <AuthProvider client={stubSupabaseClient}>
+          <LoginPage />
+        </AuthProvider>
       </ThemeProvider>
     </MemoryRouter>,
   );

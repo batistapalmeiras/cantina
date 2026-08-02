@@ -1,7 +1,7 @@
 // React
 import { Link } from 'react-router-dom';
 // Libs
-import { fadeDown } from 'bp-ui';
+import { fadeDown } from 'bp-kit';
 import styled from 'styled-components';
 
 export const Page = styled.div`

@@ -1,7 +1,7 @@
 // React
 import { Link } from 'react-router-dom';
 // Libs
-import { fadeDown, fadeUp } from 'bp-ui';
+import { fadeDown, fadeUp } from 'bp-kit';
 import styled from 'styled-components';
 
 export const Header = styled.header`

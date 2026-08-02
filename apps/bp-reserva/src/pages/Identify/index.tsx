@@ -1,7 +1,7 @@
 // React
 import { useForm } from 'react-hook-form';
 // Libs
-import { Brand, Button, PageHeader, TextInput } from 'bp-ui';
+import { Brand, Button, PageHeader, TextInput } from 'bp-kit';
 // Components
 import icon from '../../assets/icon.png';
 // Local

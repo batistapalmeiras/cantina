@@ -2,7 +2,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 // Components
-import { useAuthCtx, useSessionCtx, UserRole } from 'bp-core';
+import { useSessionCtx, UserRole } from 'bp-core';
+import { useAuthCtx } from 'bp-kit';
 import { AppRoute } from '../../../routes/paths';
 
 export function useLayout() {

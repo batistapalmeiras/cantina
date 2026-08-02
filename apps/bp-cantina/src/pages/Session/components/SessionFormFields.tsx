@@ -1,7 +1,7 @@
 // React
 import { Control, Controller, useFieldArray } from 'react-hook-form';
 // Libs
-import { Button, Select, TextInput } from 'bp-ui';
+import { Button, Select, TextInput } from 'bp-kit';
 // Components
 import { MINISTRIES } from '../../../data';
 import { newId } from '../domain';

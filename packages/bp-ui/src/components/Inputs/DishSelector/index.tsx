@@ -1,8 +1,7 @@
 // Libs
 import { Addon } from 'bp-core';
+import { formatCurrency } from 'bp-kit';
 import { Minus, Plus } from 'lucide-react';
-// Components
-import { formatCurrency } from '../../../utils/mask';
 // Local
 import {
   DishCard,

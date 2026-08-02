@@ -3,11 +3,7 @@ import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 // Libs
 import { PAYMENT_METHOD_LABEL, PIX_SURCHARGE, PaymentMethod } from 'bp-core';
-import { Button } from 'bp-ui';
-import { formatCNPJ, formatCurrency } from 'bp-ui';
-import { InfoBox } from 'bp-ui';
-import { Typography } from 'bp-ui';
-import { useToast } from 'bp-ui';
+import { Button, formatCNPJ, formatCurrency, InfoBox, Typography, useToast } from 'bp-kit';
 import { Check, CheckCircle, Copy } from 'lucide-react';
 // Components
 import { ReceiptUpload } from '../../components/ReceiptUpload';

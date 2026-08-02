@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 // Libs
 import { useClient } from 'bp-core';
-import { Button, PageHeader, maskPhone } from 'bp-ui';
+import { Button, PageHeader, maskPhone } from 'bp-kit';
 // Local
 import { EditFieldWrap, EditInput, Label } from './styles';
 
