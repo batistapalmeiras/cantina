@@ -1,11 +1,7 @@
 // Components
-import { Order, OrderStatus } from 'bp-core';
+import { Order } from 'bp-core';
 // Local
 import { GroupedItem } from './types';
-
-export function selectKitchenOrders(orders: Order[]): Order[] {
-  return orders.filter((o) => o.status === OrderStatus.Sale);
-}
 
 export function splitByDelivery(orders: Order[]): { pending: Order[]; delivered: Order[] } {
   const pending = orders

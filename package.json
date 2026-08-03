@@ -15,6 +15,6 @@
     "typescript": "catalog:"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": ["esbuild", "bp-kit"]
   }
 }

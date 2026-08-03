@@ -23,6 +23,13 @@ export const SentBadge = styled.div`
   color: ${({ theme }) => theme.colors.success};
 `;
 
+export const Hint = styled.p`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
+  color: ${({ theme }) => theme.colors.muted};
+  text-align: center;
+`;
+
 export const ResendLink = styled.button`
   background: none;
   border: none;

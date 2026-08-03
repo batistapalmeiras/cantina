@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { Addon, Dish, Order, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge, CHURCH_PIX_KEY } from 'bp-core';
+import { Addon, Dish, Order, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge, CHURCH_PIX_KEY } from 'bp-core';
 import { DishQuantity } from 'bp-ui';
 // Components
 import { AppRoute } from '../../../routes/paths';
@@ -99,6 +99,10 @@ export function useEditReservation(orderId: string) {
       setOrderError(null);
       setIsSaving(true);
       try {
+        // Editar um pedido já confirmado exige nova confirmação da equipe — e,
+        // como itens/valor podem ter mudado, um comprovante novo (se for Pix).
+        const wasConfirmed = currentOrder.status === OrderStatus.Sale;
+
         // Atomic update in place (keeps the order id/created_at and adjusts the
         // ticket counters server-side) — replaces the old cancel + re-create.
         await updateOrder(currentOrder.id, {
@@ -108,10 +112,11 @@ export function useEditReservation(orderId: string) {
           paymentMethod,
           total,
           stayForMeal,
+          ...(wasConfirmed ? { status: OrderStatus.Reservation, receiptPath: null } : {}),
         });
         onSuccess?.();
         navigate(AppRoute.ReservationConfirmed, {
-          state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY },
+          state: { paymentMethod, total, pixKey: CHURCH_PIX_KEY, orderId: currentOrder.id },
         });
       } catch (err) {
         setOrderError(err instanceof Error ? err.message : 'Erro ao salvar reserva');

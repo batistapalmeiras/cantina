@@ -423,7 +423,7 @@ export function useSession(): SessionContextValue {
     await reload();
   }, [session, reload]);
 
-  const updateOrder = useCallback(async (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total' | 'stayForMeal'>>) => {
+  const updateOrder = useCallback(async (orderId: string, data: Partial<Pick<Order, 'customerName' | 'customerPhone' | 'paymentMethod' | 'tickets' | 'total' | 'stayForMeal' | 'status'>> & { receiptPath?: string | null }) => {
     // Editar dados do pedido só é permitido na sessão aberta.
     if (!session || !session.orders.some((o) => o.id === orderId)) return;
 
@@ -433,6 +433,8 @@ export function useSession(): SessionContextValue {
     if (data.paymentMethod !== undefined) updates.payment_method = data.paymentMethod;
     if (data.total !== undefined) updates.total = data.total;
     if (data.stayForMeal !== undefined) updates.stay_for_meal = data.stayForMeal;
+    if (data.status !== undefined) updates.status = data.status;
+    if (data.receiptPath !== undefined) updates.receipt_path = data.receiptPath;
     if (Object.keys(updates).length > 0) {
       await supabase.from('orders').update(updates).eq('id', orderId);
     }

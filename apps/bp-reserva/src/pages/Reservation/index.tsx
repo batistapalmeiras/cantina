@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { ORDER_STATUS_LABEL, ORDER_STATUS_TONE, OrderStatus, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
+import { ORDER_STATUS_LABEL, ORDER_STATUS_TONE, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
 import { Button, Card, Empty, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-kit';
 import { DishSelector } from 'bp-ui';
 // Components
@@ -60,7 +60,7 @@ export function ReservationPage() {
   if (!client) return null;
 
   const clientOrder = (session.orders ?? []).find(
-    (o) => o.customerPhone === client.phone && o.status === OrderStatus.Reservation
+    (o) => o.customerPhone === client.phone
   ) ?? null;
 
   if (clientOrder) {
@@ -76,8 +76,8 @@ export function ReservationPage() {
         <Card>
           <SummaryHeader>
             <CardLabel style={{ marginBottom: 0 }}>Resumo</CardLabel>
-            <StatusBadge tone={ORDER_STATUS_TONE[OrderStatus.Reservation]}>
-              {ORDER_STATUS_LABEL[OrderStatus.Reservation]}
+            <StatusBadge tone={ORDER_STATUS_TONE[clientOrder.status]}>
+              {ORDER_STATUS_LABEL[clientOrder.status]}
             </StatusBadge>
           </SummaryHeader>
           <Typography type="p">{dishSummary}</Typography>

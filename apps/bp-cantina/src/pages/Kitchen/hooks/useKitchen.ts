@@ -2,14 +2,13 @@
 import { useMemo } from 'react';
 // Components
 import { useSessionCtx } from 'bp-core';
-import { selectKitchenOrders, splitByDelivery } from '../domain';
+import { splitByDelivery } from '../domain';
 
 export function useKitchen() {
   const { session, toggleDelivered } = useSessionCtx();
 
   const { pending, delivered } = useMemo(() => {
-    const confirmedOrders = selectKitchenOrders(session?.orders ?? []);
-    return splitByDelivery(confirmedOrders);
+    return splitByDelivery(session?.orders ?? []);
   }, [session]);
 
   return {

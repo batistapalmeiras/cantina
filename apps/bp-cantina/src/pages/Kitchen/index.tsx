@@ -2,7 +2,7 @@
 import { useState } from 'react';
 // Libs
 import { Empty, IconButton, PageHeader, Tab, TabBadge, TabBar } from 'bp-kit';
-import { Check, Undo2 } from 'lucide-react';
+import { Check, ShoppingBag, Undo2, Utensils } from 'lucide-react';
 // Local
 import { groupTicketsByDish } from './domain';
 import { useKitchen } from './hooks';
@@ -16,6 +16,7 @@ import {
   ItemList,
   ItemQty,
   ItemRow,
+  MealTag,
 } from './styles';
 import { KitchenTab } from './types';
 
@@ -62,6 +63,10 @@ export function KitchenPage() {
             <Card key={order.id} $done={tab === KitchenTab.Delivered}>
               <CardTop>
                 <CustomerName>{order.customerName}</CustomerName>
+                <MealTag $stay={order.stayForMeal}>
+                  {order.stayForMeal ? <Utensils size={12} /> : <ShoppingBag size={12} />}
+                  {order.stayForMeal ? 'Espaço de Convivência' : 'Para viagem'}
+                </MealTag>
               </CardTop>
 
               <ItemList>
@@ -82,7 +87,7 @@ export function KitchenPage() {
                   variant="primary"
                   icon={<Check />}
                   iconPosition="left"
-                  style={{ alignSelf: 'flex-end' }}
+                  style={{ alignSelf: 'flex-end', marginTop: 'auto' }}
                   onClick={() => toggleDelivered(order.id, true)}
                 >
                   Pronto
@@ -93,7 +98,7 @@ export function KitchenPage() {
                   variant="secondary"
                   icon={<Undo2 />}
                   iconPosition="left"
-                  style={{ alignSelf: 'flex-end' }}
+                  style={{ alignSelf: 'flex-end', marginTop: 'auto' }}
                   onClick={() => toggleDelivered(order.id, false)}
                 >
                   Desfazer
