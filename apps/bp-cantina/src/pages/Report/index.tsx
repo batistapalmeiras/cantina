@@ -1,16 +1,11 @@
 // Libs
 import { Check, Download, X } from 'lucide-react';
 import { Order, OrderStatus } from 'bp-core';
-import { Button, Empty, formatCurrency, PageHeader, Skeleton } from 'bp-kit';
+import { Button, Empty, formatCurrency, PageHeader, SearchInput, Skeleton, StatCard, StatLabel, StatsGrid, StatValue } from 'bp-kit';
 import { OrdersList } from 'bp-ui';
-// Components
-import { OrdersSearch } from '../../components/OrdersSearch';
 // Local
 import { useReport } from './hooks';
-import {
-  Section, SectionLabel,
-  StatCard, StatsGrid, StatValue,
-} from './styles';
+import { Section, SectionLabel } from './styles';
 
 export function ReportPage() {
   const {
@@ -80,19 +75,19 @@ export function ReportPage() {
       {stats && (
         <StatsGrid>
           <StatCard>
-            <label>Fichinhas vendidas</label>
+            <StatLabel>Fichinhas vendidas</StatLabel>
             <StatValue>{stats.totalTickets}</StatValue>
           </StatCard>
           <StatCard>
-            <label>Receita total</label>
+            <StatLabel>Receita total</StatLabel>
             <StatValue>{formatCurrency(stats.revenue)}</StatValue>
           </StatCard>
           <StatCard>
-            <label>Pedidos confirmados</label>
+            <StatLabel>Pedidos confirmados</StatLabel>
             <StatValue>{stats.confirmedOrders}</StatValue>
           </StatCard>
           <StatCard>
-            <label>Reservas pendentes</label>
+            <StatLabel>Reservas pendentes</StatLabel>
             <StatValue $muted>{stats.pendingReservations}</StatValue>
           </StatCard>
         </StatsGrid>
@@ -100,7 +95,7 @@ export function ReportPage() {
 
       <Section>
         <SectionLabel>Pedidos</SectionLabel>
-        <OrdersSearch value={nameFilter} onChange={handleNameFilter} />
+        <SearchInput value={nameFilter} onChange={handleNameFilter} placeholder="Buscar por nome do cliente…" />
         <OrdersList
           orders={orders}
           page={page}

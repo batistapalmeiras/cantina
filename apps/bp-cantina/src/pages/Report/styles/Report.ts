@@ -1,39 +1,6 @@
 // Libs
 import styled from 'styled-components';
 
-export const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-
-  @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
-`;
-
-export const StatCard = styled.div`
-  background: ${({ theme }) => theme.colors.canvas};
-  border: 1px solid ${({ theme }) => theme.colors.hairline};
-  border-radius: ${({ theme }) => theme.rounded.md};
-  padding: ${({ theme }) => theme.spacing.base};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
-
-  label {
-    display: block;
-    font-family: ${({ theme }) => theme.typography.fontFamily};
-    font-size: ${({ theme }) => theme.typography.captionSm.fontSize};
-    color: ${({ theme }) => theme.colors.muted};
-    margin-bottom: ${({ theme }) => theme.spacing.xs};
-  }
-`;
-
-export const StatValue = styled.p<{ $muted?: boolean }>`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.displaySm.fontSize};
-  font-weight: 700;
-  color: ${({ theme, $muted }) => ($muted ? theme.colors.muted : theme.colors.ink)};
-  line-height: 1.1;
-`;
-
 export const Section = styled.section`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
