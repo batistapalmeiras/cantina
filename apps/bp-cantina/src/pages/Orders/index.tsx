@@ -1,21 +1,14 @@
 // Libs
 import { Check, Pencil, X } from 'lucide-react';
-import { Button, Empty, PageHeader, useModal } from 'bp-kit';
+import { Button, Empty, PageHeader, SearchInput, StatCard, StatLabel, StatsGrid, StatValue, useModal } from 'bp-kit';
 import { OrdersList } from 'bp-ui';
 import { Order, OrderStatus } from 'bp-core';
 // Components
-import { OrdersSearch } from '../../components/OrdersSearch';
 import { OrderEditForm } from '../Report/components';
 // Local
 import { computeRemainingTickets } from './domain';
 import { useOrders } from './hooks';
-import {
-  OrderActions,
-  StatCard,
-  StatLabel,
-  StatsGrid,
-  StatValue,
-} from './styles';
+import { OrderActions } from './styles';
 
 export function OrdersPage() {
   const {
@@ -60,7 +53,7 @@ export function OrdersPage() {
         subtitle={`${session.ministry} · ${new Date(session.date).toLocaleDateString('pt-BR')}`}
       />
 
-      <StatsGrid>
+      <StatsGrid $columns={3}>
         <StatCard>
           <StatLabel>Confirmados</StatLabel>
           <StatValue>{confirmed.length}</StatValue>
@@ -75,7 +68,7 @@ export function OrdersPage() {
         </StatCard>
       </StatsGrid>
 
-      <OrdersSearch value={nameFilter} onChange={handleNameFilter} />
+      <SearchInput value={nameFilter} onChange={handleNameFilter} placeholder="Buscar por nome do cliente…" />
 
       <OrdersList
         orders={orders}
