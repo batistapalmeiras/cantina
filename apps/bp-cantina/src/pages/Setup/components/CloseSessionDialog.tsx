@@ -1,7 +1,7 @@
 // Libs
 import { AlertTriangle } from 'lucide-react';
 import styled from 'styled-components';
-import { Button, ModalTitle } from 'bp-kit';
+import { Button, ModalTitle, text } from 'bp-kit';
 
 interface Props {
   pendingCount: number;
@@ -66,7 +66,7 @@ export function CloseSessionDialog({ pendingCount, close, onConfirm }: Props) {
           </Description>
         )}
         <Actions>
-          <Button variant="secondary" size="md" onClick={close}>Cancelar</Button>
+          <Button variant="secondary" size="md" onClick={close}>{text.actions.cancel}</Button>
           <Button variant="danger" size="md" onClick={() => { onConfirm(); close(); }}>
             Encerrar sessão
           </Button>

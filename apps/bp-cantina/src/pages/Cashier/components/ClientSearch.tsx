@@ -2,7 +2,8 @@
 import { useEffect } from 'react';
 import { Control, useWatch, UseFormSetValue } from 'react-hook-form';
 // Libs
-import { TextInput, Typography, useModal } from 'bp-kit';
+import { text, TextInput, Typography, useModal } from 'bp-kit';
+import { PHONE_PLACEHOLDER } from 'bp-core';
 // Components
 import { useClientSearch } from '../hooks';
 import { CashierFormValues } from '../validators';
@@ -40,8 +41,8 @@ export function ClientSearch({ control, setValue }: Props) {
         control={control}
         name="customerPhone"
         mask="phone"
-        label="Telefone"
-        placeholder="(00) 90000-0000"
+        label={text.fields.phone}
+        placeholder={PHONE_PLACEHOLDER}
         inputMode="numeric"
       />
 

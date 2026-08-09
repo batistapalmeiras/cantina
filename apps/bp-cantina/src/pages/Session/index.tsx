@@ -1,7 +1,7 @@
 // React
 import { Navigate } from 'react-router-dom';
 // Libs
-import { Button, PageHeader } from 'bp-kit';
+import { Button, PageHeader, text } from 'bp-kit';
 // Local
 import { AppRoute } from '../../routes/paths';
 // Local
@@ -34,7 +34,7 @@ export function SessionPage({ mode }: Props) {
       <SessionFormFields control={control} />
 
       <ActionsRow>
-        <Button variant="secondary" size="lg" onClick={cancel}>Cancelar</Button>
+        <Button variant="secondary" size="lg" onClick={cancel}>{text.actions.cancel}</Button>
         <Button variant="primary" size="lg" onClick={submit} disabled={isSubmitting}>
           {isSubmitting ? 'Salvando...' : isEdit ? 'Salvar' : 'Abrir sessão'}
         </Button>

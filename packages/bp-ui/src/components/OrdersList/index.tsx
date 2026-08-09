@@ -2,7 +2,7 @@
 import { useState } from 'react';
 // Libs
 import { ORDER_STATUS_LABEL, Order, PAYMENT_METHOD_LABEL } from 'bp-core';
-import { BottomSheet, formatCurrency, Pagination, Typography } from 'bp-kit';
+import { BottomSheet, formatCurrency, Pagination, text, Typography } from 'bp-kit';
 // Local
 import {
   CardList,
@@ -63,8 +63,8 @@ export function OrdersList({
               <th>Fichinhas</th>
               <th>Total</th>
               <th>Pagamento</th>
-              <th>Status</th>
-              {renderActions && <th>Ações</th>}
+              <th>{text.fields.status}</th>
+              {renderActions && <th>{text.actions.actionsColumn}</th>}
             </tr>
           </thead>
           <tbody>
