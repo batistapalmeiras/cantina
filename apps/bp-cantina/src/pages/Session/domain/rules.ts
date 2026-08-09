@@ -6,5 +6,5 @@ export function newId(): string {
 }
 
 export function createDefaultDishes(): Dish[] {
-  return [{ id: newId(), name: '', price: 0, totalTickets: 30, soldTickets: 0, availableAddons: [] }];
+  return [{ id: newId(), name: '', price: 0, totalTickets: 30, soldTickets: 0, availableAddons: [], priceTiers: [] }];
 }

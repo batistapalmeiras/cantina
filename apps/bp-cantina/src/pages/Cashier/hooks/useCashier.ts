@@ -1,10 +1,8 @@
 // React
 import { useState } from 'react';
 // Libs
-import { Dish, Order, OrderStatus, supabase, useSessionCtx, calculateTotalWithPixSurcharge } from 'bp-core';
+import { Dish, Order, OrderStatus, supabase, useSessionCtx, calculateTotalWithPixSurcharge, buildOrderTickets, computeOrderTotal } from 'bp-core';
 import { DishQuantity } from 'bp-ui';
-// Components
-import { buildTickets, computeTotal } from '../domain';
 import { CashierTab } from '../types';
 import { CashierFormValues } from '../validators';
 // Local
@@ -44,8 +42,8 @@ export function useCashier() {
     }));
   };
 
-  const tickets = session ? buildTickets(session.dishes, quantities) : [];
-  const total = computeTotal(tickets);
+  const tickets = session ? buildOrderTickets(session.dishes, quantities) : [];
+  const total = computeOrderTotal(tickets);
 
   const handleConfirm = async (data: CashierFormValues) => {
     if (tickets.length === 0) return;

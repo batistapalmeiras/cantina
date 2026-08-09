@@ -95,7 +95,7 @@ export function ReportPage() {
 
       <Section>
         <SectionLabel>Pedidos</SectionLabel>
-        <SearchInput value={nameFilter} onChange={handleNameFilter} placeholder="Buscar por nome do cliente…" />
+        <SearchInput value={nameFilter} onChange={handleNameFilter} placeholder="Buscar por nome..." />
         <OrdersList
           orders={orders}
           page={page}

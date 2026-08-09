@@ -4,7 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Button, ModalActions, ModalTitle } from 'bp-kit';
 import { DishQuantity, DishSelector } from 'bp-ui';
-import { Dish, Order, OrderStatus, TicketItem, useSessionCtx } from 'bp-core';
+import { Dish, Order, OrderStatus, useSessionCtx, buildOrderTickets, computeOrderTotal } from 'bp-core';
 
 interface Props {
   order: Order;
@@ -85,22 +85,8 @@ export function OrderEditForm({ order, close }: Props) {
   const save = async () => {
     setSaving(true);
     try {
-      const newTickets: TicketItem[] = [];
-      for (const dish of adjustedDishes) {
-        const q = quantities[dish.id] ?? { count: 0, addonCounts: {} };
-        for (let i = 0; i < q.count; i++) {
-          const selectedAddons = dish.availableAddons.filter((a) => (q.addonCounts[a.id] ?? 0) > i);
-          const addonTotal = selectedAddons.reduce((s, a) => s + a.price, 0);
-          newTickets.push({
-            dishId: dish.id,
-            dishName: dish.name,
-            dishBasePrice: dish.price,
-            totalPrice: dish.price + addonTotal,
-            addons: selectedAddons,
-          });
-        }
-      }
-      const total = newTickets.reduce((s, t) => s + t.totalPrice, 0);
+      const newTickets = buildOrderTickets(adjustedDishes, quantities);
+      const total = computeOrderTotal(newTickets);
       await updateOrder(order.id, { tickets: newTickets, total });
       close();
     } finally {

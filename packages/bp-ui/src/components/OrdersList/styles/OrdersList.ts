@@ -133,13 +133,30 @@ export const SheetActions = styled.div`
   }
 `;
 
-export const ListEmpty = styled.div`
-  padding: ${({ theme }) => theme.spacing.xxl} ${({ theme }) => theme.spacing.base};
-  text-align: center;
-`;
-
 export const Phone = styled.div`
   font-size: 11px;
   color: ${({ theme }) => theme.colors.mutedSoft};
   margin-top: 1px;
+`;
+
+export const ReceiptButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: ${({ theme }) => theme.rounded.full};
+  border: 1px solid ${({ theme }) => theme.colors.borderStrong};
+  background: ${({ theme }) => theme.colors.canvas};
+  color: ${({ theme }) => theme.colors.ink};
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.surfaceSoft};
+  }
+`;
+
+export const NoReceipt = styled.span`
+  color: ${({ theme }) => theme.colors.mutedSoft};
 `;

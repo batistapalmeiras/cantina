@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // Libs
 import { useClient, PAYMENT_METHOD_LABEL, PaymentMethod } from 'bp-core';
-import { PageHeader, SegmentedControl, SummaryCard, Typography, useMediaQuery, useToast } from 'bp-kit';
-import { DishSelector } from 'bp-ui';
+import { Empty, PageHeader, SegmentedControl, SummaryCard, useMediaQuery } from 'bp-kit';
+import { DishSelector, useToast } from 'bp-ui';
 // Local
 import { useEditReservation } from './hooks';
 import { BottomSpacer, DishSelectorWrapper, PageWrapper, PaymentControlsWrapper } from './styles';
@@ -13,7 +13,7 @@ import { summarizeTickets } from './domain';
 export function EditReservationPage() {
   const { orderId } = useParams<{ orderId: string }>();
   const { client } = useClient();
-  const { show: showToast, toast } = useToast();
+  const { show: showToast } = useToast();
   const isWide = useMediaQuery('(min-width: 745px)');
 
   const {
@@ -45,19 +45,19 @@ export function EditReservationPage() {
 
   if (!session || !session.isOpen) {
     return (
-      <div>
-        <Typography type="h3">Reservas indisponíveis</Typography>
-        <Typography type="p">Nenhuma sessão está aberta no momento.</Typography>
-      </div>
+      <Empty
+        title="Reservas indisponíveis"
+        description="Nenhuma sessão está aberta no momento."
+      />
     );
   }
 
   if (!currentOrder) {
     return (
-      <div>
-        <Typography type="h3">Pedido não encontrado</Typography>
-        <Typography type="p">Não conseguimos carregar este pedido.</Typography>
-      </div>
+      <Empty
+        title="Pedido não encontrado"
+        description="Não conseguimos carregar este pedido."
+      />
     );
   }
 
@@ -110,7 +110,7 @@ export function EditReservationPage() {
       {(isWide || tickets.length > 0) && (
         <SummaryCard
           bottomOffset="0"
-          items={summarizeTickets(tickets)}
+          items={summarizeTickets(tickets, session.dishes)}
           total={baseTotal}
           buttons={[
             {
@@ -130,7 +130,6 @@ export function EditReservationPage() {
           ]}
         />
       )}
-      {toast}
     </PageWrapper>
   );
 }

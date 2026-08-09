@@ -5,13 +5,14 @@ import { SessionContext, SessionContextValue } from '../contexts/SessionContext'
 import type { Database } from '../lib/database.types';
 import { removeReceiptsForOrders } from '../lib/receipts';
 import { supabase } from '../lib/supabase';
-import { Addon, Dish, Order, OrderStatus, PaymentMethod, Session, TicketItem } from '../types';
+import { Addon, Dish, Order, OrderStatus, PaymentMethod, PriceTier, Session, TicketItem } from '../types';
 
 type Tables = Database['public']['Tables'];
 type SessionRow = Tables['sessions']['Row'];
 type DishRow = Tables['dishes']['Row'];
 type OrderRow = Tables['orders']['Row'];
 type TicketItemRow = Tables['ticket_items']['Row'];
+type PriceTierRow = Tables['dish_price_tiers']['Row'];
 
 function mapSession(raw: SessionRow, dishes: Dish[], orders: Order[]): Session {
   return {
@@ -25,7 +26,7 @@ function mapSession(raw: SessionRow, dishes: Dish[], orders: Order[]): Session {
   };
 }
 
-function mapDish(raw: DishRow, addons: Addon[]): Dish {
+function mapDish(raw: DishRow, addons: Addon[], priceTiers: PriceTier[]): Dish {
   return {
     id: raw.id,
     name: raw.name,
@@ -33,7 +34,12 @@ function mapDish(raw: DishRow, addons: Addon[]): Dish {
     totalTickets: raw.total_tickets,
     soldTickets: raw.sold_tickets,
     availableAddons: addons,
+    priceTiers,
   };
+}
+
+function mapPriceTier(raw: PriceTierRow): PriceTier {
+  return { id: raw.id, quantity: raw.quantity, price: raw.price };
 }
 
 function mapOrder(raw: OrderRow, tickets: TicketItem[]): Order {
@@ -103,11 +109,15 @@ export async function fetchSessionsPage(page: number = 1, pageSize: number = 10)
 async function hydrateSession(sessionRow: SessionRow): Promise<Session> {
   const { data: dishRows } = await supabase
     .from('dishes')
-    .select('*, addons(*)')
+    .select('*, addons(*), price_tiers:dish_price_tiers(*)')
     .eq('session_id', sessionRow.id);
 
   const dishes: Dish[] = (dishRows ?? []).map((d) =>
-    mapDish(d, (d.addons ?? []).map((a): Addon => ({ id: a.id, name: a.name, price: a.price })))
+    mapDish(
+      d,
+      (d.addons ?? []).map((a): Addon => ({ id: a.id, name: a.name, price: a.price })),
+      (d.price_tiers ?? []).map(mapPriceTier)
+    )
   );
 
   const { data: orderRows } = await supabase
@@ -246,6 +256,12 @@ export function useSession(): SessionContextValue {
       if (dishRow && dish.availableAddons.length > 0) {
         await supabase.from('addons').insert(
           dish.availableAddons.map((a) => ({ dish_id: dishRow.id, name: a.name, price: a.price ?? 0 }))
+        );
+      }
+
+      if (dishRow && dish.priceTiers.length > 0) {
+        await supabase.from('dish_price_tiers').insert(
+          dish.priceTiers.map((t) => ({ dish_id: dishRow.id, quantity: t.quantity, price: t.price }))
         );
       }
     }
@@ -416,6 +432,23 @@ export function useSession(): SessionContextValue {
         }
         if (newAddons.length > 0) {
           await supabase.from('addons').insert(newAddons.map((a) => ({ dish_id: dish.id, name: a.name, price: a.price ?? 0 })));
+        }
+
+        const originalTierIds = session.dishes.find((d) => d.id === dish.id)?.priceTiers.map((t) => t.id) ?? [];
+        const newTiers = dish.priceTiers.filter((t) => !originalTierIds.includes(t.id));
+        const existingTiers = dish.priceTiers.filter((t) => originalTierIds.includes(t.id));
+
+        const deletedTierIds = originalTierIds.filter((id) => !existingTiers.some((t) => t.id === id));
+        if (deletedTierIds.length > 0) {
+          await supabase.from('dish_price_tiers').delete().in('id', deletedTierIds);
+        }
+        for (const tier of existingTiers) {
+          await supabase.from('dish_price_tiers').update({ quantity: tier.quantity, price: tier.price }).eq('id', tier.id);
+        }
+        if (newTiers.length > 0) {
+          await supabase.from('dish_price_tiers').insert(
+            newTiers.map((t) => ({ dish_id: dish.id, quantity: t.quantity, price: t.price }))
+          );
         }
       }
     }

@@ -2,7 +2,7 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
-import { Dish, OrderStatus, PaymentMethod, TicketItem, useSessionCtx, calculateTotalWithPixSurcharge, CHURCH_PIX_KEY } from 'bp-core';
+import { Dish, OrderStatus, PaymentMethod, useSessionCtx, calculateTotalWithPixSurcharge, CHURCH_PIX_KEY, buildOrderTickets, computeOrderTotal } from 'bp-core';
 import { DishQuantity } from 'bp-ui';
 // Components
 import { AppRoute } from '../../../routes/paths';
@@ -49,28 +49,8 @@ export function useReservation() {
     }));
   };
 
-  const buildTickets = (): TicketItem[] => {
-    const tickets: TicketItem[] = [];
-    if (!session) return tickets;
-    session.dishes.forEach((dish) => {
-      const q = getQ(dish.id);
-      for (let i = 0; i < q.count; i++) {
-        const addons = dish.availableAddons.filter((a) => (q.addonCounts[a.id] ?? 0) > i);
-        const addonTotal = addons.reduce((s, a) => s + (a.price ?? 0), 0);
-        tickets.push({
-          dishId: dish.id,
-          dishName: dish.name,
-          dishBasePrice: dish.price,
-          addons,
-          totalPrice: dish.price + addonTotal,
-        });
-      }
-    });
-    return tickets;
-  };
-
-  const tickets = buildTickets();
-  const baseTotal = tickets.reduce((s, t) => s + t.totalPrice, 0);
+  const tickets = session ? buildOrderTickets(session.dishes, quantities) : [];
+  const baseTotal = computeOrderTotal(tickets);
   const total = calculateTotalWithPixSurcharge(baseTotal, paymentMethod);
 
   const submitReservation = useCallback(

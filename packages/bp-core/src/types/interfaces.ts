@@ -13,6 +13,12 @@ export interface Addon {
   price: number;
 }
 
+export interface PriceTier {
+  id: string;
+  quantity: number; // sempre >= 2 — a faixa de quantidade 1 é o próprio `Dish.price`
+  price: number; // preço total para essa quantidade
+}
+
 export interface Dish {
   id: string;
   name: string;
@@ -20,6 +26,7 @@ export interface Dish {
   totalTickets: number;
   soldTickets: number;
   availableAddons: Addon[];
+  priceTiers: PriceTier[];
 }
 
 export interface TicketItem {
