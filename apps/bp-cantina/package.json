@@ -36,6 +36,8 @@
     "@types/react-router-dom": "catalog:",
     "@types/styled-components": "catalog:",
     "@vitejs/plugin-react": "^4.3.4",
+    "eslint-config-react-app": "catalog:",
+    "eslint-plugin-i18next": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
     "jsdom": "^25.0.1",
     "typescript": "catalog:",

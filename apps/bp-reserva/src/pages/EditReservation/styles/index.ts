@@ -1,6 +1,6 @@
-export * from './EditReservation';
-
 import styled from 'styled-components';
+
+export * from './EditReservation';
 
 export const BottomSpacer = styled.div`
   display: none;
