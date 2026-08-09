@@ -31,8 +31,8 @@ describe('computeStats', () => {
     isOpen: true,
     status: 'open',
     dishes: [
-      { id: 'd1', name: 'Feijoada', price: 20, totalTickets: 30, soldTickets: 0, availableAddons: [] },
-      { id: 'd2', name: 'Yakisoba', price: 25, totalTickets: 10, soldTickets: 0, availableAddons: [] },
+      { id: 'd1', name: 'Feijoada', price: 20, totalTickets: 30, soldTickets: 0, availableAddons: [], priceTiers: [] },
+      { id: 'd2', name: 'Yakisoba', price: 25, totalTickets: 10, soldTickets: 0, availableAddons: [], priceTiers: [] },
     ],
     orders: [
       makeOrder({

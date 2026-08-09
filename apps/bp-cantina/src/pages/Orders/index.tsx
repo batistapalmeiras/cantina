@@ -1,14 +1,14 @@
 // Libs
 import { Check, Pencil, X } from 'lucide-react';
-import { Button, Empty, PageHeader, SearchInput, StatCard, StatLabel, StatsGrid, StatValue, useModal } from 'bp-kit';
-import { OrdersList } from 'bp-ui';
+import { Button, Empty, PageHeader, SearchInput, StatCard, StatLabel, StatValue } from 'bp-kit';
+import { OrdersList, useModal } from 'bp-ui';
 import { Order, OrderStatus } from 'bp-core';
 // Components
 import { OrderEditForm } from '../Report/components';
 // Local
 import { computeRemainingTickets } from './domain';
 import { useOrders } from './hooks';
-import { OrderActions } from './styles';
+import { OrderActions, StatsGridInline } from './styles';
 
 export function OrdersPage() {
   const {
@@ -17,7 +17,7 @@ export function OrdersPage() {
     setPage, handleNameFilter,
     confirmReservation, cancelOrder,
   } = useOrders();
-  const { open, close, modal } = useModal();
+  const { open, close } = useModal();
 
   if (!session) {
     return (
@@ -53,7 +53,7 @@ export function OrdersPage() {
         subtitle={`${session.ministry} · ${new Date(session.date).toLocaleDateString('pt-BR')}`}
       />
 
-      <StatsGrid $columns={3}>
+      <StatsGridInline $columns={3}>
         <StatCard>
           <StatLabel>Confirmados</StatLabel>
           <StatValue>{confirmed.length}</StatValue>
@@ -66,9 +66,9 @@ export function OrdersPage() {
           <StatLabel>Fichinhas restantes</StatLabel>
           <StatValue $tone={remaining === 0 ? 'danger' : undefined}>{remaining}</StatValue>
         </StatCard>
-      </StatsGrid>
+      </StatsGridInline>
 
-      <SearchInput value={nameFilter} onChange={handleNameFilter} placeholder="Buscar por nome do cliente…" />
+      <SearchInput value={nameFilter} onChange={handleNameFilter} placeholder="Buscar por nome..." />
 
       <OrdersList
         orders={orders}
@@ -93,8 +93,6 @@ export function OrdersPage() {
           </OrderActions>
         )}
       />
-
-      {modal}
     </div>
   );
 }

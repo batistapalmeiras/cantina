@@ -34,10 +34,3 @@ export const HistoryItemMeta = styled.p`
   margin-top: 2px;
 `;
 
-export const HistoryEmpty = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing.xl} 0;
-`;

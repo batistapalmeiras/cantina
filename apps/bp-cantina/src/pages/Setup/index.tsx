@@ -2,7 +2,8 @@
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { AlertTriangle } from 'lucide-react';
-import { Button, PageHeader, Pagination, Typography, useModal } from 'bp-kit';
+import { Button, PageHeader, Pagination, Typography } from 'bp-kit';
+import { useModal } from 'bp-ui';
 // Local
 import { AppRoute } from '../../routes/paths';
 // Local
@@ -16,7 +17,7 @@ HistoryItem, HistoryItemMeta, HistoryItemSub, HistoryItemTitle,   HistoryList, P
 
 export function SetupPage() {
   const { session, sessions, currentPage, totalPages, loadSessions, handleClose, viewSession } = useSetup();
-  const { open, close, modal } = useModal();
+  const { open, close } = useModal();
   const navigate = useNavigate();
 
   const pendingSessionsCount = sessions.filter(s => s.status === 'pending').length;
@@ -111,7 +112,6 @@ export function SetupPage() {
         </>
       )}
 
-      {modal}
       {historySection}
     </div>
   );

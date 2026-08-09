@@ -18,3 +18,5 @@ export * from './lib';
 export { ORDER_STATUS_LABEL, ORDER_STATUS_TONE, PAYMENT_METHOD_LABEL } from './utils/labels';
 export { calculateTotalWithPixSurcharge, PIX_SURCHARGE } from './utils/payment';
 export { PHONE_PLACEHOLDER } from './utils/text';
+export { calculateDishPrice, buildOrderTickets, computeOrderTotal, isPromoActive } from './utils/pricing';
+export type { DishOrderQuantity } from './utils/pricing';

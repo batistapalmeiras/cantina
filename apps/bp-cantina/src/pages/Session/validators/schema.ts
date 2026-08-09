@@ -7,6 +7,12 @@ const addonSchema = z.object({
   price: z.number().min(0),
 });
 
+const priceTierSchema = z.object({
+  id: z.string(),
+  quantity: z.number().int().min(2, 'Mínimo 2'),
+  price: z.number().min(0),
+});
+
 const dishSchema = z.object({
   id: z.string(),
   name: z.string().min(1, 'Nome obrigatório'),
@@ -14,6 +20,10 @@ const dishSchema = z.object({
   totalTickets: z.number().int().min(1, 'Mínimo 1'),
   soldTickets: z.number().int(),
   availableAddons: z.array(addonSchema),
+  priceTiers: z.array(priceTierSchema).refine(
+    (tiers) => new Set(tiers.map((t) => t.quantity)).size === tiers.length,
+    'Quantidades de faixas não podem se repetir'
+  ),
 });
 
 export const sessionFormSchema = z.object({

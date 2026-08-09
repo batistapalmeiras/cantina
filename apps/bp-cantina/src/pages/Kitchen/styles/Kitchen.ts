@@ -76,11 +76,3 @@ export const ItemAddons = styled.span`
   color: ${({ theme }) => theme.colors.muted};
 `;
 
-export const EmptyHint = styled.p`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
-  color: ${({ theme }) => theme.colors.muted};
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing.lg} 0;
-`;
-

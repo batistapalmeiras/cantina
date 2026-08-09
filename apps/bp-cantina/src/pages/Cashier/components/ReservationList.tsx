@@ -1,6 +1,7 @@
 // Libs
 import { getReceiptUrl, Order, PaymentMethod } from 'bp-core';
-import { Button, Card, Empty, formatCurrency, useToast } from 'bp-kit';
+import { Button, Card, Empty, formatCurrency } from 'bp-kit';
+import { useToast } from 'bp-ui';
 import { FileSearch } from 'lucide-react';
 import styled from 'styled-components';
 
@@ -64,7 +65,7 @@ const Actions = styled.div`
 `;
 
 export function ReservationList({ reservations, onConfirm, onCancel }: Props) {
-  const { show: showToast, toast } = useToast();
+  const { show: showToast } = useToast();
 
   const openReceipt = async (path: string) => {
     try {
@@ -117,7 +118,6 @@ export function ReservationList({ reservations, onConfirm, onCancel }: Props) {
           </Actions>
         </Card>
       ))}
-      {toast}
     </List>
   );
 }

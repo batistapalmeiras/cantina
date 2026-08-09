@@ -10,7 +10,6 @@ import {
   Card,
   CardTop,
   CustomerName,
-  EmptyHint,
   Grid,
   ItemAddons,
   ItemList,
@@ -54,9 +53,12 @@ export function KitchenPage() {
       </TabBar>
 
       {orders.length === 0 ? (
-        <EmptyHint>
-          {tab === KitchenTab.Pending ? 'Nenhum pedido pendente de momento.' : 'Nenhum pedido entregue ainda.'}
-        </EmptyHint>
+        <Empty
+          title={tab === KitchenTab.Pending ? 'Nenhum pedido pendente' : 'Nenhum pedido entregue'}
+          description={
+            tab === KitchenTab.Pending ? 'Nenhum pedido pendente de momento.' : 'Nenhum pedido entregue ainda.'
+          }
+        />
       ) : (
         <Grid>
           {orders.map((order) => (

@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Libs
 import { ORDER_STATUS_LABEL, ORDER_STATUS_TONE, PAYMENT_METHOD_LABEL, useClient, PaymentMethod } from 'bp-core';
-import { Button, Card, Empty, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery, useModal, useToast } from 'bp-kit';
-import { DishSelector } from 'bp-ui';
+import { Button, Card, Empty, formatCurrency, PageHeader, SegmentedControl, StatusBadge, SummaryCard, Typography, useMediaQuery } from 'bp-kit';
+import { DishSelector, useModal, useToast } from 'bp-ui';
 // Components
 import { ReceiptUpload } from '../../components/ReceiptUpload';
 import { AppRoute } from '../../routes/paths';
@@ -23,9 +23,9 @@ import {
 
 export function ReservationPage() {
   const { client } = useClient();
-  const { open, close, modal } = useModal();
+  const { open, close } = useModal();
   const navigate = useNavigate();
-  const { show: showToast, toast } = useToast();
+  const { show: showToast } = useToast();
   const isWide = useMediaQuery('(min-width: 745px)');
 
   const {
@@ -123,8 +123,6 @@ export function ReservationPage() {
           Cancelar pedido
         </CancelLink>
 
-        {modal}
-        {toast}
       </>
     );
   }
@@ -168,7 +166,7 @@ export function ReservationPage() {
 
       {(isWide || tickets.length > 0) && (
         <SummaryCard
-          items={summarizeTickets(tickets)}
+          items={summarizeTickets(tickets, session.dishes)}
           total={total}
           onConfirm={() =>
             submitReservation({ name: client.name, phone: client.phone }, () => {
@@ -180,8 +178,6 @@ export function ReservationPage() {
         />
       )}
 
-      {modal}
-      {toast}
     </>
   );
 }

@@ -41,8 +41,8 @@ describe('order selectors', () => {
 describe('computeRemainingTickets', () => {
   it('sums capacity minus sold across dishes', () => {
     const dishes = [
-      { id: 'd1', name: 'A', price: 0, totalTickets: 30, soldTickets: 10, availableAddons: [] },
-      { id: 'd2', name: 'B', price: 0, totalTickets: 10, soldTickets: 4, availableAddons: [] },
+      { id: 'd1', name: 'A', price: 0, totalTickets: 30, soldTickets: 10, availableAddons: [], priceTiers: [] },
+      { id: 'd2', name: 'B', price: 0, totalTickets: 10, soldTickets: 4, availableAddons: [], priceTiers: [] },
     ] as Dish[];
     expect(computeRemainingTickets(dishes)).toBe(26);
   });

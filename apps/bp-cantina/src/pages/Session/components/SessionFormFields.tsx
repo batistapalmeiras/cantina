@@ -1,5 +1,5 @@
 // React
-import { Control, Controller, useFieldArray } from 'react-hook-form';
+import { Control, Controller, useFieldArray, useWatch } from 'react-hook-form';
 // Libs
 import { Button, Select, text, TextInput } from 'bp-kit';
 // Components
@@ -59,6 +59,16 @@ function DishFields({ control, dishIndex, canRemove, onRemove }: DishFieldsProps
     control,
     name: `dishes.${dishIndex}.availableAddons`,
   });
+  const { fields: priceTiers, append: appendTier, remove: removeTier } = useFieldArray({
+    control,
+    name: `dishes.${dishIndex}.priceTiers`,
+  });
+  const watchedTiers = useWatch({ control, name: `dishes.${dishIndex}.priceTiers` }) ?? [];
+
+  const addTier = () => {
+    const maxQuantity = watchedTiers.reduce((max, t) => Math.max(max, t.quantity ?? 0), 1);
+    appendTier({ id: newId(), quantity: maxQuantity + 1, price: 0 });
+  };
 
   return (
     <DishCard>
@@ -113,6 +123,38 @@ function DishFields({ control, dishIndex, canRemove, onRemove }: DishFieldsProps
         style={{ marginTop: 6 }}
       >
         + Acréscimo
+      </Button>
+
+      <AddonSectionLabel>Promoção por quantidade (opcional)</AddonSectionLabel>
+      {priceTiers.map((tier, tierIdx) => (
+        <AddonRow key={tier.id}>
+          <Controller
+            control={control}
+            name={`dishes.${dishIndex}.priceTiers.${tierIdx}.quantity`}
+            render={({ field }) => (
+              <SmallInput
+                type="number"
+                min={2}
+                placeholder="Qtd."
+                style={{ flex: 0.4 }}
+                {...field}
+                onChange={(e) => field.onChange(e.target.valueAsNumber)}
+              />
+            )}
+          />
+          <TextInput
+            currency
+            label=""
+            placeholder="Preço da faixa (R$)"
+            control={control}
+            name={`dishes.${dishIndex}.priceTiers.${tierIdx}.price` as const}
+            wrapperStyle={{ flex: 1 }}
+          />
+          <Button variant="danger" size="sm" onClick={() => removeTier(tierIdx)}>✕</Button>
+        </AddonRow>
+      ))}
+      <Button variant="secondary" size="sm" onClick={addTier} style={{ marginTop: 6 }}>
+        + Faixa de preço
       </Button>
     </DishCard>
   );

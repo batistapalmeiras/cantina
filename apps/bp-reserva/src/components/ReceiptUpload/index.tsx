@@ -5,11 +5,10 @@ import { uploadPixReceipt } from 'bp-core';
 import { Button } from 'bp-kit';
 import { CheckCircle, Paperclip } from 'lucide-react';
 // Local
-import { HiddenInput, Hint, ResendLink, SentBadge, Wrapper } from './styles';
+import { HiddenInput, ResendLink, SentBadge, Wrapper } from './styles';
 
 interface IReceiptUploadProps {
   orderId: string;
-  /** Pedido já tem comprovante vinculado (permite reenviar). */
   alreadySent?: boolean;
   onSent?: () => void;
   onError?: (message: string) => void;
@@ -66,7 +65,6 @@ export function ReceiptUpload({ orderId, alreadySent = false, onSent, onError }:
             <Paperclip size={16} />
             {sending ? 'Enviando...' : 'Enviar comprovante do Pix'}
           </Button>
-          <Hint>Ou apresente no caixa após o culto.</Hint>
         </>
       )}
     </Wrapper>
