@@ -1,7 +1,7 @@
 // React
 import { useForm } from 'react-hook-form';
 // Libs
-import { Button, ModalActions, ModalTitle, TextInput, Typography } from 'bp-kit';
+import { Button, ModalActions, ModalTitle, text, TextInput, Typography } from 'bp-kit';
 
 interface IClientRegisterDialogProps {
   close: () => void;
@@ -30,10 +30,10 @@ export function ClientRegisterDialog({ close, onRegister }: IClientRegisterDialo
     <form onSubmit={submit}>
       <ModalTitle>Novo cliente</ModalTitle>
       <Typography type="p" style={{ marginBottom: 12 }}>Informe o nome para cadastrar.</Typography>
-      <TextInput control={control} name="name" label="Nome" placeholder="Nome do cliente" autoFocus />
+      <TextInput control={control} name="name" label={text.fields.name} placeholder="Nome do cliente" autoFocus />
       <ModalActions>
         <Button type="button" variant="secondary" size="md" onClick={close}>
-          Cancelar
+          {text.actions.cancel}
         </Button>
         <Button type="submit" variant="primary" size="md" disabled={!name.trim()}>
           Cadastrar e usar

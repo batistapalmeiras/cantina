@@ -2,7 +2,7 @@
 import { useState } from 'react';
 // Libs
 import styled from 'styled-components';
-import { Button, ModalActions, ModalTitle } from 'bp-kit';
+import { Button, ModalActions, ModalTitle, text } from 'bp-kit';
 import { DishQuantity, DishSelector } from 'bp-ui';
 import { Dish, Order, OrderStatus, useSessionCtx, buildOrderTickets, computeOrderTotal } from 'bp-core';
 
@@ -113,7 +113,7 @@ export function OrderEditForm({ order, close }: Props) {
       />
 
       <ModalActions>
-        <Button variant="secondary" size="md" onClick={close}>Cancelar</Button>
+        <Button variant="secondary" size="md" onClick={close}>{text.actions.cancel}</Button>
         <Button variant="primary" size="md" onClick={save} disabled={saving}>
           {saving ? 'Salvando...' : 'Salvar'}
         </Button>

@@ -1,7 +1,8 @@
 // React
 import { useForm } from 'react-hook-form';
 // Libs
-import { Brand, Button, PageHeader, TextInput } from 'bp-kit';
+import { Brand, Button, PageHeader, text, TextInput } from 'bp-kit';
+import { PHONE_PLACEHOLDER } from 'bp-core';
 // Components
 import icon from '../../assets/icon.png';
 // Local
@@ -41,7 +42,7 @@ export function IdentifyPage() {
               name="phone"
               mask="phone"
               label="Telefone (WhatsApp)"
-              placeholder="(00) 90000-0000"
+              placeholder={PHONE_PLACEHOLDER}
               inputMode="numeric"
               autoFocus
             />
@@ -62,7 +63,7 @@ export function IdentifyPage() {
             <TextInput
               control={control}
               name="name"
-              label="Nome completo"
+              label={text.fields.fullName}
               placeholder="Seu nome"
               autoFocus
             />

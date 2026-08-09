@@ -1,7 +1,7 @@
 // React
 import { Control, Controller, useFieldArray, useWatch } from 'react-hook-form';
 // Libs
-import { Button, Select, TextInput } from 'bp-kit';
+import { Button, Select, text, TextInput } from 'bp-kit';
 // Components
 import { MINISTRIES } from '../../../data';
 import { newId } from '../domain';
@@ -99,7 +99,7 @@ function DishFields({ control, dishIndex, canRemove, onRemove }: DishFieldsProps
           </Row>
         </div>
         {canRemove && (
-          <Button variant="danger" size="sm" onClick={onRemove}>Remover</Button>
+          <Button variant="danger" size="sm" onClick={onRemove}>{text.actions.remove}</Button>
         )}
       </DishCardHeader>
 

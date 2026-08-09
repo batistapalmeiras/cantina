@@ -2,7 +2,7 @@
 import { useState } from 'react';
 // Libs
 import { getReceiptUrl, ORDER_STATUS_LABEL, Order, PAYMENT_METHOD_LABEL } from 'bp-core';
-import { BottomSheet, Empty, formatCurrency, Pagination } from 'bp-kit';
+import { BottomSheet, Empty, formatCurrency, Pagination, text } from 'bp-kit';
 import { Receipt } from 'lucide-react';
 // Local
 import { useToast } from '../../contexts';
@@ -77,9 +77,9 @@ export function OrdersList({
               <th>Fichinhas</th>
               <th>Total</th>
               <th>Pagamento</th>
-              <th>Status</th>
+              <th>{text.fields.status}</th>
               <th>Comprovante</th>
-              {renderActions && <th>Ações</th>}
+              {renderActions && <th>{text.actions.actionsColumn}</th>}
             </tr>
           </thead>
           <tbody>

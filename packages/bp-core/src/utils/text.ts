@@ -1,0 +1,1 @@
+export const PHONE_PLACEHOLDER = '(00) 90000-0000';

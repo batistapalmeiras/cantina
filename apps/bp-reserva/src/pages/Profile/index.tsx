@@ -1,8 +1,8 @@
 // React
 import { useEffect, useState } from 'react';
 // Libs
-import { useClient } from 'bp-core';
-import { Button, PageHeader, maskPhone } from 'bp-kit';
+import { PHONE_PLACEHOLDER, useClient } from 'bp-core';
+import { Button, PageHeader, maskPhone, text } from 'bp-kit';
 // Local
 import { EditFieldWrap, EditInput, Label } from './styles';
 
@@ -37,7 +37,7 @@ export function ProfilePage() {
         subtitle="Atualize seus dados pessoais."
       />
       <EditFieldWrap>
-        <Label>Nome completo</Label>
+        <Label>{text.fields.fullName}</Label>
         <EditInput value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome" />
       </EditFieldWrap>
       <EditFieldWrap>
@@ -45,7 +45,7 @@ export function ProfilePage() {
         <EditInput
           value={phone}
           onChange={(e) => setPhone(maskPhone(e.target.value))}
-          placeholder="(00) 90000-0000"
+          placeholder={PHONE_PLACEHOLDER}
           inputMode="numeric"
         />
       </EditFieldWrap>
