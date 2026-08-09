@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 // Libs
 import { PAYMENT_METHOD_LABEL, PIX_SURCHARGE, PaymentMethod } from 'bp-core';
-import { Button, formatCNPJ, formatCurrency, InfoBox, Typography, useToast } from 'bp-kit';
+import { Button, formatCNPJ, formatCurrency, InfoBox, Typography } from 'bp-kit';
+import { useToast } from 'bp-ui';
 import { Check, CheckCircle, Copy } from 'lucide-react';
 // Components
 import { ReceiptUpload } from '../../components/ReceiptUpload';
@@ -35,7 +36,7 @@ export function ReservationConfirmedPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as SuccessState | null;
-  const { show: showToast, toast } = useToast();
+  const { show: showToast } = useToast();
   const [copied, setCopied] = useState(false);
 
   if (!state) {
@@ -118,8 +119,6 @@ export function ReservationConfirmedPage() {
         >
           Voltar às reservas
         </Button>
-
-        {toast}
     </>
   );
 }

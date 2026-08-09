@@ -1,5 +1,5 @@
 // Libs
-import { Addon } from 'bp-core';
+import { Addon, calculateDishPrice } from 'bp-core';
 import { formatCurrency } from 'bp-kit';
 import { Minus, Plus } from 'lucide-react';
 // Local
@@ -9,6 +9,7 @@ import {
   DishInfo,
   DishMeta,
   DishName,
+  PromoHint,
   SoldOut,
   SelectorLabel,
   StepBtn,
@@ -31,6 +32,11 @@ export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onS
         const maxAvailable = globalAvailable + (reserved?.[dish.id] ?? 0);
         const remaining = maxAvailable - q.count;
         const soldOut = maxAvailable <= 0 && q.count === 0;
+        const activeTier = [...dish.priceTiers]
+          .sort((a, b) => a.quantity - b.quantity)
+          .filter((t) => t.quantity <= q.count)
+          .pop();
+        const promoTotal = activeTier ? calculateDishPrice(dish, q.count) : 0;
 
         return (
           <DishCard key={dish.id}>
@@ -40,6 +46,20 @@ export function DishSelector({ dishes, quantities, onIncrement, onDecrement, onS
                 <DishMeta>
                   {formatCurrency(dish.price)} · {remaining} disponíve{remaining === 1 ? 'l' : 'is'}
                 </DishMeta>
+                {activeTier ? (
+                  <PromoHint $active>
+                    Promoção aplicada: {formatCurrency(promoTotal)} no total ({formatCurrency(promoTotal / q.count)}/un)
+                  </PromoHint>
+                ) : (
+                  dish.priceTiers.length > 0 && (
+                    <PromoHint>
+                      {[...dish.priceTiers]
+                        .sort((a, b) => a.quantity - b.quantity)
+                        .map((t) => `${t.quantity} por ${formatCurrency(t.price)}`)
+                        .join(' · ')}
+                    </PromoHint>
+                  )
+                )}
               </DishInfo>
               {soldOut ? (
                 <SoldOut>Esgotado</SoldOut>

@@ -110,6 +110,13 @@ export const SoldOut = styled.span`
   border-radius: ${({ theme }) => theme.rounded.full};
 `;
 
+export const PromoHint = styled.span<{ $active?: boolean }>`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.bodySm.fontSize};
+  font-weight: ${({ $active }) => ($active ? 600 : 400)};
+  color: ${({ theme, $active }) => ($active ? theme.colors.success : theme.colors.muted)};
+`;
+
 export const SelectorLabel = styled.p`
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.caption.fontSize};

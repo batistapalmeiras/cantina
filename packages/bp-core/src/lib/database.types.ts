@@ -112,6 +112,35 @@ export interface Database {
           },
         ];
       };
+      dish_price_tiers: {
+        Row: {
+          id: string;
+          dish_id: string;
+          quantity: number;
+          price: number;
+        };
+        Insert: {
+          id?: string;
+          dish_id: string;
+          quantity: number;
+          price: number;
+        };
+        Update: {
+          id?: string;
+          dish_id?: string;
+          quantity?: number;
+          price?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dish_price_tiers_dish_id_fkey';
+            columns: ['dish_id'];
+            isOneToOne: false;
+            referencedRelation: 'dishes';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       orders: {
         Row: {
           id: string;

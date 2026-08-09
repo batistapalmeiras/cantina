@@ -1,11 +1,10 @@
 // Libs
 import { ORDER_STATUS_LABEL, ORDER_STATUS_TONE, PAYMENT_METHOD_LABEL, useClient, useSessionCtx } from 'bp-core';
-import { formatCurrency, PageHeader, Skeleton, StatusBadge } from 'bp-kit';
+import { Empty, formatCurrency, PageHeader, Skeleton, StatusBadge } from 'bp-kit';
 // Local
 import { useClientHistory } from './hooks';
 import { uniqueDishesText } from './domain';
 import {
-  HistoryEmpty,
   HistoryItem,
   HistoryItemHeader,
   HistoryItemMeta,
@@ -40,7 +39,7 @@ export function HistoryPage() {
           ))}
         </HistoryList>
       ) : history.length === 0 ? (
-        <HistoryEmpty>Sem pedidos anteriores.</HistoryEmpty>
+        <Empty title="Nenhum pedido ainda" description="Sem pedidos anteriores." />
       ) : (
         <HistoryList>
           {history.map((o) => (
