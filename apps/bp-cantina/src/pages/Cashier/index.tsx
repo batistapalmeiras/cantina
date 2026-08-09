@@ -13,8 +13,8 @@ import {
   Tab,
   TabBadge,
   TabBar,
-  useToast,
 } from 'bp-kit';
+import { useToast } from 'bp-ui';
 // Local
 import { CashierDishSelector } from './components/DishSelector';
 import { PaymentSection } from './components/PaymentSection';
@@ -53,7 +53,7 @@ export function CashierPage() {
     cancelOrder,
   } = useCashier();
 
-  const { show: showToast, toast } = useToast();
+  const { show: showToast } = useToast();
 
   useEffect(() => { if (onSale) showToast('✓ Venda registrada com sucesso'); }, [onSale, showToast]);
   useEffect(() => { if (orderError) showToast(orderError); }, [orderError, showToast]);
@@ -119,7 +119,7 @@ export function CashierPage() {
             </div>
             <StickyAside>
               <SummaryCard
-                items={groupTicketsForSummary(tickets)}
+                items={groupTicketsForSummary(tickets, session.dishes)}
                 total={total}
                 onConfirm={handleSubmit(onSubmit)}
                 confirmText="Confirmar venda"
@@ -156,8 +156,6 @@ export function CashierPage() {
           onCancel={cancelOrder}
         />
       )}
-
-      {toast}
     </div>
   );
 }
