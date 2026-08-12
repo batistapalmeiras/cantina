@@ -1,5 +1,5 @@
 // Libs
-import { ModalContainer, ToastContainer } from 'bp-ui';
+import { ToastContainer } from 'bp-ui';
 // Local
 import { AppRouter } from './routes';
 
@@ -8,7 +8,6 @@ function App() {
     <>
       <AppRouter />
       <ToastContainer />
-      <ModalContainer />
     </>
   );
 }

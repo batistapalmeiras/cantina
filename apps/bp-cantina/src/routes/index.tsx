@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // Libs
 import { SessionProvider, supabase, UserRole } from 'bp-core';
 import { AuthProvider } from 'bp-kit';
+import { ModalContainer } from 'bp-ui';
 // Components
 import { Layout } from '../components/Layout';
 import { CashierPage } from '../pages/Cashier';
@@ -103,6 +104,7 @@ export function AppRouter() {
               }
             />
           </Routes>
+          <ModalContainer />
         </SessionProvider>
       </AuthProvider>
     </BrowserRouter>
