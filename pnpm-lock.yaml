@@ -96,8 +96,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/bp-core
       bp-kit:
-        specifier: github:batistapalmeiras/bp-kit
-        version: https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/a469b90365ae2fcbf5808aa05c4174b24353fd01(react-dom@19.2.7(react@19.2.7))(react-hook-form@7.80.0(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
+        specifier: github:batistapalmeiras/bp-kit#v1.0.0
+        version: https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/022fe64f09b7b9dbc168b5614672b1f318b8a296(react-dom@19.2.7(react@19.2.7))(react-hook-form@7.80.0(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
       bp-ui:
         specifier: workspace:*
         version: link:../../packages/bp-ui
@@ -190,8 +190,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/bp-core
       bp-kit:
-        specifier: github:batistapalmeiras/bp-kit
-        version: https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/a469b90365ae2fcbf5808aa05c4174b24353fd01(react-dom@19.2.7(react@19.2.7))(react-hook-form@7.80.0(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
+        specifier: github:batistapalmeiras/bp-kit#v1.0.0
+        version: https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/022fe64f09b7b9dbc168b5614672b1f318b8a296(react-dom@19.2.7(react@19.2.7))(react-hook-form@7.80.0(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
       bp-ui:
         specifier: workspace:*
         version: link:../../packages/bp-ui
@@ -297,8 +297,8 @@ importers:
         specifier: workspace:*
         version: link:../bp-core
       bp-kit:
-        specifier: github:batistapalmeiras/bp-kit
-        version: https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/a469b90365ae2fcbf5808aa05c4174b24353fd01(react-dom@19.2.7(react@19.2.7))(react-hook-form@7.80.0(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
+        specifier: github:batistapalmeiras/bp-kit#v1.0.0
+        version: https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/022fe64f09b7b9dbc168b5614672b1f318b8a296(react-dom@19.2.7(react@19.2.7))(react-hook-form@7.80.0(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
       lucide-react:
         specifier: 'catalog:'
         version: 1.23.0(react@19.2.7)
@@ -1966,9 +1966,9 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  bp-kit@https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/a469b90365ae2fcbf5808aa05c4174b24353fd01:
-    resolution: {tarball: https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/a469b90365ae2fcbf5808aa05c4174b24353fd01}
-    version: 0.0.0
+  bp-kit@https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/022fe64f09b7b9dbc168b5614672b1f318b8a296:
+    resolution: {tarball: https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/022fe64f09b7b9dbc168b5614672b1f318b8a296}
+    version: 1.0.0
     peerDependencies:
       react: ^19.2.7
       react-dom: ^19.2.7
@@ -5420,7 +5420,7 @@ snapshots:
 
   baseline-browser-mapping@2.11.13: {}
 
-  bp-kit@https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/a469b90365ae2fcbf5808aa05c4174b24353fd01(react-dom@19.2.7(react@19.2.7))(react-hook-form@7.80.0(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)):
+  bp-kit@https://codeload.github.com/batistapalmeiras/bp-kit/tar.gz/022fe64f09b7b9dbc168b5614672b1f318b8a296(react-dom@19.2.7(react@19.2.7))(react-hook-form@7.80.0(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)):
     dependencies:
       '@hookform/resolvers': 5.4.0(react-hook-form@7.80.0(react@19.2.7))
       '@supabase/supabase-js': 2.110.0

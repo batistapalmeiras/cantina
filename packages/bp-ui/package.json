@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "bp-core": "workspace:*",
-    "bp-kit": "github:batistapalmeiras/bp-kit",
+    "bp-kit": "github:batistapalmeiras/bp-kit#v1.0.0",
     "lucide-react": "catalog:"
   },
   "devDependencies": {
